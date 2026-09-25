@@ -113,7 +113,6 @@ module.exports = async function handler(req, res) {
     }
 
     if (matched < 6) {
-      // Something in Jotform's form structure no longer matches our labels.
       throw new Error(
         `No se pudieron mapear todos los campos del formulario (${matched}/6). Revisa que las preguntas de Jotform no hayan cambiado de texto.`
       );
