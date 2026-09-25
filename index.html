@@ -239,9 +239,23 @@
   .docentes h2{ font-size:clamp(28px,4.4vw,40px); margin-top:10px; }
   .docentes .route-sub{ margin-top:10px; }
 
+  .ticket-link{ display:inline-block; margin-top:4px; font-size:12px; font-weight:600; color:var(--red-500); text-decoration:none; }
+  .ticket-link:hover{ text-decoration:underline; }
+
+  .editions{ display:grid; gap:clamp(48px,7vw,72px); }
+  .edition{ scroll-margin-top:84px; }
+  .edition-head{
+    display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 16px;
+    padding-bottom:16px; margin-bottom:24px; border-bottom:1px solid var(--line);
+  }
+  .edition-num{ font-family:var(--font-mono); font-size:12px; letter-spacing:.14em; color:var(--red-500); }
+  .edition-city{ font-size:clamp(24px,3.4vw,32px); color:var(--white); }
+  .edition-date{ font-family:var(--font-mono); font-size:12px; letter-spacing:.08em; color:var(--silver); text-transform:uppercase; }
+  .edition-count{ margin-left:auto; font-family:var(--font-mono); font-size:11.5px; color:var(--silver); }
+
   .speaker-grid{
-    display:grid; gap:24px;
-    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    display:grid; gap:20px;
+    grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
   }
   .speaker-card{
     position:relative;
@@ -290,12 +304,6 @@
     font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
     color:var(--silver);
   }
-  .speaker-sedes{ display:flex; flex-wrap:wrap; gap:8px; }
-  .speaker-tag{
-    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.04em;
-    color:var(--white); background:rgba(247,244,241,.1); border:1px solid var(--line-strong);
-    padding:4px 9px; border-radius:999px; white-space:nowrap;
-  }
   .speaker-btn{
     margin-top:4px;
     display:inline-flex; align-items:center; justify-content:center; gap:8px;
@@ -336,12 +344,12 @@
       <p class="hero-copy reveal">
         Dos jornadas presenciales para conocer de primera mano los protocolos que están
         redefiniendo la armonización orofacial: actualización clínica, capacitación breve
-        y aplicada, y tu primer contacto con la especialidad — dictadas por las
-        Dras. Loreto Campos y Javiera Vergara.
+        y aplicada, y tu primer contacto con la especialidad — de la mano de docentes
+        Harmony, profesionales formados en nuestro Postgrado y speakers invitados.
       </p>
       <div class="hero-actions reveal">
         <a class="btn btn-primary" href="#sedes">Ver fechas y sedes</a>
-        <a class="btn btn-ghost" href="#docentes">Conoce a las docentes</a>
+        <a class="btn btn-ghost" href="#docentes">Conoce a los speakers</a>
       </div>
       <div class="hero-meta reveal">
         <span><i class="dot"></i>2 sedes en Chile</span>
@@ -390,7 +398,7 @@
         <div>
           <p class="eyebrow">RECORRIDO 2026</p>
           <h2>Elige tu sede</h2>
-          <p class="route-sub">Mismo contenido, mismas docentes: Dra. Loreto Campos y Dra. Javiera Vergara. Elige la fecha y ciudad que más te acomode.</p>
+          <p class="route-sub">Cada edición cuenta con su propio equipo de speakers. Elige la fecha y ciudad que más te acomode.</p>
         </div>
       </div>
 
@@ -407,7 +415,7 @@
             </div>
             <div class="ticket-rule"></div>
             <div class="ticket-body">
-              <dl class="ticket-row"><dt>Docentes</dt><dd>Dra. Campos · Dra. Vergara</dd></dl>
+              <dl class="ticket-row"><dt>Speakers</dt><dd>Dra. Vergara · Dra. Flores · Dra. Gold<br><a class="ticket-link" href="#edicion-concepcion">Ver equipo</a></dd></dl>
               <dl class="ticket-row"><dt>Modalidad</dt><dd>Presencial</dd></dl>
               <dl class="ticket-row value"><dt>Valor</dt><dd>$47.000 CLP</dd></dl>
 
@@ -478,7 +486,7 @@
             </div>
             <div class="ticket-rule"></div>
             <div class="ticket-body">
-              <dl class="ticket-row"><dt>Docentes</dt><dd>Dra. Campos · Dra. Vergara</dd></dl>
+              <dl class="ticket-row"><dt>Speakers</dt><dd>Dra. Campos · Dr. Romero ·<br>Dra. Gold · Dra. Montes<br><a class="ticket-link" href="#edicion-antofagasta">Ver equipo</a></dd></dl>
               <dl class="ticket-row"><dt>Modalidad</dt><dd>Presencial</dd></dl>
               <dl class="ticket-row value"><dt>Valor</dt><dd>$47.000 CLP</dd></dl>
 
@@ -543,11 +551,11 @@
   <section class="docentes" id="docentes">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">DOCENTES</p>
-        <h2>Quienes dictan esta edición</h2>
-        <p class="route-sub">Conoce al equipo docente de Harmony Instituto Internacional presente en cada sede del tour.</p>
+        <p class="eyebrow">SPEAKERS</p>
+        <h2>Quiénes dictan cada edición</h2>
+        <p class="route-sub">Docentes de Harmony Instituto Internacional, profesionales formados en nuestro Postgrado y speakers invitados. Conoce al equipo de tu sede.</p>
       </div>
-      <div class="speaker-grid" id="speaker-grid"></div>
+      <div class="editions" id="editions"></div>
     </div>
   </section>
 </main>
@@ -564,22 +572,25 @@
 
 <script>
   (function(){
-    var SPEAKERS = [
+    // Cada speaker se define una vez; las ediciones (sedes) listan sus ids en orden.
+    // "verified" marca a las docentes de Harmony. "instagram" vacío oculta el botón.
+    var SPEAKERS = {
+      "loreto-campos":   { name: "Dra. Loreto Campos",   role: "Docente Harmony Instituto Internacional", verified: true },
+      "javiera-vergara": { name: "Dra. Javiera Vergara", role: "Docente Harmony Instituto Internacional", verified: true },
+      "miguel-romero":   { name: "Dr. Miguel Romero",    role: "Alumno de Postgrado · Cohorte 7" },
+      "marjorie-gold":   { name: "Dra. Marjorie Gold",   role: "Speaker Osamedic" },
+      "sofia-montes":    { name: "Dra. Sofía Montes",    role: "Exalumna de Postgrado · Cohorte 4" },
+      "pamela-flores":   { name: "Dra. Pamela Flores",   role: "Exalumna de Postgrado · Cohorte 5" }
+    };
+
+    var EDITIONS = [
       {
-        name: "Dra. Loreto Campos",
-        role: "Docente Harmony Instituto Internacional",
-        sedes: ["Concepción", "Antofagasta"],
-        photo: "/speakers/loreto-campos.webp",
-        instagram: "#",
-        verified: true
+        id: "edicion-concepcion", num: "01", city: "Concepción", date: "Sáb 17 oct 2026",
+        speakers: ["javiera-vergara", "pamela-flores", "marjorie-gold"]
       },
       {
-        name: "Dra. Javiera Vergara",
-        role: "Docente Harmony Instituto Internacional",
-        sedes: ["Concepción", "Antofagasta"],
-        photo: "/speakers/javiera-vergara.webp",
-        instagram: "#",
-        verified: true
+        id: "edicion-antofagasta", num: "02", city: "Antofagasta", date: "Sáb 24 oct 2026",
+        speakers: ["loreto-campos", "miguel-romero", "marjorie-gold", "sofia-montes"]
       }
     ];
 
@@ -589,14 +600,10 @@
       });
     }
 
-    function renderSpeakers(){
-      var grid = document.getElementById("speaker-grid");
-      if(!grid) return;
-
-      grid.innerHTML = SPEAKERS.map(function(s){
-        var sedesHtml = (s.sedes || []).map(function(sede){
-          return '<span class="speaker-tag">' + escapeHtml(sede) + '</span>';
-        }).join("");
+    function speakerCard(id){
+        var s = SPEAKERS[id];
+        if(!s) return "";
+        var photo = "/speakers/" + id + ".webp";
 
         var verifiedHtml = s.verified ? (
           '<span class="speaker-verified" title="Docente confirmada Harmony" aria-hidden="true">' +
@@ -604,31 +611,49 @@
           '</span>'
         ) : "";
 
-        var hasLink = s.instagram && s.instagram !== "#";
-        var linkAttrs = hasLink ? ' target="_blank" rel="noopener"' : "";
+        var linkHtml = s.instagram ? (
+          '<a class="speaker-btn" href="' + escapeHtml(s.instagram) + '" target="_blank" rel="noopener">' +
+            '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>' +
+            'Ver perfil' +
+          '</a>'
+        ) : "";
 
         return (
           '<article class="speaker-card">' +
-            '<img class="speaker-photo" src="' + escapeHtml(s.photo) + '" alt="' + escapeHtml(s.name) + ', ' + escapeHtml(s.role) + '" loading="lazy">' +
+            '<img class="speaker-photo" src="' + escapeHtml(photo) + '" alt="' + escapeHtml(s.name) + ', ' + escapeHtml(s.role) + '" width="640" height="800" loading="lazy">' +
             '<div class="speaker-scrim"></div>' +
             '<div class="speaker-content">' +
               '<div class="speaker-name-row">' +
-                '<h3 class="speaker-name">' + escapeHtml(s.name) + '</h3>' +
+                '<h4 class="speaker-name">' + escapeHtml(s.name) + '</h4>' +
                 verifiedHtml +
               '</div>' +
               '<p class="speaker-role">' + escapeHtml(s.role) + '</p>' +
-              '<div class="speaker-sedes">' + sedesHtml + '</div>' +
-              '<a class="speaker-btn" href="' + escapeHtml(s.instagram || "#") + '"' + linkAttrs + '>' +
-                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>' +
-                'Ver perfil' +
-              '</a>' +
+              linkHtml +
             '</div>' +
           '</article>'
+        );
+    }
+
+    function renderEditions(){
+      var root = document.getElementById("editions");
+      if(!root) return;
+
+      root.innerHTML = EDITIONS.map(function(ed){
+        return (
+          '<section class="edition" id="' + ed.id + '" aria-labelledby="' + ed.id + '-title">' +
+            '<div class="edition-head">' +
+              '<span class="edition-num">EDICIÓN ' + escapeHtml(ed.num) + '</span>' +
+              '<h3 class="edition-city" id="' + ed.id + '-title">' + escapeHtml(ed.city) + '</h3>' +
+              '<span class="edition-date">' + escapeHtml(ed.date) + '</span>' +
+              '<span class="edition-count">' + ed.speakers.length + ' speakers</span>' +
+            '</div>' +
+            '<div class="speaker-grid">' + ed.speakers.map(speakerCard).join("") + '</div>' +
+          '</section>'
         );
       }).join("");
     }
 
-    renderSpeakers();
+    renderEditions();
 
     document.querySelectorAll(".js-toggle-form").forEach(function(btn){
       btn.addEventListener("click", function(){
