@@ -1,0 +1,9 @@
+{
+  "name": "harmony-on-tour-chile-2026",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Landing de inscripción para Harmony On Tour Chile 2026",
+  "engines": {
+    "node": ">=20"
+  }
+}
