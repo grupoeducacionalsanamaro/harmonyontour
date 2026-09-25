@@ -149,59 +149,113 @@
   .hero-meta span{display:flex;align-items:center;gap:8px;white-space:nowrap;}
   .dot{width:5px;height:5px;border-radius:50%;background:var(--red-500);flex:none;}
 
-  .about{ padding-block:clamp(56px,9vw,88px); border-bottom:1px solid var(--line); }
-  .about-grid{ display:grid; gap:36px; grid-template-columns:1fr; }
-  @media (min-width:860px){ .about-grid{grid-template-columns:0.85fr 1.15fr;align-items:start;} }
+  .about{ padding-block:clamp(64px,10vw,112px); border-bottom:1px solid var(--line); }
+  .about-grid{ display:grid; gap:clamp(28px,4vw,56px); grid-template-columns:1fr; }
+  @media (min-width:900px){ .about-grid{grid-template-columns:1fr 1fr;align-items:center;} }
   .section-head .eyebrow{margin-bottom:14px;}
-  .about h2{ font-size:clamp(28px,4.4vw,40px); max-width:14ch; }
-  .about-copy{ font-size:16.5px; line-height:1.75; color:var(--silver); max-width:62ch; }
+  .about h2{ font-size:clamp(44px,7vw,84px); line-height:.95; }
+  .about h2 .accent{ color:var(--red-500); }
+  .about-copy{ font-size:clamp(17px,1.6vw,19px); line-height:1.75; color:var(--silver); max-width:60ch; }
   .about-copy strong{color:var(--white);font-weight:600;}
-  .pill-row{ display:grid; gap:12px; margin-top:22px; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); }
-  .pill{ display:flex; align-items:flex-start; gap:12px; padding:16px; background:var(--surface); border:1px solid var(--line); border-radius:12px; }
+  .pill-row{ display:grid; gap:16px; margin-top:clamp(36px,5vw,56px); grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); }
+  .pill{ display:flex; align-items:flex-start; gap:14px; padding:22px; background:var(--surface); border:1px solid var(--line); border-radius:12px; transition:border-color .2s ease; }
+  .pill:hover{ border-color:var(--line-strong); }
   .pill svg{flex:none;margin-top:2px;color:var(--red-500);}
-  .pill b{ display:block; font-family:var(--font-body); font-weight:600; font-size:14px; color:var(--white); margin-bottom:2px; }
-  .pill small{font-size:12.5px;color:var(--silver);line-height:1.5;}
+  .pill b{ display:block; font-family:var(--font-body); font-weight:600; font-size:16.5px; color:var(--white); margin-bottom:4px; }
+  .pill small{font-size:14.5px;color:var(--silver);line-height:1.55;}
 
-  .route{ padding-block:clamp(56px,9vw,96px); background:var(--bg-2); border-bottom:1px solid var(--line); }
+  .route{ padding-block:clamp(56px,9vw,96px); background:var(--bg); border-bottom:1px solid var(--line); }
   .route .section-head{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:18px; margin-bottom:40px; }
   .route h2{font-size:clamp(28px,4.4vw,40px);}
   .route-sub{color:var(--silver);font-size:15px;max-width:46ch;margin-top:10px;}
 
-  .stops{ position:relative; display:grid; gap:28px; grid-template-columns:1fr; align-items:start; }
-  @media (min-width:800px){
-    .stops{grid-template-columns:1fr 1fr;gap:28px;}
-  }
-  .stop{ position:relative; z-index:1; display:flex; flex-direction:column; gap:0; }
+  /* Tickets: mismo alto mientras ningún formulario está abierto */
+  .stops{ position:relative; display:grid; gap:32px; grid-template-columns:1fr; align-items:stretch; }
+  .stops.has-open{ align-items:start; }
+  @media (min-width:860px){ .stops{grid-template-columns:1fr 1fr;} }
+  .stop{ position:relative; z-index:1; display:flex; flex-direction:column; }
 
-  .stop-marker{ display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .stop-marker{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
   .stop-num{
-    width:26px;height:26px;border-radius:50%; background:var(--bg); border:2px solid var(--red-500);
-    display:grid;place-items:center; font-family:var(--font-mono); font-size:11px; font-weight:600; flex:none;
+    width:32px;height:32px;border-radius:50%; background:var(--bg); border:2px solid var(--red-500);
+    display:grid;place-items:center; font-family:var(--font-mono); font-size:12.5px; font-weight:600; flex:none;
   }
-  .stop-label{ font-family:var(--font-mono); font-size:11.5px; letter-spacing:.1em; color:var(--silver); text-transform:uppercase; }
+  .stop-label{ font-family:var(--font-mono); font-size:13px; letter-spacing:.12em; color:var(--silver); text-transform:uppercase; }
 
   .ticket{
-    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
-    overflow:hidden; transition:border-color .2s ease;
+    --notch:var(--bg);
+    --rule-inset:22px;
+    flex:1; display:flex; flex-direction:column;
+    position:relative;
+    background:var(--surface); border:1px solid var(--line-strong); border-radius:18px;
+    box-shadow:0 24px 50px -28px rgba(0,0,0,.8);
+    transition:border-color .25s ease, transform .25s ease, box-shadow .25s ease;
   }
-  .ticket-top{ padding:24px 24px 20px; background:linear-gradient(160deg, var(--surface-2), var(--surface) 70%); }
-  .ticket-city{ font-family:var(--font-display); font-size:clamp(26px,3.4vw,32px); color:var(--white); }
-  .ticket-date{ margin-top:8px; font-family:var(--font-mono); font-size:13px; color:var(--red-500); letter-spacing:.02em; }
+  .ticket:hover{ border-color:rgba(210,26,26,.55); box-shadow:0 28px 60px -28px rgba(183,0,0,.45); }
+  .ticket-top{
+    position:relative; overflow:hidden;
+    padding:26px 28px 24px; border-radius:17px 17px 0 0;
+    background:
+      radial-gradient(120% 140% at 100% 0%, rgba(210,26,26,.38), transparent 55%),
+      linear-gradient(135deg, var(--red-900), #1c0a09 70%);
+    border-bottom:1px solid rgba(247,244,241,.1);
+  }
+  .ticket-brand{
+    display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    font-family:var(--font-mono); font-size:11.5px; letter-spacing:.16em; text-transform:uppercase;
+    color:rgba(247,244,241,.72); margin-bottom:18px;
+  }
+  .ticket-brand .admit{ color:var(--white); border:1px solid rgba(247,244,241,.45); padding:3px 9px; border-radius:4px; letter-spacing:.14em; }
+  .ticket-city{ font-family:var(--font-display); font-size:clamp(40px,5vw,56px); line-height:.95; color:var(--white); }
+  .ticket-edition{ margin-top:10px; font-family:var(--font-mono); font-size:13px; letter-spacing:.1em; color:rgba(247,244,241,.8); text-transform:uppercase; }
+
+  .ticket-body{ padding:24px 28px 26px; flex:1; }
+  .ticket-fields{ margin:0; display:grid; grid-template-columns:1fr 1fr; gap:20px 24px; }
+  .tf{ display:grid; gap:6px; align-content:start; }
+  .tf-wide{ grid-column:1 / -1; }
+  .tf dt{ font-family:var(--font-mono); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--silver); }
+  .tf dd{ margin:0; font-size:17px; font-weight:600; color:var(--white); line-height:1.35; }
+  .tf-price dd{ font-family:var(--font-display); font-size:28px; font-weight:600; color:var(--white); letter-spacing:.01em; line-height:1.1; }
+  .tf-price .cur{ font-family:var(--font-mono); font-size:12px; font-weight:500; letter-spacing:.1em; color:var(--silver); }
+  .nw{ white-space:nowrap; }
+  .ticket-link{ display:inline-block; margin-top:2px; font-size:13.5px; font-weight:600; color:var(--red-500); text-decoration:none; }
+  .ticket-link:hover{ text-decoration:underline; }
+
+  /* Perforación con muescas laterales */
   .ticket-rule{
-    position:relative; height:1px;
-    background:repeating-linear-gradient(90deg, var(--line-strong) 0 8px, transparent 8px 16px);
-    margin:0;
+    position:relative; height:2px; margin:0 var(--rule-inset);
+    background:repeating-linear-gradient(90deg, var(--line-strong) 0 10px, transparent 10px 18px);
   }
   .ticket-rule::before,.ticket-rule::after{
-    content:""; position:absolute; top:50%; width:18px;height:18px; background:var(--bg-2); border-radius:50%; transform:translateY(-50%);
+    content:""; position:absolute; top:50%; width:30px;height:30px; background:var(--notch);
+    border:1px solid var(--line-strong); border-radius:50%; transform:translateY(-50%);
   }
-  .ticket-rule::before{left:-9px;}
-  .ticket-rule::after{right:-9px;}
-  .ticket-body{ padding:20px 24px 24px; display:flex; flex-direction:column; gap:16px; }
-  .ticket-row{ display:flex; justify-content:space-between; gap:12px; font-size:13.5px; }
-  .ticket-row dt{color:var(--silver);}
-  .ticket-row dd{ margin:0; text-align:right; color:var(--white); font-weight:500; }
-  .ticket-row.value dd{ font-family:var(--font-mono); color:var(--silver); font-style:italic; }
+  .ticket-rule::before{ left:calc(-1 * var(--rule-inset) - 16px); clip-path:inset(0 0 0 50%); }
+  .ticket-rule::after{ right:calc(-1 * var(--rule-inset) - 16px); clip-path:inset(0 50% 0 0); }
+
+  .ticket-stub{ scroll-margin-top:84px; padding:22px 28px 26px; display:flex; flex-direction:column; gap:18px; }
+  .stub-meta{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  .stub-no{ font-family:var(--font-mono); font-size:12px; letter-spacing:.14em; color:var(--silver); text-transform:uppercase; line-height:1.6; }
+  .stub-no b{ display:block; color:var(--white); font-size:15px; letter-spacing:.08em; }
+  .barcode{
+    flex:none; width:128px; height:40px; opacity:.85;
+    background:repeating-linear-gradient(90deg,
+      var(--white) 0 2px, transparent 2px 4px, var(--white) 4px 5px, transparent 5px 8px,
+      var(--white) 8px 11px, transparent 11px 12px, var(--white) 12px 13px, transparent 13px 16px);
+  }
+  .ticket-stub .btn-small{ padding:16px 22px; font-size:15.5px; }
+
+  @media (max-width:520px){
+    .ticket{ --rule-inset:16px; border-radius:16px; }
+    .ticket-top{ padding:22px 20px 20px; border-radius:15px 15px 0 0; }
+    .ticket-brand{ font-size:10.5px; letter-spacing:.12em; margin-bottom:14px; }
+    .ticket-body{ padding:20px 20px 22px; }
+    .ticket-fields{ gap:18px 16px; }
+    .tf dd{ font-size:15.5px; }
+    .tf-price dd{ font-size:24px; }
+    .ticket-stub{ padding:20px 20px 22px; gap:16px; }
+    .barcode{ width:92px; height:34px; }
+  }
 
   .reg-panel{
     margin-top:4px;
@@ -234,13 +288,11 @@
   .reg-fallback{ font-size:11.5px; color:var(--silver); text-align:center; }
   .reg-fallback a{ color:var(--red-500); text-decoration:underline; }
 
-  .docentes{ padding-block:clamp(56px,9vw,88px); border-bottom:1px solid var(--line); }
+  .docentes{ padding-block:clamp(56px,9vw,88px); background:var(--bg-2); border-bottom:1px solid var(--line); }
   .docentes .section-head{ margin-bottom:36px; max-width:62ch; }
   .docentes h2{ font-size:clamp(28px,4.4vw,40px); margin-top:10px; }
   .docentes .route-sub{ margin-top:10px; }
 
-  .ticket-link{ display:inline-block; margin-top:4px; font-size:12px; font-weight:600; color:var(--red-500); text-decoration:none; }
-  .ticket-link:hover{ text-decoration:underline; }
 
   .editions{ display:grid; gap:clamp(48px,7vw,72px); }
   .edition{ scroll-margin-top:84px; }
@@ -302,7 +354,7 @@
   .speaker-card:hover .speaker-verified{ transform:scale(1.12) rotate(4deg); }
   .speaker-role{
     font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
-    color:var(--silver);
+    color:var(--silver); line-height:1.4; min-height:2.8em;
   }
   .speaker-btn{
     margin-top:4px;
@@ -316,6 +368,26 @@
   }
   .speaker-btn:hover{ background:rgba(183,0,0,.22); border-color:var(--red-500); transform:translateY(-1px); }
   .speaker-btn svg{ flex:none; }
+
+  /* Móvil: speakers en 2 columnas para no alargar el scroll */
+  @media (max-width:599px){
+    .speaker-grid{ grid-template-columns:1fr 1fr; gap:12px; }
+    .speaker-card{ border-radius:14px; }
+    .speaker-card:hover{ transform:none; }
+    .speaker-content{ padding:12px; gap:4px; }
+    .speaker-name-row{ gap:6px; }
+    .speaker-name{ font-size:15px; line-height:1.15; }
+    .speaker-verified{ width:14px; height:14px; }
+    .speaker-role{ font-size:9px; letter-spacing:.04em; }
+    .edition-head{ margin-bottom:18px; }
+    .about h2{ line-height:1.02; }
+  }
+  @media (max-width:359px){
+    .speaker-card{ aspect-ratio:3/4.3; }
+    .speaker-name{ font-size:14px; }
+    .speaker-role{ font-size:8.5px; }
+    .ticket-stub .btn-small{ font-size:14px; padding:14px 12px; }
+  }
 
   footer{ padding-block:36px; }
   .foot-inner{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px; }
@@ -360,12 +432,12 @@
   </section>
 
   <section class="about" id="sobre">
-    <div class="wrap about-grid">
-      <div class="section-head">
-        <p class="eyebrow">SOBRE EL TOUR</p>
-        <h2>¿Qué es Harmony On Tour Chile 2026?</h2>
-      </div>
-      <div>
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="section-head">
+          <p class="eyebrow">SOBRE EL TOUR</p>
+          <h2>¿Qué es Harmony On Tour <span class="accent">Chile 2026</span>?</h2>
+        </div>
         <p class="about-copy">
           <strong>Harmony On Tour</strong> es la gira nacional del Instituto Harmony: un recorrido
           presencial por distintas ciudades de Chile pensado para médicos y odontólogos que quieren
@@ -374,21 +446,32 @@
           <strong>primer contacto con la técnica</strong> antes de decidir profundizar en la
           especialidad.
         </p>
-        <div class="pill-row">
-          <div class="pill">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
-            <div><b>Actualización clínica</b><small>Los protocolos y tendencias vigentes en armonización orofacial.</small></div>
-          </div>
-          <div class="pill">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-            <div><b>Capacitación breve</b><small>Una jornada intensiva de 10:00 a 14:00 hrs, sin desplazarte fuera de tu ciudad.</small></div>
-          </div>
-          <div class="pill">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-3-8-6.5-8-11a5 5 0 0 1 8-4 5 5 0 0 1 8 4c0 4.5-4 8-8 11Z"/></svg>
-            <div><b>Primer contacto</b><small>Tu puerta de entrada a la especialidad, con el aval académico de Harmony.</small></div>
-          </div>
+      </div>
+      <div class="pill-row">
+        <div class="pill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+          <div><b>Actualización clínica</b><small>Los protocolos y tendencias vigentes en armonización orofacial.</small></div>
+        </div>
+        <div class="pill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <div><b>Capacitación breve</b><small>Una jornada intensiva de 10:00 a 14:00 hrs, sin desplazarte fuera de tu ciudad.</small></div>
+        </div>
+        <div class="pill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-3-8-6.5-8-11a5 5 0 0 1 8-4 5 5 0 0 1 8 4c0 4.5-4 8-8 11Z"/></svg>
+          <div><b>Primer contacto</b><small>Tu puerta de entrada a la especialidad, con el aval académico de Harmony.</small></div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="docentes" id="docentes">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">SPEAKERS</p>
+        <h2>Quiénes dictan cada edición</h2>
+        <p class="route-sub">Docentes de Harmony Instituto Internacional, profesionales formados en nuestro Postgrado y speakers invitados. Conoce al equipo de tu sede.</p>
+      </div>
+      <div class="editions" id="editions"></div>
     </div>
   </section>
 
@@ -410,14 +493,25 @@
           </div>
           <div class="ticket">
             <div class="ticket-top">
+              <div class="ticket-brand"><span>Harmony On Tour · Chile 2026</span><span class="admit">Admisión general</span></div>
               <h3 class="ticket-city">Concepción</h3>
-              <p class="ticket-date">SÁB 17 OCT 2026 · 10:00–14:00 HRS</p>
+              <p class="ticket-edition">Edición 01 · Cupos limitados</p>
             </div>
-            <div class="ticket-rule"></div>
             <div class="ticket-body">
-              <dl class="ticket-row"><dt>Speakers</dt><dd>Dra. Vergara · Dra. Flores · Dra. Gold<br><a class="ticket-link" href="#edicion-concepcion">Ver equipo</a></dd></dl>
-              <dl class="ticket-row"><dt>Modalidad</dt><dd>Presencial</dd></dl>
-              <dl class="ticket-row value"><dt>Valor</dt><dd>$47.000 CLP</dd></dl>
+              <dl class="ticket-fields">
+                <div class="tf"><dt>Fecha</dt><dd>Sáb 17 oct 2026</dd></div>
+                <div class="tf"><dt>Horario</dt><dd><span class="nw">10:00 – 14:00</span> hrs</dd></div>
+                <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Vergara</span> · <span class="nw">Dra. Flores</span> · <span class="nw">Dra. Gold</span><br><a class="ticket-link" href="#edicion-concepcion">Ver equipo →</a></dd></div>
+                <div class="tf tf-price"><dt>Valor</dt><dd><span class="nw">$47.000</span> <small class="cur">CLP</small></dd></div>
+                <div class="tf"><dt>Modalidad</dt><dd>Presencial</dd></div>
+              </dl>
+            </div>
+            <div class="ticket-rule" aria-hidden="true"></div>
+            <div class="ticket-stub">
+              <div class="stub-meta">
+                <span class="stub-no">Ticket Nº 01<b>CONCEPCIÓN</b></span>
+                <span class="barcode" aria-hidden="true"></span>
+              </div>
 
               <button type="button" class="btn btn-primary btn-small js-toggle-form" data-target="form-concepcion">Inscribirme — Concepción</button>
 
@@ -481,14 +575,25 @@
           </div>
           <div class="ticket">
             <div class="ticket-top">
+              <div class="ticket-brand"><span>Harmony On Tour · Chile 2026</span><span class="admit">Admisión general</span></div>
               <h3 class="ticket-city">Antofagasta</h3>
-              <p class="ticket-date">SÁB 24 OCT 2026 · 10:00–14:00 HRS</p>
+              <p class="ticket-edition">Edición 02 · Cupos limitados</p>
             </div>
-            <div class="ticket-rule"></div>
             <div class="ticket-body">
-              <dl class="ticket-row"><dt>Speakers</dt><dd>Dra. Campos · Dr. Romero ·<br>Dra. Gold · Dra. Montes<br><a class="ticket-link" href="#edicion-antofagasta">Ver equipo</a></dd></dl>
-              <dl class="ticket-row"><dt>Modalidad</dt><dd>Presencial</dd></dl>
-              <dl class="ticket-row value"><dt>Valor</dt><dd>$47.000 CLP</dd></dl>
+              <dl class="ticket-fields">
+                <div class="tf"><dt>Fecha</dt><dd>Sáb 24 oct 2026</dd></div>
+                <div class="tf"><dt>Horario</dt><dd><span class="nw">10:00 – 14:00</span> hrs</dd></div>
+                <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Campos</span> · <span class="nw">Dr. Romero</span> · <span class="nw">Dra. Gold</span> · <span class="nw">Dra. Montes</span><br><a class="ticket-link" href="#edicion-antofagasta">Ver equipo →</a></dd></div>
+                <div class="tf tf-price"><dt>Valor</dt><dd><span class="nw">$47.000</span> <small class="cur">CLP</small></dd></div>
+                <div class="tf"><dt>Modalidad</dt><dd>Presencial</dd></div>
+              </dl>
+            </div>
+            <div class="ticket-rule" aria-hidden="true"></div>
+            <div class="ticket-stub">
+              <div class="stub-meta">
+                <span class="stub-no">Ticket Nº 02<b>ANTOFAGASTA</b></span>
+                <span class="barcode" aria-hidden="true"></span>
+              </div>
 
               <button type="button" class="btn btn-primary btn-small js-toggle-form" data-target="form-antofagasta">Inscribirme — Antofagasta</button>
 
@@ -545,17 +650,6 @@
           </div>
         </article>
       </div>
-    </div>
-  </section>
-
-  <section class="docentes" id="docentes">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">SPEAKERS</p>
-        <h2>Quiénes dictan cada edición</h2>
-        <p class="route-sub">Docentes de Harmony Instituto Internacional, profesionales formados en nuestro Postgrado y speakers invitados. Conoce al equipo de tu sede.</p>
-      </div>
-      <div class="editions" id="editions"></div>
     </div>
   </section>
 </main>
@@ -655,14 +749,25 @@
 
     renderEditions();
 
-    document.querySelectorAll(".js-toggle-form").forEach(function(btn){
+    // Solo un formulario abierto a la vez: al abrir uno se repliegan los demás.
+    var toggles = document.querySelectorAll(".js-toggle-form");
+    var stops = document.querySelector(".stops");
+    toggles.forEach(function(btn){
       btn.addEventListener("click", function(){
         var form = document.getElementById(btn.getAttribute("data-target"));
         if(!form) return;
+        toggles.forEach(function(other){
+          if(other === btn) return;
+          var otherForm = document.getElementById(other.getAttribute("data-target"));
+          if(otherForm) otherForm.classList.add("hidden-form");
+          other.hidden = false;
+        });
         form.classList.remove("hidden-form");
         btn.hidden = true;
+        if(stops) stops.classList.add("has-open");
         var firstField = form.querySelector("input, select");
-        if(firstField) firstField.focus();
+        if(firstField) firstField.focus({ preventScroll: true });
+        btn.closest(".ticket-stub").scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
 
