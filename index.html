@@ -9,6 +9,17 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0a0908">
+<script>
+  // Fin de la preventa: 16 de octubre de 2026, 00:00 hora de Chile (UTC-3).
+  // Va en el <head> para que el precio correcto se vea desde el primer pintado.
+  // Para probar: agregar ?precio=general o ?precio=preventa a la URL.
+  (function(){
+    var PRESALE_END = Date.parse("2026-10-16T00:00:00-03:00");
+    var forced = new URLSearchParams(location.search).get("precio");
+    var over = forced ? forced === "general" : Date.now() >= PRESALE_END;
+    if(over) document.documentElement.classList.add("presale-over");
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -158,6 +169,34 @@
   .btn-ghost:hover{border-color:var(--red-500);background:rgba(183,0,0,.1);}
   .btn-small{padding:12px 20px;font-size:13.5px;width:100%;}
 
+  /* Preventa: visible hasta el 15 oct; el JS agrega .presale-over al <html> después */
+  .regular-only{ display:none; }
+  .presale-over .presale-only{ display:none !important; }
+  .presale-over .regular-only{ display:revert; }
+  .presale-pill{
+    display:inline-flex; align-items:center; gap:10px; flex-wrap:wrap; width:fit-content;
+    font-family:var(--font-mono); font-size:12.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--white); background:rgba(210,26,26,.16); border:1px solid rgba(210,26,26,.6);
+    padding:8px 14px; border-radius:999px;
+  }
+  .presale-pill b{ color:var(--white); font-weight:600; }
+  .presale-pill .pp-tag{ background:var(--red-500); color:var(--white); padding:2px 8px; border-radius:999px; font-weight:600; }
+  .presale-pill s{ color:var(--silver); }
+  .presale-pill .pp-short{ display:none; }
+  @media (max-width:520px){
+    .presale-pill{ font-size:11px; letter-spacing:.05em; gap:8px; padding:7px 12px; white-space:nowrap; }
+    .presale-pill .pp-long{ display:none; }
+    .presale-pill .pp-short{ display:inline; }
+  }
+  @media (max-width:359px){ .presale-pill s{ display:none; } }
+  .presale-note{
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    margin:-12px 0 32px; padding:14px 18px; border-radius:12px;
+    background:rgba(210,26,26,.1); border:1px solid rgba(210,26,26,.45);
+    font-size:15px; color:var(--white);
+  }
+  .presale-note strong{ font-family:var(--font-display); font-size:20px; letter-spacing:.02em; }
+  .presale-note s{ color:var(--silver); }
   .hero-meta{
     display:flex; flex-wrap:wrap; gap:10px 22px; font-family:var(--font-mono); font-size:12px;
     color:var(--silver); padding-top:14px; border-top:1px dashed var(--line);
@@ -232,6 +271,9 @@
   .tf dt{ font-family:var(--font-mono); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--silver); }
   .tf dd{ margin:0; font-size:17px; font-weight:600; color:var(--white); line-height:1.35; }
   .tf-price dd{ font-family:var(--font-display); font-size:28px; font-weight:600; color:var(--white); letter-spacing:.01em; line-height:1.1; }
+  .price-old{ display:block; margin-top:4px; font-family:var(--font-body); font-size:13px; font-weight:500; color:var(--silver); letter-spacing:0; }
+  .price-old s{ color:var(--silver); }
+  .ticket-brand .admit.presale-only{ background:var(--red-500); border-color:var(--red-500); }
   .tf-price .cur{ font-family:var(--font-mono); font-size:12px; font-weight:500; letter-spacing:.1em; color:var(--silver); }
   .nw{ white-space:nowrap; }
   .ticket-link{ display:inline-block; margin-top:2px; font-size:13.5px; font-weight:600; color:var(--red-500); text-decoration:none; }
@@ -458,6 +500,7 @@
   <section class="hero">
     <div class="wrap hero-inner">
       <p class="eyebrow reveal">HARMONY INSTITUTO INTERNACIONAL PRESENTA</p>
+      <p class="presale-pill presale-only reveal"><span class="pp-tag">Preventa</span> <b>$19.000</b> <span class="pp-long">hasta el 15 de octubre</span><span class="pp-short">hasta el 15 oct</span> <s>$47.000</s></p>
       <h1 class="reveal">HARMONY<br>ON TOUR <span class="accent">CHILE</span></h1>
       <p class="hero-tagline reveal">Una actualización necesaria.</p>
       <p class="hero-copy reveal">
@@ -532,6 +575,8 @@
         </div>
       </div>
 
+      <p class="presale-note presale-only"><strong>Preventa $19.000</strong> <span>para ambas sedes hasta el 15 de octubre. Desde el 16 de octubre, precio general <s>$47.000</s>.</span></p>
+
       <div class="stops">
         <article class="stop">
           <div class="stop-marker">
@@ -540,7 +585,7 @@
           </div>
           <div class="ticket">
             <div class="ticket-top">
-              <div class="ticket-brand"><span>Harmony On Tour · Chile 2026</span><span class="admit">Admisión general</span></div>
+              <div class="ticket-brand"><span>Harmony On Tour · Chile 2026</span><span class="admit presale-only">Preventa</span><span class="admit regular-only">Admisión general</span></div>
               <h3 class="ticket-city">Concepción</h3>
               <p class="ticket-edition">Edición 01 · Cupos limitados</p>
             </div>
@@ -549,7 +594,7 @@
                 <div class="tf"><dt>Fecha</dt><dd>Sáb 17 oct 2026</dd></div>
                 <div class="tf"><dt>Horario</dt><dd><span class="nw">10:00 – 14:00</span> hrs</dd></div>
                 <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Vergara</span> · <span class="nw">Dra. Flores</span> · <span class="nw">Dra. Gold</span><br><a class="ticket-link" href="#edicion-concepcion">Ver equipo →</a></dd></div>
-                <div class="tf tf-price"><dt>Valor</dt><dd><span class="nw">$47.000</span> <small class="cur">CLP</small></dd></div>
+                <div class="tf tf-price"><dt><span class="presale-only">Valor preventa</span><span class="regular-only">Valor</span></dt><dd><span class="presale-only"><span class="nw">$19.000</span> <small class="cur">CLP</small><span class="price-old">Luego <s>$47.000</s></span></span><span class="regular-only"><span class="nw">$47.000</span> <small class="cur">CLP</small></span></dd></div>
                 <div class="tf"><dt>Modalidad</dt><dd>Presencial</dd></div>
               </dl>
             </div>
@@ -622,7 +667,7 @@
           </div>
           <div class="ticket">
             <div class="ticket-top">
-              <div class="ticket-brand"><span>Harmony On Tour · Chile 2026</span><span class="admit">Admisión general</span></div>
+              <div class="ticket-brand"><span>Harmony On Tour · Chile 2026</span><span class="admit presale-only">Preventa</span><span class="admit regular-only">Admisión general</span></div>
               <h3 class="ticket-city">Antofagasta</h3>
               <p class="ticket-edition">Edición 02 · Cupos limitados</p>
             </div>
@@ -631,7 +676,7 @@
                 <div class="tf"><dt>Fecha</dt><dd>Sáb 24 oct 2026</dd></div>
                 <div class="tf"><dt>Horario</dt><dd><span class="nw">10:00 – 14:00</span> hrs</dd></div>
                 <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Campos</span> · <span class="nw">Dr. Romero</span> · <span class="nw">Dra. Gold</span> · <span class="nw">Dra. Montes</span><br><a class="ticket-link" href="#edicion-antofagasta">Ver equipo →</a></dd></div>
-                <div class="tf tf-price"><dt>Valor</dt><dd><span class="nw">$47.000</span> <small class="cur">CLP</small></dd></div>
+                <div class="tf tf-price"><dt><span class="presale-only">Valor preventa</span><span class="regular-only">Valor</span></dt><dd><span class="presale-only"><span class="nw">$19.000</span> <small class="cur">CLP</small><span class="price-old">Luego <s>$47.000</s></span></span><span class="regular-only"><span class="nw">$47.000</span> <small class="cur">CLP</small></span></dd></div>
                 <div class="tf"><dt>Modalidad</dt><dd>Presencial</dd></div>
               </dl>
             </div>
