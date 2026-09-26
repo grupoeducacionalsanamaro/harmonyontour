@@ -298,9 +298,11 @@
   .reg-form.is-entering .reg-panel > :nth-child(n+6){ animation-delay:.31s; }
   @keyframes field-in{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
   .js-toggle-form.is-revealed{ animation:field-in .35s ease both; }
+  /* Con "reducir movimiento" el despliegue se mantiene (es suave y breve),
+     pero los campos solo aparecen con fundido, sin desplazamiento. */
+  @keyframes field-fade{ from{ opacity:0; } to{ opacity:1; } }
   @media (prefers-reduced-motion: reduce){
-    .reg-form{ transition:none; }
-    .reg-form.is-entering .reg-panel > *, .js-toggle-form.is-revealed{ animation:none; }
+    .reg-form.is-entering .reg-panel > *, .js-toggle-form.is-revealed{ animation-name:field-fade; }
   }
   .reg-fallback{ font-size:11.5px; color:var(--silver); text-align:center; }
   .reg-fallback a{ color:var(--red-500); text-decoration:underline; }
@@ -775,14 +777,12 @@
     var toggles = document.querySelectorAll(".js-toggle-form");
     var stops = document.querySelector(".stops");
     var FORM_ANIM_MS = 420;
-    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // Anima de 0 a la altura real y luego libera la altura (auto) para que
     // los mensajes de error/éxito puedan cambiar el tamaño sin cortarse.
     function expandForm(form){
       clearTimeout(form._animTimer);
       form.classList.remove("hidden-form", "is-entering");
-      if(reduceMotion) return;
       var target = form.scrollHeight;
       form.style.height = "0px";
       form.style.opacity = "0";
@@ -799,7 +799,6 @@
     function collapseForm(form){
       if(form.classList.contains("hidden-form")) return false;
       clearTimeout(form._animTimer);
-      if(reduceMotion){ form.classList.add("hidden-form"); return true; }
       form.style.height = form.scrollHeight + "px";
       void form.offsetHeight;
       form.style.height = "0px";
@@ -835,14 +834,14 @@
 
         // Si se replegó otro formulario (en mobile queda arriba), esperar a que
         // termine para que el scroll no quede desfasado.
-        var wait = closedAnother && !reduceMotion ? FORM_ANIM_MS : 0;
+        var wait = closedAnother ? FORM_ANIM_MS : 0;
         setTimeout(function(){
-          btn.closest(".ticket-stub").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+          btn.closest(".ticket-stub").scrollIntoView({ behavior: "smooth", block: "start" });
         }, wait);
         setTimeout(function(){
           var firstField = form.querySelector("input, select");
           if(firstField) firstField.focus({ preventScroll: true });
-        }, reduceMotion ? 0 : FORM_ANIM_MS);
+        }, FORM_ANIM_MS);
       });
     });
 
