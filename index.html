@@ -409,6 +409,11 @@
   footer{ padding-block:36px; }
   .foot-inner{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px; }
   .foot-copy{ font-size:12px; color:var(--silver); }
+  @media (max-width:599px){
+    .foot-inner{ flex-direction:column; justify-content:center; text-align:center; gap:14px; }
+    .foot-inner .brand-text{ text-align:left; }
+    .foot-copy{ line-height:1.6; }
+  }
 </style>
 </head>
 <body>
@@ -677,7 +682,7 @@
       <span class="brand-mark" aria-hidden="true"><img src="/harmony-logo.webp" alt=""></span>
       <span class="brand-text"><b>HARMONY</b><span>INSTITUTO INTERNACIONAL</span></span>
     </a>
-    <p class="foot-copy">© 2026 Harmony Instituto Internacional — Harmony On Tour Chile</p>
+    <p class="foot-copy">© 2026 Harmony Instituto Internacional&nbsp;— <span class="nw">Harmony On Tour Chile</span></p>
   </div>
 </footer>
 
