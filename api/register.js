@@ -4,6 +4,23 @@
 // pública de Jotform. Requiere la variable de entorno JOTFORM_API_KEY.
 
 const { FORM_ID, getQuestions, findQid } = require("./_lib/jotform");
+const { sendConfirmationEmail } = require("./_lib/email");
+
+// Mismo link y parámetros que arma la landing (js/app.js > buildPayUrl).
+const PAY_BASE = "https://pay.hotmart.com/L107640931E";
+const SCK_BY_SEDE = {
+  "Concepción — 17 de octubre": "HOT_CONCEPCION",
+  "Antofagasta — 24 de octubre": "HOT_ANTOFAGASTA",
+};
+
+function buildPayUrl({ sede, submissionId, email, nombre }) {
+  const url = new URL(PAY_BASE);
+  url.searchParams.set("sck", SCK_BY_SEDE[sede]);
+  if (submissionId) url.searchParams.set("src", "JF" + submissionId);
+  url.searchParams.set("email", email);
+  url.searchParams.set("name", nombre);
+  return url.toString();
+}
 
 // Orígenes desde los que se aceptan inscripciones (bloquea envíos desde otros sitios).
 const ALLOWED_ORIGINS = new Set([
@@ -193,7 +210,12 @@ module.exports = async function handler(req, res) {
 
     // El id de la submission se devuelve para enlazar el pago de Hotmart (parámetro src).
     const submissionId = (submitJson.content && submitJson.content.submissionID) || null;
-    res.status(200).json({ success: true, submissionId });
+
+    // Correo de confirmación: si falla, la inscripción igual queda registrada.
+    const payUrl = buildPayUrl({ sede, submissionId, email, nombre });
+    const mail = await sendConfirmationEmail({ to: email, nombre, sede, payUrl });
+
+    res.status(200).json({ success: true, submissionId, emailSent: mail.sent });
   } catch (err) {
     console.error("register error:", err);
     res.status(502).json({

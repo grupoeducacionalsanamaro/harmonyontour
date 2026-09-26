@@ -226,6 +226,11 @@
         if(!result.ok || !result.data || !result.data.success){
           throw new Error((result.data && result.data.error) || "No pudimos registrar tu inscripción.");
         }
+        var mailNote = form.querySelector(".reg-mail-note");
+        if(mailNote && result.data.emailSent){
+          mailNote.querySelector(".reg-mail-to").textContent = payload.email;
+          mailNote.hidden = false;
+        }
         var payLink = form.querySelector("[data-pay-link]");
         if(payLink) payLink.href = buildPayUrl(payLink.href, form, payload, result.data.submissionId);
         form.querySelectorAll(".field, .reg-msg, button[type=submit], .reg-fallback").forEach(function(el){ el.style.display = "none"; });
