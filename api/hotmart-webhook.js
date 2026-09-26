@@ -13,7 +13,7 @@
 // Hotmart, llega en el header X-HOTMART-HOTTOK de cada request).
 
 const crypto = require("crypto");
-const { FORM_ID, API, getQuestions, findQid } = require("../lib/jotform");
+const { FORM_ID, API, getQuestions, findQid } = require("./_lib/jotform");
 
 const STATUS_LABEL = "Estado de pago";
 const DETAIL_LABEL = "Detalle de pago";
@@ -30,6 +30,23 @@ const EVENT_STATUS = {
   PURCHASE_CANCELED: "Cancelado",
   PURCHASE_EXPIRED: "Cancelado",
 };
+
+// Solo se procesan ventas de este producto (el Hottok es de toda la cuenta de Hotmart).
+// id/ucode tomados del checkout pay.hotmart.com/L107640931E; el nombre es respaldo.
+const HARMONY_PRODUCT = {
+  id: 8534378,
+  ucode: "656cd32f-23b8-411f-bb01-00bbef142a9d",
+  name: /harmony\s+on\s+tour/i,
+};
+
+function isHarmonyProduct(product) {
+  if (!product) return false;
+  return (
+    Number(product.id) === HARMONY_PRODUCT.id ||
+    product.ucode === HARMONY_PRODUCT.ucode ||
+    HARMONY_PRODUCT.name.test(String(product.name || ""))
+  );
+}
 
 const SEDES = {
   HOT_CONCEPCION: "Concepción",
@@ -89,6 +106,8 @@ async function findSubmission({ src, email }, questions, apiKey) {
 }
 
 module.exports = async function handler(req, res) {
+  res.setHeader("Cache-Control", "no-store");
+
   // Respuesta simple para verificaciones de URL (p. ej. al guardar el webhook en Hotmart).
   if (req.method === "GET" || req.method === "HEAD") {
     res.status(200).json({ ok: true, service: "hotmart-webhook" });
@@ -129,6 +148,13 @@ module.exports = async function handler(req, res) {
 
   if (!status) {
     res.status(200).json({ ok: true, ignored: `Evento no manejado: ${event || "(vacío)"}` });
+    return;
+  }
+
+  if (!isHarmonyProduct(data.product)) {
+    const p = data.product || {};
+    console.warn("hotmart-webhook: producto ignorado", { event, id: p.id, ucode: p.ucode, name: p.name });
+    res.status(200).json({ ok: true, ignored: "Producto distinto a Harmony ON TOUR 2026." });
     return;
   }
 
