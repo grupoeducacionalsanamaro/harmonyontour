@@ -133,7 +133,9 @@ module.exports = async function handler(req, res) {
       throw new Error(submitJson.message || "Jotform rechazó la inscripción.");
     }
 
-    res.status(200).json({ success: true });
+    // El id de la submission se devuelve para enlazar el pago de Hotmart (parámetro src).
+    const submissionId = (submitJson.content && submitJson.content.submissionID) || null;
+    res.status(200).json({ success: true, submissionId });
   } catch (err) {
     console.error("register error:", err);
     res.status(502).json({

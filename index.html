@@ -562,7 +562,7 @@
 
               <button type="button" class="btn btn-primary btn-small js-toggle-form" data-target="form-concepcion">Inscribirme — Concepción</button>
 
-              <form class="reg-form hidden-form" id="form-concepcion" data-sede="Concepción — 17 de octubre" data-city="Concepción" novalidate>
+              <form class="reg-form hidden-form" id="form-concepcion" data-sede="Concepción — 17 de octubre" data-city="Concepción" data-sck="HOT_CONCEPCION" novalidate>
                 <div class="reg-panel">
                   <div class="field">
                     <label for="nombre-concepcion">Nombre y Apellido</label>
@@ -607,7 +607,7 @@
                     <span class="check">✅</span>
                     <h4>¡Tu preinscripción quedó registrada!</h4>
                     <p>Para asegurar tu cupo en Concepción, completa ahora el pago.</p>
-                    <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E" target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
+                    <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E?sck=HOT_CONCEPCION" data-pay-link target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
                   </div>
                 </div>
               </form>
@@ -644,7 +644,7 @@
 
               <button type="button" class="btn btn-primary btn-small js-toggle-form" data-target="form-antofagasta">Inscribirme — Antofagasta</button>
 
-              <form class="reg-form hidden-form" id="form-antofagasta" data-sede="Antofagasta — 24 de octubre" data-city="Antofagasta" novalidate>
+              <form class="reg-form hidden-form" id="form-antofagasta" data-sede="Antofagasta — 24 de octubre" data-city="Antofagasta" data-sck="HOT_ANTOFAGASTA" novalidate>
                 <div class="reg-panel">
                   <div class="field">
                     <label for="nombre-antofagasta">Nombre y Apellido</label>
@@ -689,7 +689,7 @@
                     <span class="check">✅</span>
                     <h4>¡Tu preinscripción quedó registrada!</h4>
                     <p>Para asegurar tu cupo en Antofagasta, completa ahora el pago.</p>
-                    <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E" target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
+                    <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E?sck=HOT_ANTOFAGASTA" data-pay-link target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
                   </div>
                 </div>
               </form>
@@ -885,6 +885,19 @@
       return errors;
     }
 
+    // Un solo producto/link de Hotmart para ambas sedes. Se agregan parámetros:
+    //  - sck: sede (HOT_CONCEPCION / HOT_ANTOFAGASTA) -> Reportes > Ventas por origen de checkout
+    //  - src: id de la preinscripción en Jotform (JF<id>) -> enlaza el pago con su inscripción
+    //  - email / name: autocompletan el checkout para que el correo coincida con Jotform
+    function buildPayUrl(baseHref, form, payload, submissionId){
+      var url = new URL(baseHref);
+      url.searchParams.set("sck", form.getAttribute("data-sck"));
+      if(submissionId) url.searchParams.set("src", "JF" + submissionId);
+      url.searchParams.set("email", payload.email);
+      url.searchParams.set("name", payload.nombre);
+      return url.toString();
+    }
+
     document.querySelectorAll(".reg-form").forEach(function(form){
       form.addEventListener("submit", function(e){
         e.preventDefault();
@@ -924,6 +937,8 @@
           if(!result.ok || !result.data || !result.data.success){
             throw new Error((result.data && result.data.error) || "No pudimos registrar tu inscripción.");
           }
+          var payLink = form.querySelector("[data-pay-link]");
+          if(payLink) payLink.href = buildPayUrl(payLink.href, form, payload, result.data.submissionId);
           form.querySelectorAll(".field, .reg-msg, button[type=submit], .reg-fallback").forEach(function(el){ el.style.display = "none"; });
           success.classList.add("show");
         })
