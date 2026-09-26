@@ -111,14 +111,14 @@
     pointer-events:none;
     z-index:1;
   }
-  /* Imagen de fondo sutil, solo desktop (en mobile no se descarga).
+  /* Imagen de fondo sutil (20%), solo desktop (en mobile no se descarga).
      Se funde hacia la izquierda y abajo para no competir con el texto. */
   @media (min-width:1024px){
     .hero::after{
       content:"";
       position:absolute; inset:0; z-index:0;
       background:url("/img/hero-bg.webp") center right / cover no-repeat;
-      opacity:.3;
+      opacity:.2;
       -webkit-mask-image:linear-gradient(90deg, rgba(0,0,0,.45) 0%, #000 55%), linear-gradient(0deg, transparent 0%, #000 22%);
       -webkit-mask-composite:source-in;
       mask-image:linear-gradient(90deg, rgba(0,0,0,.45) 0%, #000 55%), linear-gradient(0deg, transparent 0%, #000 22%);
