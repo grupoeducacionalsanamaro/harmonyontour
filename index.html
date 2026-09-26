@@ -407,18 +407,25 @@
   /* Móvil: speakers en 2 columnas para no alargar el scroll */
   @media (max-width:599px){
     .speaker-grid{ grid-template-columns:1fr 1fr; gap:12px; }
-    .speaker-card{ border-radius:14px; }
+    /* Tarjeta apilada: foto arriba y datos debajo, para no tapar las caras */
+    .speaker-card{ border-radius:14px; aspect-ratio:auto; display:flex; flex-direction:column; }
+    .speaker-photo{ position:relative; inset:auto; height:auto; aspect-ratio:4/5; }
+    .speaker-card:hover .speaker-photo{ transform:none; }
+    .speaker-scrim{ inset:auto 0 auto 0; top:0; aspect-ratio:4/5; background:linear-gradient(0deg, var(--surface) 0%, transparent 28%); }
+    .speaker-content{ position:relative; flex:1; display:flex; flex-direction:column; }
     .speaker-card:hover{ transform:none; }
-    .speaker-content{ padding:12px; gap:4px; }
+    .speaker-content{ padding:4px 12px 12px; gap:4px; }
     .speaker-name-row{ gap:6px; }
     .speaker-name{ font-size:15px; line-height:1.15; }
     .speaker-verified{ width:14px; height:14px; }
     .speaker-role{ font-size:9px; letter-spacing:.04em; }
+    .speaker-btn{ margin-top:auto; padding:8px 8px; font-size:12px; gap:6px; border-radius:8px; }
+    .speaker-role{ margin-bottom:10px; }
+    .speaker-btn svg{ width:13px; height:13px; }
     .edition-head{ margin-bottom:18px; }
     .about h2{ line-height:1.02; }
   }
   @media (max-width:359px){
-    .speaker-card{ aspect-ratio:3/4.3; }
     .speaker-name{ font-size:14px; }
     .speaker-role{ font-size:8.5px; }
     .ticket-stub .btn-small{ font-size:14px; padding:14px 12px; }
@@ -707,14 +714,14 @@
 <script>
   (function(){
     // Cada speaker se define una vez; las ediciones (sedes) listan sus ids en orden.
-    // "verified" marca a las docentes de Harmony. "instagram" vacío oculta el botón.
+    // "verified" marca a las docentes de Harmony. Sin "instagram" no se muestra el botón.
     var SPEAKERS = {
-      "loreto-campos":   { name: "Dra. Loreto Campos",   role: "Docente Harmony Instituto Internacional", verified: true },
-      "javiera-vergara": { name: "Dra. Javiera Vergara", role: "Docente Harmony Instituto Internacional", verified: true },
-      "miguel-romero":   { name: "Dr. Miguel Romero",    role: "Alumno de Postgrado · Cohorte 7" },
-      "marjorie-gold":   { name: "Dra. Marjorie Gold",   role: "Speaker Osamedic" },
-      "sofia-montes":    { name: "Dra. Sofía Montes",    role: "Exalumna de Postgrado · Cohorte 4" },
-      "pamela-flores":   { name: "Dra. Pamela Flores",   role: "Exalumna de Postgrado · Cohorte 5" }
+      "loreto-campos":   { name: "Dra. Loreto Campos",   role: "Docente Harmony Instituto Internacional", verified: true, instagram: "https://www.instagram.com/dra.loretocampos/" },
+      "javiera-vergara": { name: "Dra. Javiera Vergara", role: "Docente Harmony Instituto Internacional", verified: true, instagram: "https://www.instagram.com/dra.javieravergarae/" },
+      "miguel-romero":   { name: "Dr. Miguel Romero",    role: "Alumno de Postgrado · Cohorte 7", instagram: "https://www.instagram.com/docmiguelromero/" },
+      "marjorie-gold":   { name: "Dra. Marjorie Gold",   role: "Speaker Osamedic", instagram: "https://www.instagram.com/gyh.dentalyestetica/" },
+      "sofia-montes":    { name: "Dra. Sofía Montes",    role: "Exalumna de Postgrado · Cohorte 4", instagram: "https://www.instagram.com/dra.sofimo_/" },
+      "pamela-flores":   { name: "Dra. Pamela Flores",   role: "Exalumna de Postgrado · Cohorte 5", instagram: "https://www.instagram.com/dra.pamelareneeflores/" }
     };
 
     var EDITIONS = [
@@ -746,7 +753,7 @@
         ) : "";
 
         var linkHtml = s.instagram ? (
-          '<a class="speaker-btn" href="' + escapeHtml(s.instagram) + '" target="_blank" rel="noopener">' +
+          '<a class="speaker-btn" href="' + escapeHtml(s.instagram) + '" target="_blank" rel="noopener" aria-label="Ver perfil de Instagram de ' + escapeHtml(s.name) + '">' +
             '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>' +
             'Ver perfil' +
           '</a>'
