@@ -89,6 +89,11 @@ async function findSubmission({ src, email }, questions, apiKey) {
 }
 
 module.exports = async function handler(req, res) {
+  // Respuesta simple para verificaciones de URL (p. ej. al guardar el webhook en Hotmart).
+  if (req.method === "GET" || req.method === "HEAD") {
+    res.status(200).json({ ok: true, service: "hotmart-webhook" });
+    return;
+  }
   if (req.method !== "POST") {
     res.status(405).json({ ok: false, error: "Método no permitido." });
     return;
