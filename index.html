@@ -285,6 +285,23 @@
   .reg-success h4{ font-family:var(--font-display); font-size:18px; }
   .reg-success p{ font-size:13.5px; color:var(--silver); line-height:1.6; }
   .reg-form.hidden-form{display:none;}
+
+  /* Despliegue del formulario: la altura y opacidad las anima el JS;
+     los campos entran escalonados. */
+  .reg-form{ overflow:hidden; transition:height .42s cubic-bezier(.2,.8,.2,1), opacity .32s ease; }
+  .reg-form.is-entering .reg-panel > *{ animation:field-in .5s cubic-bezier(.2,.8,.2,1) both; }
+  .reg-form.is-entering .reg-panel > :nth-child(1){ animation-delay:.06s; }
+  .reg-form.is-entering .reg-panel > :nth-child(2){ animation-delay:.11s; }
+  .reg-form.is-entering .reg-panel > :nth-child(3){ animation-delay:.16s; }
+  .reg-form.is-entering .reg-panel > :nth-child(4){ animation-delay:.21s; }
+  .reg-form.is-entering .reg-panel > :nth-child(5){ animation-delay:.26s; }
+  .reg-form.is-entering .reg-panel > :nth-child(n+6){ animation-delay:.31s; }
+  @keyframes field-in{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+  .js-toggle-form.is-revealed{ animation:field-in .35s ease both; }
+  @media (prefers-reduced-motion: reduce){
+    .reg-form{ transition:none; }
+    .reg-form.is-entering .reg-panel > *, .js-toggle-form.is-revealed{ animation:none; }
+  }
   .reg-fallback{ font-size:11.5px; color:var(--silver); text-align:center; }
   .reg-fallback a{ color:var(--red-500); text-decoration:underline; }
 
@@ -752,22 +769,75 @@
     // Solo un formulario abierto a la vez: al abrir uno se repliegan los demás.
     var toggles = document.querySelectorAll(".js-toggle-form");
     var stops = document.querySelector(".stops");
+    var FORM_ANIM_MS = 420;
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Anima de 0 a la altura real y luego libera la altura (auto) para que
+    // los mensajes de error/éxito puedan cambiar el tamaño sin cortarse.
+    function expandForm(form){
+      clearTimeout(form._animTimer);
+      form.classList.remove("hidden-form", "is-entering");
+      if(reduceMotion) return;
+      var target = form.scrollHeight;
+      form.style.height = "0px";
+      form.style.opacity = "0";
+      void form.offsetHeight;
+      form.classList.add("is-entering");
+      form.style.height = target + "px";
+      form.style.opacity = "1";
+      form._animTimer = setTimeout(function(){
+        form.style.height = "";
+        form.style.opacity = "";
+      }, FORM_ANIM_MS);
+    }
+
+    function collapseForm(form){
+      if(form.classList.contains("hidden-form")) return false;
+      clearTimeout(form._animTimer);
+      if(reduceMotion){ form.classList.add("hidden-form"); return true; }
+      form.style.height = form.scrollHeight + "px";
+      void form.offsetHeight;
+      form.style.height = "0px";
+      form.style.opacity = "0";
+      form._animTimer = setTimeout(function(){
+        form.classList.add("hidden-form");
+        form.classList.remove("is-entering");
+        form.style.height = "";
+        form.style.opacity = "";
+      }, FORM_ANIM_MS);
+      return true;
+    }
+
     toggles.forEach(function(btn){
       btn.addEventListener("click", function(){
         var form = document.getElementById(btn.getAttribute("data-target"));
         if(!form) return;
+        var closedAnother = false;
         toggles.forEach(function(other){
           if(other === btn) return;
           var otherForm = document.getElementById(other.getAttribute("data-target"));
-          if(otherForm) otherForm.classList.add("hidden-form");
-          other.hidden = false;
+          if(otherForm && collapseForm(otherForm)) closedAnother = true;
+          if(other.hidden){
+            other.hidden = false;
+            other.classList.remove("is-revealed");
+            void other.offsetWidth;
+            other.classList.add("is-revealed");
+          }
         });
-        form.classList.remove("hidden-form");
         btn.hidden = true;
+        expandForm(form);
         if(stops) stops.classList.add("has-open");
-        var firstField = form.querySelector("input, select");
-        if(firstField) firstField.focus({ preventScroll: true });
-        btn.closest(".ticket-stub").scrollIntoView({ behavior: "smooth", block: "start" });
+
+        // Si se replegó otro formulario (en mobile queda arriba), esperar a que
+        // termine para que el scroll no quede desfasado.
+        var wait = closedAnother && !reduceMotion ? FORM_ANIM_MS : 0;
+        setTimeout(function(){
+          btn.closest(".ticket-stub").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+        }, wait);
+        setTimeout(function(){
+          var firstField = form.querySelector("input, select");
+          if(firstField) firstField.focus({ preventScroll: true });
+        }, reduceMotion ? 0 : FORM_ANIM_MS);
       });
     });
 
