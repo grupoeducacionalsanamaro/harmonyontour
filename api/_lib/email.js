@@ -20,7 +20,7 @@ const SEDES = {
     ciudad: "Concepción",
     edicion: "01",
     fecha: "Sábado 17 de octubre de 2026",
-    speakers: ["Dra. Javiera Vergara", "Dra. Pamela Flores", "Dra. Marjorie Gold"],
+    speakers: ["Dra. Javiera Vergara", "Dra. Nathaly Fuentes", "Dra. Pamela Flores", "Dra. Marjorie Gold"],
   },
   "Antofagasta — 24 de octubre": {
     ciudad: "Antofagasta",

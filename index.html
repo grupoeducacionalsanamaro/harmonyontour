@@ -413,12 +413,13 @@
   .speaker-name-row{ display:flex; align-items:center; gap:8px; }
   .speaker-name{
     font-family:var(--font-display); font-size:clamp(18px,2.2vw,21px); color:var(--white);
-    text-transform:none; letter-spacing:0;
+    text-transform:none; letter-spacing:0; line-height:1.15;
   }
+  /* La insignia va dentro del nombre: si el nombre se parte, queda junto a la última palabra */
   .speaker-verified{
-    flex:none; width:17px;height:17px;border-radius:50%;
+    display:inline-grid; place-items:center; vertical-align:2px;
+    width:17px;height:17px;border-radius:50%; margin-left:7px;
     background:var(--red-500); color:var(--white);
-    display:grid; place-items:center;
     transition:transform .25s ease;
   }
   .speaker-card:hover .speaker-verified{ transform:scale(1.12) rotate(4deg); }
@@ -452,7 +453,7 @@
     .speaker-content{ padding:4px 12px 12px; gap:4px; }
     .speaker-name-row{ gap:6px; }
     .speaker-name{ font-size:15px; line-height:1.15; }
-    .speaker-verified{ width:14px; height:14px; }
+    .speaker-verified{ width:14px; height:14px; margin-left:5px; vertical-align:1px; }
     .speaker-role{ font-size:9px; letter-spacing:.04em; }
     .speaker-btn{ margin-top:auto; padding:8px 8px; font-size:12px; gap:6px; border-radius:8px; }
     .speaker-role{ margin-bottom:10px; }
@@ -586,7 +587,7 @@
               <dl class="ticket-fields">
                 <div class="tf"><dt>Fecha</dt><dd>Sáb 17 oct 2026</dd></div>
                 <div class="tf"><dt>Horario</dt><dd><span class="nw">10:00 – 14:00</span> hrs</dd></div>
-                <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Vergara</span> · <span class="nw">Dra. Flores</span> · <span class="nw">Dra. Gold</span><br><a class="ticket-link" href="#edicion-concepcion">Ver equipo →</a></dd></div>
+                <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Vergara</span> · <span class="nw">Dra. Fuentes</span> · <span class="nw">Dra. Flores</span> · <span class="nw">Dra. Gold</span><br><a class="ticket-link" href="#edicion-concepcion">Ver equipo →</a></dd></div>
                 <div class="tf tf-price"><dt><span class="presale-only">Valor preventa</span><span class="regular-only">Valor</span></dt><dd><span class="presale-only"><span class="nw">$19.990</span> <small class="cur">CLP</small><span class="price-old">Luego <s>$47.000</s></span></span><span class="regular-only"><span class="nw">$47.000</span> <small class="cur">CLP</small></span></dd></div>
                 <div class="tf"><dt>Modalidad</dt><dd>Presencial</dd></div>
               </dl>

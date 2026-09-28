@@ -4,6 +4,7 @@
   var SPEAKERS = {
     "loreto-campos":   { name: "Dra. Loreto Campos",   role: "Docente Harmony Instituto Internacional", verified: true, instagram: "https://www.instagram.com/dra.loretocampos/" },
     "javiera-vergara": { name: "Dra. Javiera Vergara", role: "Docente Harmony Instituto Internacional", verified: true, instagram: "https://www.instagram.com/dra.javieravergarae/" },
+    "nathaly-fuentes": { name: "Dra. Nathaly Fuentes", role: "Docente Harmony Instituto Internacional", verified: true, instagram: "https://www.instagram.com/dra.nathalyfuentes/" },
     "miguel-romero":   { name: "Dr. Miguel Romero",    role: "Alumno de Postgrado · Cohorte 7", instagram: "https://www.instagram.com/docmiguelromero/" },
     "marjorie-gold":   { name: "Dra. Marjorie Gold",   role: "Speaker Osamedic", instagram: "https://www.instagram.com/gyh.dentalyestetica/" },
     "sofia-montes":    { name: "Dra. Sofía Montes",    role: "Exalumna de Postgrado · Cohorte 4", instagram: "https://www.instagram.com/dra.sofimo_/" },
@@ -13,7 +14,7 @@
   var EDITIONS = [
     {
       id: "edicion-concepcion", num: "01", city: "Concepción", date: "Sáb 17 oct 2026",
-      speakers: ["javiera-vergara", "pamela-flores", "marjorie-gold"]
+      speakers: ["javiera-vergara", "nathaly-fuentes", "pamela-flores", "marjorie-gold"]
     },
     {
       id: "edicion-antofagasta", num: "02", city: "Antofagasta", date: "Sáb 24 oct 2026",
@@ -38,6 +39,13 @@
         '</span>'
       ) : "";
 
+      // La última palabra y la insignia van juntas (nunca queda la insignia sola en otra línea).
+      var words = s.name.split(" ");
+      var last = words.pop();
+      var nameHtml = s.verified
+        ? escapeHtml(words.join(" ")) + ' <span class="nw">' + escapeHtml(last) + verifiedHtml + '</span>'
+        : escapeHtml(s.name);
+
       var linkHtml = s.instagram ? (
         '<a class="speaker-btn" href="' + escapeHtml(s.instagram) + '" target="_blank" rel="noopener" aria-label="Ver perfil de Instagram de ' + escapeHtml(s.name) + '">' +
           '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>' +
@@ -51,8 +59,7 @@
           '<div class="speaker-scrim"></div>' +
           '<div class="speaker-content">' +
             '<div class="speaker-name-row">' +
-              '<h4 class="speaker-name">' + escapeHtml(s.name) + '</h4>' +
-              verifiedHtml +
+              '<h4 class="speaker-name">' + nameHtml + '</h4>' +
             '</div>' +
             '<p class="speaker-role">' + escapeHtml(s.role) + '</p>' +
             linkHtml +
