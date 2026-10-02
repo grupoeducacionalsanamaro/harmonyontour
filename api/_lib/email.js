@@ -10,8 +10,8 @@ const FROM = "Harmony On Tour Chile <harmonyontour@send.sanamaro.cl>";
 const REPLY_TO = "info@sanamaro.cl";
 const BCC = "relacionespublicas@sanamaro.cl";
 
-// Mismo corte que la landing (js/presale.js): 16 oct 2026 00:00 hora de Chile.
-const PRESALE_END = Date.parse("2026-10-16T00:00:00-03:00");
+// Mismo corte que la landing (js/presale.js): 10 oct 2026 00:00 hora de Chile.
+const PRESALE_END = Date.parse("2026-10-10T00:00:00-03:00");
 const PRICE_PRESALE = "$19.990";
 const PRICE_REGULAR = "$47.000";
 
@@ -63,7 +63,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
   const preheader = `${info.fecha} · 10:00 a 14:00 hrs. Completa el pago para recibir tu ticket de acceso.`;
 
   const priceHtml = presale
-    ? `${PRICE_PRESALE} CLP <span style="font-size:13px;font-weight:500;color:#ada39a;">· preventa hasta el 15 oct (luego <s>${PRICE_REGULAR}</s>)</span>`
+    ? `${PRICE_PRESALE} CLP <span style="font-size:13px;font-weight:500;color:#ada39a;">· preventa hasta el 9 oct (luego <s>${PRICE_REGULAR}</s>)</span>`
     : `${PRICE_REGULAR} CLP`;
 
   const html = `<!doctype html>
@@ -216,7 +216,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
     "Horario: 10:00 a 14:00 hrs",
     `Speakers: ${info.speakers.join(" · ")}`,
     "Lugar: la dirección exacta te llegará junto con tu ticket de acceso.",
-    `Valor: ${price} CLP${presale ? ` (preventa hasta el 15 de octubre; luego ${PRICE_REGULAR})` : ""}`,
+    `Valor: ${price} CLP${presale ? ` (preventa hasta el 9 de octubre; luego ${PRICE_REGULAR})` : ""}`,
     `Cronograma de la jornada: ${agendaUrl}`,
     "",
     "IMPORTANTE: tu entrada será efectiva y te enviaremos tu ticket de acceso cuando se confirme el pago.",
