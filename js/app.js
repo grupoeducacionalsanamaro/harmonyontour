@@ -4,7 +4,7 @@
   var SPEAKERS = {
     "loreto-campos":   { name: "Dra. Loreto Campos",   role: "Docente Harmony Instituto Internacional", verified: true, instagram: "https://www.instagram.com/dra.loretocampos/" },
     "javiera-vergara": { name: "Dra. Javiera Vergara", role: "Docente Harmony Instituto Internacional", verified: true, instagram: "https://www.instagram.com/dra.javieravergarae/" },
-    "nathaly-fuentes": { name: "Dra. Nathaly Fuentes", role: "Docente Harmony Instituto Internacional", verified: true, instagram: "https://www.instagram.com/dra.nathalyfuentes/" },
+    "nathaly-fuentes": { name: "Dra. Nathaly Fuentes", role: "Exalumna de Postgrado · Cohorte 1", instagram: "https://www.instagram.com/dra.nathalyfuentes/" },
     "miguel-romero":   { name: "Dr. Miguel Romero",    role: "Alumno de Postgrado · Cohorte 7", instagram: "https://www.instagram.com/docmiguelromero/" },
     "marjorie-gold":   { name: "Dra. Marjorie Gold",   role: "Speaker Osamedic", instagram: "https://www.instagram.com/gyh.dentalyestetica/" },
     "sofia-montes":    { name: "Dra. Sofía Montes",    role: "Exalumna de Postgrado · Cohorte 4", instagram: "https://www.instagram.com/dra.sofimo_/" },
