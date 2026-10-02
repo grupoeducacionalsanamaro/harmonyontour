@@ -18,12 +18,14 @@ const PRICE_REGULAR = "$47.000";
 const SEDES = {
   "Concepción — 17 de octubre": {
     ciudad: "Concepción",
+    slug: "concepcion",
     edicion: "01",
     fecha: "Sábado 17 de octubre de 2026",
     speakers: ["Dra. Javiera Vergara", "Dra. Nathaly Fuentes", "Dra. Pamela Flores", "Dra. Marjorie Gold"],
   },
   "Antofagasta — 24 de octubre": {
     ciudad: "Antofagasta",
+    slug: "antofagasta",
     edicion: "02",
     fecha: "Sábado 24 de octubre de 2026",
     speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Dra. Marjorie Gold", "Dra. Sofía Montes"],
@@ -53,6 +55,8 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
   if (!info) throw new Error(`Sede desconocida para el correo: ${sede}`);
 
   const presale = now < PRESALE_END;
+  // Abre la sección Cronograma de la landing con la pestaña de esta sede.
+  const agendaUrl = `${SITE}/?cronograma=${info.slug}#cronograma`;
   const price = presale ? PRICE_PRESALE : PRICE_REGULAR;
   const hola = firstName(nombre);
   const subject = `Tu preinscripción a Harmony On Tour ${info.ciudad} quedó registrada`;
@@ -141,6 +145,15 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
                     <tr>${field(presale ? "Valor preventa" : "Valor", priceHtml)}
                     </tr>
                   </table>
+
+                  <!-- Botón secundario: cronograma en la web -->
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 22px;">
+                    <tr>
+                      <td align="center" style="border:1px solid #5a4f4a;border-radius:10px;">
+                        <a href="${esc(agendaUrl)}" target="_blank" style="display:block;padding:13px 20px;font-family:Inter,Arial,Helvetica,sans-serif;font-size:14.5px;font-weight:600;color:#f7f4f1;text-decoration:none;border-radius:10px;">Ver cronograma de la jornada &rarr;</a>
+                      </td>
+                    </tr>
+                  </table>
                 </td>
               </tr>
 
@@ -204,6 +217,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
     `Speakers: ${info.speakers.join(" · ")}`,
     "Lugar: la dirección exacta te llegará junto con tu ticket de acceso.",
     `Valor: ${price} CLP${presale ? ` (preventa hasta el 15 de octubre; luego ${PRICE_REGULAR})` : ""}`,
+    `Cronograma de la jornada: ${agendaUrl}`,
     "",
     "IMPORTANTE: tu entrada será efectiva y te enviaremos tu ticket de acceso cuando se confirme el pago.",
     "",

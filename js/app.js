@@ -190,6 +190,13 @@
 
   renderAgenda();
 
+  // Enlaces externos (p. ej. el correo de confirmación) abren la pestaña de su sede:
+  // /?cronograma=antofagasta#cronograma
+  var agendaParam = new URLSearchParams(location.search).get("cronograma");
+  if(agendaParam && document.getElementById("panel-edicion-" + agendaParam)){
+    selectAgenda("edicion-" + agendaParam);
+  }
+
   // Enlaces "Ver cronograma" de los tickets: abren la pestaña de su sede.
   document.querySelectorAll("[data-agenda]").forEach(function(link){
     link.addEventListener("click", function(){ selectAgenda(link.getAttribute("data-agenda")); });
