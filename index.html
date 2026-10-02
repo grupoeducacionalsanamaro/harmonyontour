@@ -209,7 +209,7 @@
   .pill b{ display:block; font-family:var(--font-body); font-weight:600; font-size:16.5px; color:var(--white); margin-bottom:4px; }
   .pill small{font-size:14.5px;color:var(--silver);line-height:1.55;}
 
-  .route{ padding-block:clamp(56px,9vw,96px); background:var(--bg); border-bottom:1px solid var(--line); }
+  .route{ padding-block:clamp(56px,9vw,96px); background:var(--bg-2); border-bottom:1px solid var(--line); }
   .route .section-head{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:18px; margin-bottom:40px; }
   .route h2{font-size:clamp(28px,4.4vw,40px);}
   .route-sub{color:var(--silver);font-size:15px;max-width:46ch;margin-top:10px;}
@@ -228,7 +228,7 @@
   .stop-label{ font-family:var(--font-mono); font-size:13px; letter-spacing:.12em; color:var(--silver); text-transform:uppercase; }
 
   .ticket{
-    --notch:var(--bg);
+    --notch:var(--bg-2);
     --rule-inset:22px;
     flex:1; display:flex; flex-direction:column;
     position:relative;
@@ -268,6 +268,7 @@
   .nw{ white-space:nowrap; }
   .ticket-link{ display:inline-block; margin-top:2px; font-size:13.5px; font-weight:600; color:var(--red-500); text-decoration:none; }
   .ticket-link:hover{ text-decoration:underline; }
+  .ticket-link + .ticket-link{ margin-left:14px; }
 
   /* Perforación con muescas laterales */
   .ticket-rule{
@@ -467,6 +468,48 @@
     .ticket-stub .btn-small{ font-size:14px; padding:14px 12px; }
   }
 
+  /* ---------- CRONOGRAMA ---------- */
+  .agenda{ padding-block:clamp(56px,9vw,96px); border-bottom:1px solid var(--line); }
+  .agenda .section-head{ margin-bottom:32px; max-width:62ch; }
+  .agenda h2{ font-size:clamp(28px,4.4vw,40px); margin-top:10px; }
+  .ag-tabs{ display:inline-flex; gap:6px; padding:5px; margin-bottom:28px; background:var(--surface); border:1px solid var(--line-strong); border-radius:14px; max-width:100%; }
+  .ag-tab{
+    display:flex; flex-direction:column; align-items:flex-start; gap:2px; cursor:pointer;
+    padding:10px 20px; border:0; border-radius:10px; background:transparent; color:var(--silver);
+    font:inherit; text-align:left; transition:background .2s ease, color .2s ease;
+  }
+  .ag-tab:hover{ color:var(--white); }
+  .ag-tab[aria-selected="true"]{ background:linear-gradient(135deg, var(--red-500), var(--red-900)); color:var(--white); box-shadow:0 8px 22px -10px rgba(183,0,0,.7); }
+  .ag-tab-city{ font-family:var(--font-display); font-size:20px; text-transform:uppercase; letter-spacing:.02em; line-height:1.1; }
+  .ag-tab-date{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; opacity:.85; }
+
+  .ag-list{ list-style:none; margin:0; padding:0; display:grid; gap:12px; position:relative; }
+  .ag-item{ display:grid; grid-template-columns:150px 1fr; gap:20px; align-items:center; position:relative; }
+  .ag-time{ font-family:var(--font-mono); font-size:14px; font-weight:600; color:var(--white); letter-spacing:.02em; white-space:nowrap; }
+  .ag-card{ display:flex; align-items:center; gap:16px; padding:16px 20px; background:var(--surface); border:1px solid var(--line); border-radius:14px; transition:border-color .2s ease; }
+  .ag-talk .ag-card{ border-left:3px solid var(--red-500); }
+  .ag-talk .ag-card:hover{ border-color:var(--line-strong); border-left-color:var(--red-500); }
+  .ag-avatar{ flex:none; width:56px; height:56px; border-radius:50%; object-fit:cover; object-position:top center; border:2px solid rgba(210,26,26,.6); background:var(--surface-2); }
+  .ag-body{ min-width:0; }
+  .ag-speaker{ font-family:var(--font-display); font-size:19px; color:var(--white); line-height:1.15; }
+  .ag-role{ display:block; margin-top:3px; font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--silver); }
+  .ag-topic{ margin-top:8px; font-size:15.5px; line-height:1.5; color:#d9d2cc; }
+  .ag-info .ag-card, .ag-break .ag-card, .ag-networking .ag-card{ background:transparent; border-style:dashed; padding-block:12px; }
+  .ag-icon{ flex:none; width:40px; height:40px; border-radius:50%; display:grid; place-items:center; color:var(--red-500); background:rgba(210,26,26,.1); }
+  .ag-title{ font-family:var(--font-display); font-size:17px; text-transform:uppercase; letter-spacing:.04em; color:var(--white); }
+  .ag-detail{ font-size:13.5px; color:var(--silver); margin-top:2px; }
+  .ag-break .ag-time, .ag-networking .ag-time, .ag-info .ag-time{ color:var(--silver); }
+  @media (max-width:640px){
+    .ag-tabs{ display:flex; width:100%; }
+    .ag-tab{ flex:1; padding:10px 12px; }
+    .ag-tab-city{ font-size:17px; }
+    .ag-item{ grid-template-columns:1fr; gap:6px; }
+    .ag-card{ padding:14px 16px; gap:12px; align-items:flex-start; }
+    .ag-avatar{ width:46px; height:46px; }
+    .ag-speaker{ font-size:17px; }
+    .ag-topic{ font-size:14.5px; }
+  }
+
   footer{ padding-block:36px; }
   .foot-inner{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px; }
   .foot-copy{ font-size:12px; color:var(--silver); }
@@ -559,6 +602,17 @@
     </div>
   </section>
 
+  <section class="agenda" id="cronograma">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">CRONOGRAMA</p>
+        <h2>Programa de la jornada</h2>
+        <p class="route-sub">Cuatro charlas, un break y networking, de 10:00 a 14:00 hrs. Elige tu sede para ver el programa.</p>
+      </div>
+      <div class="agenda-box" id="agenda"></div>
+    </div>
+  </section>
+
   <section class="route" id="sedes">
     <div class="wrap">
       <div class="section-head">
@@ -587,7 +641,7 @@
               <dl class="ticket-fields">
                 <div class="tf"><dt>Fecha</dt><dd>Sáb 17 oct 2026</dd></div>
                 <div class="tf"><dt>Horario</dt><dd><span class="nw">10:00 – 14:00</span> hrs</dd></div>
-                <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Vergara</span> · <span class="nw">Dra. Fuentes</span> · <span class="nw">Dra. Flores</span> · <span class="nw">Dra. Gold</span><br><a class="ticket-link" href="#edicion-concepcion">Ver equipo →</a></dd></div>
+                <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Vergara</span> · <span class="nw">Dra. Fuentes</span> · <span class="nw">Dra. Flores</span> · <span class="nw">Dra. Gold</span><br><a class="ticket-link" href="#edicion-concepcion">Ver equipo →</a> <a class="ticket-link" href="#cronograma" data-agenda="edicion-concepcion">Ver cronograma →</a></dd></div>
                 <div class="tf tf-price"><dt><span class="presale-only">Valor preventa</span><span class="regular-only">Valor</span></dt><dd><span class="presale-only"><span class="nw">$19.990</span> <small class="cur">CLP</small><span class="price-old">Luego <s>$47.000</s></span></span><span class="regular-only"><span class="nw">$47.000</span> <small class="cur">CLP</small></span></dd></div>
                 <div class="tf"><dt>Modalidad</dt><dd>Presencial</dd></div>
               </dl>
@@ -672,7 +726,7 @@
               <dl class="ticket-fields">
                 <div class="tf"><dt>Fecha</dt><dd>Sáb 24 oct 2026</dd></div>
                 <div class="tf"><dt>Horario</dt><dd><span class="nw">10:00 – 14:00</span> hrs</dd></div>
-                <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Campos</span> · <span class="nw">Dr. Romero</span> · <span class="nw">Dra. Gold</span> · <span class="nw">Dra. Montes</span><br><a class="ticket-link" href="#edicion-antofagasta">Ver equipo →</a></dd></div>
+                <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Campos</span> · <span class="nw">Dr. Romero</span> · <span class="nw">Dra. Gold</span> · <span class="nw">Dra. Montes</span><br><a class="ticket-link" href="#edicion-antofagasta">Ver equipo →</a> <a class="ticket-link" href="#cronograma" data-agenda="edicion-antofagasta">Ver cronograma →</a></dd></div>
                 <div class="tf tf-price"><dt><span class="presale-only">Valor preventa</span><span class="regular-only">Valor</span></dt><dd><span class="presale-only"><span class="nw">$19.990</span> <small class="cur">CLP</small><span class="price-old">Luego <s>$47.000</s></span></span><span class="regular-only"><span class="nw">$47.000</span> <small class="cur">CLP</small></span></dd></div>
                 <div class="tf"><dt>Modalidad</dt><dd>Presencial</dd></div>
               </dl>

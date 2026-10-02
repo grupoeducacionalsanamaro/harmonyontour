@@ -14,11 +14,29 @@
   var EDITIONS = [
     {
       id: "edicion-concepcion", num: "01", city: "Concepción", date: "Sáb 17 oct 2026",
-      speakers: ["javiera-vergara", "nathaly-fuentes", "pamela-flores", "marjorie-gold"]
+      speakers: ["javiera-vergara", "nathaly-fuentes", "pamela-flores", "marjorie-gold"],
+      agenda: [
+        { time: "10:00 – 10:10", kind: "info", title: "Bienvenida", detail: "Harmony Instituto Internacional" },
+        { time: "10:10 – 10:55", speaker: "nathaly-fuentes", topic: "Trabajar con precursores de colágeno para la mejora de la matriz extracelular" },
+        { time: "10:55 – 11:40", speaker: "marjorie-gold", topic: "El ABC de los Polinucleótidos: “Meline y el Futuro de la Regeneración Cutánea”, técnicas y predictibilidad" },
+        { time: "11:40 – 12:00", kind: "break", title: "Break" },
+        { time: "12:00 – 12:45", speaker: "pamela-flores", topic: "Hialuronidasa: una herramienta esencial para una práctica segura en estética facial" },
+        { time: "12:45 – 13:30", speaker: "javiera-vergara", topic: "“Descifrando la toxina botulínica”: del mecanismo de acción a la decisión clínica" },
+        { time: "13:30 – 14:00", kind: "networking", title: "Networking" }
+      ]
     },
     {
       id: "edicion-antofagasta", num: "02", city: "Antofagasta", date: "Sáb 24 oct 2026",
-      speakers: ["loreto-campos", "miguel-romero", "marjorie-gold", "sofia-montes"]
+      speakers: ["loreto-campos", "miguel-romero", "marjorie-gold", "sofia-montes"],
+      agenda: [
+        { time: "10:00 – 10:10", kind: "info", title: "Bienvenida", detail: "Harmony Instituto Internacional" },
+        { time: "10:10 – 10:55", speaker: "sofia-montes", topic: "¿Por qué dos pieles de la misma edad no envejecen igual?" },
+        { time: "10:55 – 11:40", speaker: "marjorie-gold", topic: "El ABC de los Polinucleótidos: “Meline y el Futuro de la Regeneración Cutánea”, técnicas y predictibilidad" },
+        { time: "11:40 – 12:00", kind: "break", title: "Break" },
+        { time: "12:00 – 12:45", speaker: "miguel-romero", topic: "¿Los fillers realmente hacen lifting?" },
+        { time: "12:45 – 13:30", speaker: "loreto-campos", topic: "Toxina botulínica: anatomía funcional, dinámica muscular y estrategias de aplicación para resultados predecibles y naturales" },
+        { time: "13:30 – 14:00", kind: "networking", title: "Networking" }
+      ]
     }
   ];
 
@@ -88,6 +106,94 @@
   }
 
   renderEditions();
+
+  // ---------- CRONOGRAMA: pestañas por sede ----------
+  var AGENDA_ICONS = {
+    info: '<path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/>',
+    break: '<path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/>',
+    networking: '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M15 14.5c2.8.3 5 2.6 5 5.5"/>'
+  };
+
+  function agendaItem(item){
+    var timeHtml = '<span class="ag-time">' + escapeHtml(item.time) + '</span>';
+    if(item.speaker){
+      var s = SPEAKERS[item.speaker] || { name: item.speaker, role: "" };
+      return (
+        '<li class="ag-item ag-talk">' + timeHtml +
+          '<div class="ag-card">' +
+            '<img class="ag-avatar" src="/speakers/' + escapeHtml(item.speaker) + '.webp" alt="" width="56" height="56" loading="lazy">' +
+            '<div class="ag-body">' +
+              '<p class="ag-speaker">' + escapeHtml(s.name) + '<span class="ag-role">' + escapeHtml(s.role) + '</span></p>' +
+              '<p class="ag-topic">' + escapeHtml(item.topic) + '</p>' +
+            '</div>' +
+          '</div>' +
+        '</li>'
+      );
+    }
+    return (
+      '<li class="ag-item ag-' + escapeHtml(item.kind) + '">' + timeHtml +
+        '<div class="ag-card">' +
+          '<span class="ag-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + (AGENDA_ICONS[item.kind] || "") + '</svg></span>' +
+          '<div class="ag-body"><p class="ag-title">' + escapeHtml(item.title) + '</p>' +
+          (item.detail ? '<p class="ag-detail">' + escapeHtml(item.detail) + '</p>' : '') +
+          '</div>' +
+        '</div>' +
+      '</li>'
+    );
+  }
+
+  function renderAgenda(){
+    var root = document.getElementById("agenda");
+    if(!root) return;
+
+    var tabs = EDITIONS.map(function(ed, i){
+      return (
+        '<button type="button" class="ag-tab" role="tab" id="tab-' + escapeHtml(ed.id) + '" aria-controls="panel-' + escapeHtml(ed.id) + '" aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? 0 : -1) + '" data-edition="' + escapeHtml(ed.id) + '">' +
+          '<span class="ag-tab-city">' + escapeHtml(ed.city) + '</span>' +
+          '<span class="ag-tab-date">' + escapeHtml(ed.date) + '</span>' +
+        '</button>'
+      );
+    }).join("");
+
+    var panels = EDITIONS.map(function(ed, i){
+      return (
+        '<div class="ag-panel" role="tabpanel" id="panel-' + escapeHtml(ed.id) + '" aria-labelledby="tab-' + escapeHtml(ed.id) + '"' + (i === 0 ? '' : ' hidden') + '>' +
+          '<ol class="ag-list">' + (ed.agenda || []).map(agendaItem).join("") + '</ol>' +
+        '</div>'
+      );
+    }).join("");
+
+    root.innerHTML = '<div class="ag-tabs" role="tablist" aria-label="Elige la sede">' + tabs + '</div>' + panels;
+
+    var tabEls = root.querySelectorAll(".ag-tab");
+    tabEls.forEach(function(tab, i){
+      tab.addEventListener("click", function(){ selectAgenda(tab.getAttribute("data-edition")); });
+      tab.addEventListener("keydown", function(e){
+        if(e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+        var next = tabEls[(i + (e.key === "ArrowRight" ? 1 : tabEls.length - 1)) % tabEls.length];
+        selectAgenda(next.getAttribute("data-edition"));
+        next.focus();
+      });
+    });
+  }
+
+  function selectAgenda(editionId){
+    document.querySelectorAll("#agenda .ag-tab").forEach(function(tab){
+      var on = tab.getAttribute("data-edition") === editionId;
+      tab.setAttribute("aria-selected", on);
+      tab.tabIndex = on ? 0 : -1;
+    });
+    document.querySelectorAll("#agenda .ag-panel").forEach(function(panel){
+      panel.hidden = panel.id !== "panel-" + editionId;
+    });
+  }
+
+  renderAgenda();
+
+  // Enlaces "Ver cronograma" de los tickets: abren la pestaña de su sede.
+  document.querySelectorAll("[data-agenda]").forEach(function(link){
+    link.addEventListener("click", function(){ selectAgenda(link.getAttribute("data-agenda")); });
+  });
 
   // Solo un formulario abierto a la vez: al abrir uno se repliegan los demás.
   var toggles = document.querySelectorAll(".js-toggle-form");
