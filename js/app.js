@@ -1,6 +1,7 @@
 (function(){
   // Cada speaker se define una vez; las ediciones (sedes) listan sus ids en orden.
   // "verified" marca a las docentes de Harmony. Sin "instagram" no se muestra el botón.
+  // "noPhoto: true" muestra una tarjeta con iniciales hasta tener la foto en /speakers/<id>.webp.
   var SPEAKERS = {
     "loreto-campos":   { name: "Dra. Loreto Campos",   role: "Docente Harmony Instituto Internacional", verified: true, instagram: "https://www.instagram.com/dra.loretocampos/" },
     "javiera-vergara": { name: "Dra. Javiera Vergara", role: "Docente Harmony Instituto Internacional", verified: true, instagram: "https://www.instagram.com/dra.javieravergarae/" },
@@ -8,7 +9,10 @@
     "miguel-romero":   { name: "Dr. Miguel Romero",    role: "Alumno de Postgrado · Cohorte 7", instagram: "https://www.instagram.com/docmiguelromero/" },
     "marjorie-gold":   { name: "Dra. Marjorie Gold",   role: "Speaker Osamedic", instagram: "https://www.instagram.com/gyh.dentalyestetica/" },
     "sofia-montes":    { name: "Dra. Sofía Montes",    role: "Exalumna de Postgrado · Cohorte 4", instagram: "https://www.instagram.com/dra.sofimo_/" },
-    "pamela-flores":   { name: "Dra. Pamela Flores",   role: "Exalumna de Postgrado · Cohorte 5", instagram: "https://www.instagram.com/dra.pamelareneeflores/" }
+    "pamela-flores":   { name: "Dra. Pamela Flores",   role: "Exalumna de Postgrado · Cohorte 5", instagram: "https://www.instagram.com/dra.pamelareneeflores/" },
+    "rafaela-melo":    { name: "Dra. Rafaela Melo",    role: "Speaker AFORMI", noPhoto: true },
+    "malu-lobato":     { name: "Dra. Malu Lobato",     role: "Speaker AFORMI", noPhoto: true },
+    "andrea-mazzo":    { name: "Dra. Andrea Mazzo",    role: "Docente Harmony Instituto Internacional", verified: true, noPhoto: true }
   };
 
   var EDITIONS = [
@@ -37,6 +41,12 @@
         { time: "12:45 – 13:30", speaker: "loreto-campos", topic: "Toxina botulínica: anatomía funcional, dinámica muscular y estrategias de aplicación para resultados predecibles y naturales" },
         { time: "13:30 – 14:00", kind: "networking", title: "Networking" }
       ]
+    },
+    {
+      // Sede internacional. Sin "agenda" el cronograma muestra "en elaboración".
+      id: "edicion-guayaquil", num: "03", city: "Guayaquil", date: "Ecuador · Fecha por confirmar", tabDate: "Por confirmar",
+      venue: "Hotel Wyndham Guayaquil Puerto Santa Ana",
+      speakers: ["rafaela-melo", "malu-lobato", "andrea-mazzo", "javiera-vergara"]
     }
   ];
 
@@ -71,9 +81,14 @@
         '</a>'
       ) : "";
 
+      var initials = s.name.replace(/^Dr[a]?\.\s*/, "").split(" ").map(function(w){ return w.charAt(0); }).join("").slice(0, 2);
+      var photoHtml = s.noPhoto
+        ? '<div class="speaker-photo speaker-nophoto" role="img" aria-label="' + escapeHtml(s.name) + ', ' + escapeHtml(s.role) + '"><span>' + escapeHtml(initials) + '</span><small>Foto próximamente</small></div>'
+        : '<img class="speaker-photo" src="' + escapeHtml(photo) + '" alt="' + escapeHtml(s.name) + ', ' + escapeHtml(s.role) + '" width="640" height="800" loading="lazy">';
+
       return (
         '<article class="speaker-card">' +
-          '<img class="speaker-photo" src="' + escapeHtml(photo) + '" alt="' + escapeHtml(s.name) + ', ' + escapeHtml(s.role) + '" width="640" height="800" loading="lazy">' +
+          photoHtml +
           '<div class="speaker-scrim"></div>' +
           '<div class="speaker-content">' +
             '<div class="speaker-name-row">' +
@@ -151,7 +166,7 @@
       return (
         '<button type="button" class="ag-tab" role="tab" id="tab-' + escapeHtml(ed.id) + '" aria-controls="panel-' + escapeHtml(ed.id) + '" aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? 0 : -1) + '" data-edition="' + escapeHtml(ed.id) + '">' +
           '<span class="ag-tab-city">' + escapeHtml(ed.city) + '</span>' +
-          '<span class="ag-tab-date">' + escapeHtml(ed.date) + '</span>' +
+          '<span class="ag-tab-date">' + escapeHtml(ed.tabDate || ed.date) + '</span>' +
         '</button>'
       );
     }).join("");
@@ -159,7 +174,13 @@
     var panels = EDITIONS.map(function(ed, i){
       return (
         '<div class="ag-panel" role="tabpanel" id="panel-' + escapeHtml(ed.id) + '" aria-labelledby="tab-' + escapeHtml(ed.id) + '"' + (i === 0 ? '' : ' hidden') + '>' +
-          '<ol class="ag-list">' + (ed.agenda || []).map(agendaItem).join("") + '</ol>' +
+          (ed.agenda
+            ? '<ol class="ag-list">' + ed.agenda.map(agendaItem).join("") + '</ol>'
+            : '<div class="ag-pending">' +
+                '<span class="ag-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>' +
+                '<div><p class="ag-title">Cronograma en elaboración</p>' +
+                '<p class="ag-detail">Jornada de 10:00 a 14:00 hrs' + (ed.venue ? ' en el ' + escapeHtml(ed.venue) : '') + '. Muy pronto publicaremos el programa con las charlas de cada speaker.</p></div>' +
+              '</div>') +
         '</div>'
       );
     }).join("");
@@ -293,8 +314,8 @@
     return errors;
   }
 
-  // Un solo producto/link de Hotmart para ambas sedes. Se agregan parámetros:
-  //  - sck: sede (HOT_CONCEPCION / HOT_ANTOFAGASTA) -> Reportes > Ventas por origen de checkout
+  // Un solo producto/link de Hotmart para todas las sedes. Se agregan parámetros:
+  //  - sck: sede (HOT_CONCEPCION / HOT_ANTOFAGASTA / HOT_GUAYAQUIL) -> Reportes > Ventas por origen de checkout
   //  - src: id de la preinscripción en Jotform (JF<id>) -> enlaza el pago con su inscripción
   //  - email / name: autocompletan el checkout para que el correo coincida con Jotform
   function buildPayUrl(baseHref, form, payload, submissionId){

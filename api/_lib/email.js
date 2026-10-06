@@ -6,11 +6,12 @@
 // igual se registra).
 
 const SITE = "https://harmonyontour.sanamaro.cl";
-const FROM = "Harmony On Tour Chile <harmonyontour@send.sanamaro.cl>";
+const FROM = "Harmony On Tour LATAM <harmonyontour@send.sanamaro.cl>";
 const REPLY_TO = "info@sanamaro.cl";
 const BCC = "relacionespublicas@sanamaro.cl";
 
 // Mismo corte que la landing (js/presale.js): 10 oct 2026 00:00 hora de Chile.
+// La preventa aplica solo a las sedes de Chile; las sedes con "precio" fijo no la usan.
 const PRESALE_END = Date.parse("2026-10-10T00:00:00-03:00");
 const PRICE_PRESALE = "$19.990";
 const PRICE_REGULAR = "$47.000";
@@ -29,6 +30,16 @@ const SEDES = {
     edicion: "02",
     fecha: "Sábado 24 de octubre de 2026",
     speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Dra. Marjorie Gold", "Dra. Sofía Montes"],
+  },
+  "Guayaquil — Ecuador": {
+    ciudad: "Guayaquil",
+    slug: "guayaquil",
+    edicion: "03",
+    pais: "Ecuador",
+    fecha: "Por confirmar (te la informaremos por correo)",
+    lugar: "Hotel Wyndham Guayaquil Puerto Santa Ana",
+    precio: "$49.99 USD",
+    speakers: ["Dra. Rafaela Melo", "Dra. Malu Lobato", "Dra. Andrea Mazzo", "Dra. Javiera Vergara"],
   },
 };
 
@@ -54,17 +65,21 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
   const info = SEDES[sede];
   if (!info) throw new Error(`Sede desconocida para el correo: ${sede}`);
 
-  const presale = now < PRESALE_END;
+  const presale = !info.precio && now < PRESALE_END;
   // Abre la sección Cronograma de la landing con la pestaña de esta sede.
   const agendaUrl = `${SITE}/?cronograma=${info.slug}#cronograma`;
-  const price = presale ? PRICE_PRESALE : PRICE_REGULAR;
+  const price = info.precio || `${presale ? PRICE_PRESALE : PRICE_REGULAR} CLP`;
   const hola = firstName(nombre);
   const subject = `Tu preinscripción a Harmony On Tour ${info.ciudad} quedó registrada`;
-  const preheader = `${info.fecha} · 10:00 a 14:00 hrs. Completa el pago para recibir tu ticket de acceso.`;
+  const preheader = `${info.lugar ? info.ciudad : info.fecha} · 10:00 a 14:00 hrs. Completa el pago para recibir tu ticket de acceso.`;
 
   const priceHtml = presale
     ? `${PRICE_PRESALE} CLP <span style="font-size:13px;font-weight:500;color:#ada39a;">· preventa hasta el 9 oct (luego <s>${PRICE_REGULAR}</s>)</span>`
-    : `${PRICE_REGULAR} CLP`;
+    : esc(price);
+
+  const lugarHtml = info.lugar
+    ? `${esc(info.lugar)}<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(info.ciudad)}, ${esc(info.pais)}</span>`
+    : `${esc(info.ciudad)}, Chile<br><span style="font-size:13px;font-weight:500;color:#ada39a;">La dirección exacta te llegará junto con tu ticket de acceso.</span>`;
 
   const html = `<!doctype html>
 <html lang="es">
@@ -109,7 +124,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
           <td class="px" style="padding:0 8px 26px;">
             <div style="font-family:Oswald,'Arial Narrow',Arial,sans-serif;font-size:30px;font-weight:700;line-height:1.1;color:#f7f4f1;text-transform:uppercase;">¡Hola${hola ? ", " + esc(hola) : ""}! Tu preinscripción quedó registrada</div>
             <div style="font-family:Inter,Arial,sans-serif;font-size:16px;line-height:1.65;color:#ada39a;padding-top:14px;">
-              Gracias por inscribirte en <strong style="color:#f7f4f1;">Harmony On Tour Chile 2026</strong>. Estos son los datos de tu jornada.
+              Gracias por inscribirte en <strong style="color:#f7f4f1;">Harmony On Tour LATAM 2026</strong>. Estos son los datos de tu jornada.
             </div>
           </td>
         </tr>
@@ -122,7 +137,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
               <tr>
                 <td class="px" bgcolor="#5e0000" style="background:#5e0000;background-image:linear-gradient(135deg,#7a0707 0%,#3a0806 60%,#1c0a09 100%);border-radius:17px 17px 0 0;padding:26px 30px 24px;">
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-                    <td style="font-family:'JetBrains Mono',Consolas,monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#e8dcd8;">Harmony On Tour · Chile 2026</td>
+                    <td style="font-family:'JetBrains Mono',Consolas,monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#e8dcd8;">Harmony On Tour · LATAM 2026</td>
                     <td align="right"><span style="display:inline-block;font-family:'JetBrains Mono',Consolas,monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ffffff;background:#d21a1a;padding:4px 9px;border-radius:4px;">Preinscripción</span></td>
                   </tr></table>
                   <div class="city" style="font-family:Oswald,'Arial Narrow',Impact,Arial,sans-serif;font-size:50px;font-weight:700;line-height:1;color:#f7f4f1;text-transform:uppercase;padding-top:18px;">${esc(info.ciudad)}</div>
@@ -140,7 +155,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
                     </tr>
                     <tr>${field("Speakers", info.speakers.map((n) => `<span style="white-space:nowrap;">${esc(n)}</span>`).join(" · "))}
                     </tr>
-                    <tr>${field("Lugar", `${esc(info.ciudad)}, Chile<br><span style="font-size:13px;font-weight:500;color:#ada39a;">La dirección exacta te llegará junto con tu ticket de acceso.</span>`)}
+                    <tr>${field("Lugar", lugarHtml)}
                     </tr>
                     <tr>${field(presale ? "Valor preventa" : "Valor", priceHtml)}
                     </tr>
@@ -197,7 +212,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
             ¿Dudas? Responde este correo o escríbenos a <a href="mailto:${REPLY_TO}" style="color:#d21a1a;text-decoration:none;">${REPLY_TO}</a>.<br>
             <a href="${SITE}" style="color:#ada39a;text-decoration:underline;">harmonyontour.sanamaro.cl</a><br><br>
             © 2026 Harmony Instituto Internacional · Grupo Educacional San Amaro<br>
-            Recibes este correo porque te preinscribiste en Harmony On Tour Chile 2026.
+            Recibes este correo porque te preinscribiste en Harmony On Tour LATAM 2026.
           </td>
         </tr>
 
@@ -209,14 +224,16 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
 </html>`;
 
   const text = [
-    `¡Hola${hola ? ", " + hola : ""}! Tu preinscripción a Harmony On Tour Chile 2026 quedó registrada.`,
+    `¡Hola${hola ? ", " + hola : ""}! Tu preinscripción a Harmony On Tour LATAM 2026 quedó registrada.`,
     "",
     `Sede: ${info.ciudad} (Edición ${info.edicion}, presencial)`,
     `Fecha: ${info.fecha}`,
     "Horario: 10:00 a 14:00 hrs",
     `Speakers: ${info.speakers.join(" · ")}`,
-    "Lugar: la dirección exacta te llegará junto con tu ticket de acceso.",
-    `Valor: ${price} CLP${presale ? ` (preventa hasta el 9 de octubre; luego ${PRICE_REGULAR})` : ""}`,
+    info.lugar
+      ? `Lugar: ${info.lugar}, ${info.ciudad}, ${info.pais}`
+      : "Lugar: la dirección exacta te llegará junto con tu ticket de acceso.",
+    `Valor: ${price}${presale ? ` (preventa hasta el 9 de octubre; luego ${PRICE_REGULAR} CLP)` : ""}`,
     `Cronograma de la jornada: ${agendaUrl}`,
     "",
     "IMPORTANTE: tu entrada será efectiva y te enviaremos tu ticket de acceso cuando se confirme el pago.",

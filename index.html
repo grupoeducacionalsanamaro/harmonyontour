@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Harmony On Tour Chile 2026 — Inscripción</title>
-<meta name="description" content="Elige tu sede e inscríbete en Harmony On Tour Chile 2026, la gira de actualización en armonización orofacial del Instituto Harmony.">
+<title>Harmony On Tour LATAM 2026 — Inscripción</title>
+<meta name="description" content="Elige tu sede e inscríbete en Harmony On Tour LATAM 2026, la gira latinoamericana de actualización en armonización orofacial del Instituto Harmony.">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -217,7 +217,11 @@
   /* Tickets: mismo alto mientras ningún formulario está abierto */
   .stops{ position:relative; display:grid; gap:32px; grid-template-columns:1fr; align-items:stretch; }
   .stops.has-open{ align-items:start; }
-  @media (min-width:860px){ .stops{grid-template-columns:1fr 1fr;} }
+  @media (min-width:860px){
+    .stops{grid-template-columns:1fr 1fr;}
+    /* Si queda un ticket solo en la última fila, se centra con el mismo ancho */
+    .stop:last-child:nth-child(odd){ grid-column:1 / -1; justify-self:center; width:calc(50% - 16px); }
+  }
   .stop{ position:relative; z-index:1; display:flex; flex-direction:column; }
 
   .stop-marker{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
@@ -451,6 +455,9 @@
     .speaker-scrim{ inset:auto 0 auto 0; top:0; aspect-ratio:4/5; background:linear-gradient(0deg, var(--surface) 0%, transparent 28%); }
     .speaker-content{ position:relative; flex:1; display:flex; flex-direction:column; }
     .speaker-card:hover{ transform:none; }
+    .speaker-nophoto{ padding-top:18%; gap:8px; }
+    .speaker-nophoto span{ width:64px; height:64px; font-size:26px; }
+    .speaker-nophoto small{ font-size:8.5px; letter-spacing:.06em; }
     .speaker-content{ padding:4px 12px 12px; gap:4px; }
     .speaker-name-row{ gap:6px; }
     .speaker-name{ font-size:15px; line-height:1.15; }
@@ -500,10 +507,29 @@
   .ag-title{ font-family:var(--font-display); font-size:17px; text-transform:uppercase; letter-spacing:.04em; color:var(--white); }
   .ag-detail{ font-size:13.5px; color:var(--silver); margin-top:2px; }
   .ag-break .ag-time, .ag-networking .ag-time, .ag-info .ag-time{ color:var(--silver); }
+  .ag-pending{ display:flex; align-items:flex-start; gap:16px; padding:22px 24px; border:1px dashed var(--line-strong); border-radius:14px; background:rgba(210,26,26,.05); }
+  .ag-pending .ag-detail{ font-size:15px; line-height:1.6; margin-top:6px; max-width:62ch; }
+
+  /* Tarjeta de speaker sin foto (iniciales) */
+  .speaker-nophoto{
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:10px; padding-top:22%;
+    background:
+      radial-gradient(90% 70% at 50% 25%, rgba(210,26,26,.35), transparent 70%),
+      linear-gradient(160deg, var(--surface-2), var(--bg) 85%);
+  }
+  .speaker-nophoto span{
+    width:96px; height:96px; border-radius:50%; display:grid; place-items:center;
+    font-family:var(--font-display); font-size:38px; color:var(--white); letter-spacing:.02em;
+    border:2px solid rgba(210,26,26,.7); background:rgba(10,9,8,.45);
+  }
+  .speaker-nophoto small{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--silver); }
+  .speaker-card:hover .speaker-nophoto{ transform:none; }
   @media (max-width:640px){
     .ag-tabs{ display:flex; width:100%; }
     .ag-tab{ flex:1; padding:10px 12px; }
-    .ag-tab-city{ font-size:17px; }
+    .ag-tab-city{ font-size:15px; }
+    .ag-tab-date{ font-size:9.5px; letter-spacing:.04em; }
+    .ag-tab{ padding:9px 8px; }
     .ag-item{ grid-template-columns:1fr; gap:6px; }
     .ag-card{ padding:14px 16px; gap:12px; align-items:flex-start; }
     .ag-avatar{ width:46px; height:46px; }
@@ -530,7 +556,7 @@
       <span class="brand-mark" aria-hidden="true"><img src="/harmony-logo.webp" alt=""></span>
       <span class="brand-text"><b>HARMONY</b><span>INSTITUTO INTERNACIONAL</span></span>
     </a>
-    <span class="nav-tag">ON TOUR · CHILE 2026</span>
+    <span class="nav-tag">ON TOUR · LATAM 2026</span>
     <a class="nav-cta" href="#sedes">Elegir sede</a>
   </div>
 </header>
@@ -539,11 +565,11 @@
   <section class="hero">
     <div class="wrap hero-inner">
       <p class="eyebrow reveal">HARMONY INSTITUTO INTERNACIONAL PRESENTA</p>
-      <p class="presale-pill presale-only reveal"><span class="pp-tag">Preventa</span> <b>$19.990</b> <span class="pp-long">hasta el 9 de octubre</span><span class="pp-short">hasta el 9 oct</span> <s>$47.000</s></p>
-      <h1 class="reveal">HARMONY<br>ON TOUR <span class="accent">CHILE</span></h1>
+      <p class="presale-pill presale-only reveal"><span class="pp-tag">Preventa Chile</span> <b>$19.990</b> <span class="pp-long">hasta el 9 de octubre</span><span class="pp-short">hasta el 9 oct</span> <s>$47.000</s></p>
+      <h1 class="reveal">HARMONY<br>ON TOUR <span class="accent">LATAM</span></h1>
       <p class="hero-tagline reveal">Una actualización necesaria.</p>
       <p class="hero-copy reveal">
-        Dos jornadas presenciales para conocer de primera mano los protocolos que están
+        Jornadas presenciales en Chile y Ecuador para conocer de primera mano los protocolos que están
         redefiniendo la armonización orofacial: actualización clínica, capacitación breve
         y aplicada, y tu primer contacto con la especialidad — de la mano de docentes
         Harmony, profesionales formados en nuestro Postgrado y speakers invitados.
@@ -553,7 +579,7 @@
         <a class="btn btn-ghost" href="#docentes">Conoce a los speakers</a>
       </div>
       <div class="hero-meta reveal">
-        <span><i class="dot"></i>2 sedes en Chile</span>
+        <span><i class="dot"></i>3 sedes · Chile y Ecuador</span>
         <span><i class="dot"></i>Cupos limitados</span>
         <span><i class="dot"></i>10:00 – 14:00 hrs</span>
       </div>
@@ -565,11 +591,11 @@
       <div class="about-grid">
         <div class="section-head">
           <p class="eyebrow">SOBRE EL TOUR</p>
-          <h2>¿Qué es Harmony On Tour <span class="accent">Chile 2026</span>?</h2>
+          <h2>¿Qué es Harmony On Tour <span class="accent">LATAM 2026</span>?</h2>
         </div>
         <p class="about-copy">
-          <strong>Harmony On Tour</strong> es la gira nacional del Instituto Harmony: un recorrido
-          presencial por distintas ciudades de Chile pensado para médicos y odontólogos que quieren
+          <strong>Harmony On Tour</strong> es la gira latinoamericana del Instituto Harmony: un recorrido
+          presencial por ciudades de Chile y Ecuador pensado para médicos y odontólogos que quieren
           acercarse a la armonización orofacial. Cada jornada reúne una <strong>actualización de
           contenidos</strong>, una <strong>capacitación breve y aplicada</strong>, y un
           <strong>primer contacto con la técnica</strong> antes de decidir profundizar en la
@@ -609,7 +635,7 @@
       <div class="section-head">
         <p class="eyebrow">CRONOGRAMA</p>
         <h2>Programa de la jornada</h2>
-        <p class="route-sub">Cuatro charlas, un break y networking, de 10:00 a 14:00 hrs. Elige tu sede para ver el programa.</p>
+        <p class="route-sub">Charlas, break y networking, de 10:00 a 14:00 hrs. Elige tu sede para ver el programa.</p>
       </div>
       <div class="agenda-box" id="agenda"></div>
     </div>
@@ -625,7 +651,7 @@
         </div>
       </div>
 
-      <p class="presale-note presale-only"><strong>Preventa $19.990</strong> <span>para ambas sedes hasta el 9 de octubre. Desde el 10 de octubre, precio general <s>$47.000</s>.</span></p>
+      <p class="presale-note presale-only"><strong>Preventa $19.990</strong> <span>para las sedes de Chile (Concepción y Antofagasta) hasta el 9 de octubre. Desde el 10 de octubre, precio general <s>$47.000</s>.</span></p>
 
       <div class="stops">
         <article class="stop">
@@ -635,7 +661,7 @@
           </div>
           <div class="ticket">
             <div class="ticket-top">
-              <div class="ticket-brand"><span>Harmony On Tour · Chile 2026</span><span class="admit presale-only">Preventa</span><span class="admit regular-only">Admisión general</span></div>
+              <div class="ticket-brand"><span>Harmony On Tour · LATAM 2026</span><span class="admit presale-only">Preventa</span><span class="admit regular-only">Admisión general</span></div>
               <h3 class="ticket-city">Concepción</h3>
               <p class="ticket-edition">Edición 01 · Cupos limitados</p>
             </div>
@@ -720,7 +746,7 @@
           </div>
           <div class="ticket">
             <div class="ticket-top">
-              <div class="ticket-brand"><span>Harmony On Tour · Chile 2026</span><span class="admit presale-only">Preventa</span><span class="admit regular-only">Admisión general</span></div>
+              <div class="ticket-brand"><span>Harmony On Tour · LATAM 2026</span><span class="admit presale-only">Preventa</span><span class="admit regular-only">Admisión general</span></div>
               <h3 class="ticket-city">Antofagasta</h3>
               <p class="ticket-edition">Edición 02 · Cupos limitados</p>
             </div>
@@ -797,6 +823,92 @@
             </div>
           </div>
         </article>
+
+        <article class="stop">
+          <div class="stop-marker">
+            <span class="stop-num">03</span>
+            <span class="stop-label">Sede internacional</span>
+          </div>
+          <div class="ticket">
+            <div class="ticket-top">
+              <div class="ticket-brand"><span>Harmony On Tour · LATAM 2026</span><span class="admit">Admisión general</span></div>
+              <h3 class="ticket-city">Guayaquil</h3>
+              <p class="ticket-edition">Edición 03 · Ecuador · Cupos limitados</p>
+            </div>
+            <div class="ticket-body">
+              <dl class="ticket-fields">
+                <div class="tf"><dt>Fecha</dt><dd>Por confirmar</dd></div>
+                <div class="tf"><dt>Horario</dt><dd><span class="nw">10:00 – 14:00</span> hrs</dd></div>
+                <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Melo</span> · <span class="nw">Dra. Lobato</span> · <span class="nw">Dra. Mazzo</span> · <span class="nw">Dra. Vergara</span><br><a class="ticket-link" href="#edicion-guayaquil">Ver equipo →</a> <a class="ticket-link" href="#cronograma" data-agenda="edicion-guayaquil">Ver cronograma →</a></dd></div>
+                <div class="tf tf-wide"><dt>Lugar</dt><dd>Hotel Wyndham Guayaquil Puerto Santa Ana</dd></div>
+                <div class="tf tf-price"><dt>Valor</dt><dd><span class="nw">$49.99</span> <small class="cur">USD</small></dd></div>
+                <div class="tf"><dt>Modalidad</dt><dd>Presencial</dd></div>
+              </dl>
+            </div>
+            <div class="ticket-rule" aria-hidden="true"></div>
+            <div class="ticket-stub">
+              <div class="stub-meta">
+                <span class="stub-no">Ticket Nº 03<b>GUAYAQUIL</b></span>
+                <span class="barcode" aria-hidden="true"></span>
+              </div>
+
+              <button type="button" class="btn btn-primary btn-small js-toggle-form" data-target="form-guayaquil">Inscribirme — Guayaquil</button>
+
+              <form class="reg-form hidden-form" id="form-guayaquil" data-sede="Guayaquil — Ecuador" data-city="Guayaquil" data-sck="HOT_GUAYAQUIL" novalidate>
+                <div class="reg-panel">
+                  <div class="field">
+                    <label for="nombre-guayaquil">Nombre y Apellido</label>
+                    <input id="nombre-guayaquil" name="nombre" type="text" autocomplete="name" required>
+                  </div>
+                  <div class="field">
+                    <label for="email-guayaquil">Correo electrónico</label>
+                    <input id="email-guayaquil" name="email" type="email" autocomplete="email" required>
+                  </div>
+                  <div class="field">
+                    <label for="whatsapp-guayaquil">WhatsApp</label>
+                    <input id="whatsapp-guayaquil" name="whatsapp" type="tel" inputmode="tel" placeholder="+593 99 123 4567" autocomplete="tel" required>
+                  </div>
+                  <div class="field">
+                    <label for="profesion-guayaquil">Profesión</label>
+                    <select id="profesion-guayaquil" name="profesion" required>
+                      <option value="" disabled selected>Selecciona una opción</option>
+                      <option>Médico(a) cirujano(a)</option>
+                      <option>Cirujano(a)-dentista</option>
+                      <option>Estudiante de Medicina</option>
+                      <option>Estudiante de Odontología</option>
+                      <option>Otro profesional de la salud</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="nivel-guayaquil">Nivel de formación en armonización orofacial</label>
+                    <select id="nivel-guayaquil" name="nivel" required>
+                      <option value="" disabled selected>Selecciona una opción</option>
+                      <option>Sin experiencia</option>
+                      <option>Cursos iniciales</option>
+                      <option>Formación intermedia (Diplomado)</option>
+                      <option>Formación avanzada (Postgrado / Especialista)</option>
+                    </select>
+                  </div>
+
+                  <div class="hp-field" aria-hidden="true"><label>Empresa<input name="empresa" type="text" tabindex="-1" autocomplete="off"></label></div>
+
+                  <p class="reg-msg error" role="alert"></p>
+
+                  <button type="submit" class="btn btn-primary btn-small">Enviar inscripción</button>
+                  <p class="reg-fallback">¿Problemas al enviar? <a href="https://form.jotform.com/262586485506064?dropdown0=Guayaquil%20%E2%80%94%20Ecuador" target="_blank" rel="noopener">Complétalo aquí</a>.</p>
+
+                  <div class="reg-success">
+                    <span class="check">✅</span>
+                    <h4>¡Tu preinscripción quedó registrada!</h4>
+                    <p>Para asegurar tu cupo en Guayaquil, completa ahora el pago.</p>
+                    <p class="reg-mail-note" hidden>Te enviamos un correo a <b class="reg-mail-to"></b> con los detalles de tu jornada y el enlace de pago.</p>
+                    <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E?sck=HOT_GUAYAQUIL" data-pay-link target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -808,7 +920,7 @@
       <span class="brand-mark" aria-hidden="true"><img src="/harmony-logo.webp" alt=""></span>
       <span class="brand-text"><b>HARMONY</b><span>INSTITUTO INTERNACIONAL</span></span>
     </a>
-    <p class="foot-copy">© 2026 Harmony Instituto Internacional&nbsp;— <span class="nw">Harmony On Tour Chile</span></p>
+    <p class="foot-copy">© 2026 Harmony Instituto Internacional&nbsp;— <span class="nw">Harmony On Tour LATAM</span></p>
   </div>
 </footer>
 

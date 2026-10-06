@@ -1,6 +1,6 @@
 // Serverless function (Vercel, Node runtime): recibe la inscripción del formulario
 // nativo de la landing y la crea como submission real en el formulario de Jotform
-// "Harmony On Tour Chile 2026 — Inscripción" (id 262586485506064), vía la API
+// "Harmony On Tour Chile 2026 — Inscripción" (nombre interno en Jotform) (id 262586485506064), vía la API
 // pública de Jotform. Requiere la variable de entorno JOTFORM_API_KEY.
 
 const { FORM_ID, getQuestions, findQid } = require("./_lib/jotform");
@@ -11,6 +11,7 @@ const PAY_BASE = "https://pay.hotmart.com/L107640931E";
 const SCK_BY_SEDE = {
   "Concepción — 17 de octubre": "HOT_CONCEPCION",
   "Antofagasta — 24 de octubre": "HOT_ANTOFAGASTA",
+  "Guayaquil — Ecuador": "HOT_GUAYAQUIL",
 };
 
 function buildPayUrl({ sede, submissionId, email, nombre }) {
@@ -30,7 +31,7 @@ const ALLOWED_ORIGINS = new Set([
 ]);
 
 // Valores permitidos: deben coincidir con las opciones del formulario de la landing.
-const SEDES = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre"]);
+const SEDES = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre", "Guayaquil — Ecuador"]);
 const PROFESIONES = new Set([
   "Médico(a) cirujano(a)",
   "Cirujano(a)-dentista",

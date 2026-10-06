@@ -51,6 +51,7 @@ function isHarmonyProduct(product) {
 const SEDES = {
   HOT_CONCEPCION: "Concepción",
   HOT_ANTOFAGASTA: "Antofagasta",
+  HOT_GUAYAQUIL: "Guayaquil",
 };
 
 function safeEqual(a, b) {
