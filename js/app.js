@@ -10,8 +10,8 @@
     "marjorie-gold":   { name: "Dra. Marjorie Gold",   role: "Speaker Osamedic", instagram: "https://www.instagram.com/gyh.dentalyestetica/" },
     "sofia-montes":    { name: "Dra. Sofía Montes",    role: "Exalumna de Postgrado · Cohorte 4", instagram: "https://www.instagram.com/dra.sofimo_/" },
     "pamela-flores":   { name: "Dra. Pamela Flores",   role: "Exalumna de Postgrado · Cohorte 5", instagram: "https://www.instagram.com/dra.pamelareneeflores/" },
-    "rafaela-melo":    { name: "Dra. Rafaela Melo",    role: "Speaker AFORMI", noPhoto: true },
-    "malu-lobato":     { name: "Dra. Malu Lobato",     role: "Speaker AFORMI", noPhoto: true },
+    "rafaela-melo":    { name: "Dra. Rafaela Melo",    role: "Speaker AFORMI" },
+    "malu-lobato":     { name: "Dra. Malu Lobato",     role: "Speaker AFORMI" },
     "andrea-mazzo":    { name: "Dra. Andrea Mazzo",    role: "Docente Harmony Instituto Internacional", verified: true, noPhoto: true }
   };
 
