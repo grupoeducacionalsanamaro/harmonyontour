@@ -12,7 +12,7 @@
     "pamela-flores":   { name: "Dra. Pamela Flores",   role: "Exalumna de Postgrado · Cohorte 5", instagram: "https://www.instagram.com/dra.pamelareneeflores/" },
     "rafaela-melo":    { name: "Dra. Rafaela Melo",    role: "Speaker AFORMI" },
     "malu-lobato":     { name: "Dra. Malu Lobato",     role: "Speaker AFORMI" },
-    "andrea-mazzo":    { name: "Dra. Andrea Mazzo",    role: "Docente Harmony Instituto Internacional", verified: true, noPhoto: true }
+    "andrea-mazzo":    { name: "Dra. Andrea Mazzo",    role: "Docente Harmony Instituto Internacional", verified: true }
   };
 
   var EDITIONS = [
