@@ -1,5 +1,5 @@
 // Utilidades compartidas para la API de Jotform (formulario de inscripción
-// "Harmony On Tour Chile 2026 — Inscripción"). Las usan /api/register y
+// "Harmony On Tour LATAM 2026 — Inscripción"). Las usan /api/register y
 // /api/hotmart-webhook. Requiere la variable de entorno JOTFORM_API_KEY.
 
 const FORM_ID = "262586485506064";
