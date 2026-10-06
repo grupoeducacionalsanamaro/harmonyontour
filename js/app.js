@@ -33,7 +33,7 @@
         { time: "10:10 – 10:55", speaker: "sofia-montes", topic: "¿Por qué dos pieles de la misma edad no envejecen igual?" },
         { time: "10:55 – 11:40", speaker: "marjorie-gold", topic: "El ABC de los Polinucleótidos: “Meline y el Futuro de la Regeneración Cutánea”, técnicas y predictibilidad" },
         { time: "11:40 – 12:00", kind: "break", title: "Break" },
-        { time: "12:00 – 12:45", speaker: "miguel-romero", topic: "¿Los fillers realmente hacen lifting?" },
+        { time: "12:00 – 12:45", speaker: "miguel-romero", topic: "Rellenos faciales full face, con criterio", subtitle: "Pensar por capas. Decidir por paciente." },
         { time: "12:45 – 13:30", speaker: "loreto-campos", topic: "Toxina botulínica: anatomía funcional, dinámica muscular y estrategias de aplicación para resultados predecibles y naturales" },
         { time: "13:30 – 14:00", kind: "networking", title: "Networking" }
       ]
@@ -125,6 +125,7 @@
             '<div class="ag-body">' +
               '<p class="ag-speaker">' + escapeHtml(s.name) + '<span class="ag-role">' + escapeHtml(s.role) + '</span></p>' +
               '<p class="ag-topic">' + escapeHtml(item.topic) + '</p>' +
+              (item.subtitle ? '<p class="ag-subtitle">' + escapeHtml(item.subtitle) + '</p>' : '') +
             '</div>' +
           '</div>' +
         '</li>'
