@@ -44,7 +44,7 @@
     },
     {
       // Sede internacional. Sin "agenda" el cronograma muestra "en elaboración".
-      id: "edicion-guayaquil", num: "03", city: "Guayaquil", date: "Ecuador · Fecha por confirmar", tabDate: "Por confirmar",
+      id: "edicion-guayaquil", num: "03", city: "Guayaquil", date: "Ecuador · Sáb 28 nov 2026", tabDate: "Sáb 28 nov 2026",
       venue: "Hotel Wyndham Guayaquil Puerto Santa Ana",
       speakers: ["rafaela-melo", "malu-lobato", "andrea-mazzo", "javiera-vergara"]
     }

@@ -22,6 +22,8 @@ const SEDES = {
     slug: "concepcion",
     edicion: "01",
     fecha: "Sábado 17 de octubre de 2026",
+    pais: "Chile",
+    lugar: "Hotel Aurelio",
     speakers: ["Dra. Javiera Vergara", "Dra. Nathaly Fuentes", "Dra. Pamela Flores", "Dra. Marjorie Gold"],
   },
   "Antofagasta — 24 de octubre": {
@@ -29,6 +31,8 @@ const SEDES = {
     slug: "antofagasta",
     edicion: "02",
     fecha: "Sábado 24 de octubre de 2026",
+    pais: "Chile",
+    lugar: "Hotel Terrado Suites",
     speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Dra. Marjorie Gold", "Dra. Sofía Montes"],
   },
   "Guayaquil — Ecuador": {
@@ -36,7 +40,7 @@ const SEDES = {
     slug: "guayaquil",
     edicion: "03",
     pais: "Ecuador",
-    fecha: "Por confirmar (te la informaremos por correo)",
+    fecha: "Sábado 28 de noviembre de 2026",
     lugar: "Hotel Wyndham Guayaquil Puerto Santa Ana",
     precio: "$49.99 USD",
     speakers: ["Dra. Rafaela Melo", "Dra. Malu Lobato", "Dra. Andrea Mazzo", "Dra. Javiera Vergara"],
@@ -71,7 +75,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
   const price = info.precio || `${presale ? PRICE_PRESALE : PRICE_REGULAR} CLP`;
   const hola = firstName(nombre);
   const subject = `Tu preinscripción a Harmony On Tour ${info.ciudad} quedó registrada`;
-  const preheader = `${info.lugar ? info.ciudad : info.fecha} · 10:00 a 14:00 hrs. Completa el pago para recibir tu ticket de acceso.`;
+  const preheader = `${info.fecha} · 10:00 a 14:00 hrs${info.lugar ? ` · ${info.lugar}` : ""}. Completa el pago para recibir tu ticket de acceso.`;
 
   const priceHtml = presale
     ? `${PRICE_PRESALE} CLP <span style="font-size:13px;font-weight:500;color:#ada39a;">· preventa hasta el 9 oct (luego <s>${PRICE_REGULAR}</s>)</span>`
