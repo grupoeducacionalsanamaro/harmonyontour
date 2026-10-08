@@ -24,6 +24,7 @@ const SEDES = {
     fecha: "Sábado 17 de octubre de 2026",
     pais: "Chile",
     lugar: "Hotel Aurelio",
+    mapa: "https://maps.google.com/?cid=205314904127980124",
     speakers: ["Dra. Javiera Vergara", "Dra. Nathaly Fuentes", "Dra. Pamela Flores", "Dra. Marjorie Gold"],
   },
   "Antofagasta — 24 de octubre": {
@@ -33,6 +34,7 @@ const SEDES = {
     fecha: "Sábado 24 de octubre de 2026",
     pais: "Chile",
     lugar: "Hotel Terrado Suites",
+    mapa: "https://maps.google.com/?cid=2220393754344205012",
     speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Dra. Marjorie Gold", "Dra. Sofía Montes"],
   },
   "Guayaquil — Ecuador": {
@@ -42,6 +44,7 @@ const SEDES = {
     pais: "Ecuador",
     fecha: "Sábado 28 de noviembre de 2026",
     lugar: "Hotel Wyndham Guayaquil Puerto Santa Ana",
+    mapa: "https://maps.google.com/?cid=7259335876104380102",
     precio: "$49.99 USD",
     speakers: ["Dra. Rafaela Melo", "Dra. Malu Lobato", "Dra. Andrea Mazzo", "Dra. Javiera Vergara"],
   },
@@ -82,7 +85,8 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
     : esc(price);
 
   const lugarHtml = info.lugar
-    ? `${esc(info.lugar)}<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(info.ciudad)}, ${esc(info.pais)}</span>`
+    ? `${esc(info.lugar)}<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(info.ciudad)}, ${esc(info.pais)}</span>` +
+      (info.mapa ? `<br><a href="${esc(info.mapa)}" target="_blank" style="font-size:13.5px;font-weight:600;color:#d21a1a;text-decoration:none;">Ver ubicación &rarr;</a>` : "")
     : `${esc(info.ciudad)}, Chile<br><span style="font-size:13px;font-weight:500;color:#ada39a;">La dirección exacta te llegará junto con tu ticket de acceso.</span>`;
 
   const html = `<!doctype html>
@@ -235,7 +239,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
     "Horario: 10:00 a 14:00 hrs",
     `Speakers: ${info.speakers.join(" · ")}`,
     info.lugar
-      ? `Lugar: ${info.lugar}, ${info.ciudad}, ${info.pais}`
+      ? `Lugar: ${info.lugar}, ${info.ciudad}, ${info.pais}${info.mapa ? ` (ubicación: ${info.mapa})` : ""}`
       : "Lugar: la dirección exacta te llegará junto con tu ticket de acceso.",
     `Valor: ${price}${presale ? ` (preventa hasta el 9 de octubre; luego ${PRICE_REGULAR} CLP)` : ""}`,
     `Cronograma de la jornada: ${agendaUrl}`,
