@@ -12,9 +12,9 @@
     "por-confirmar": { name: "Speaker por confirmar", role: "Por confirmar", noPhoto: true, pending: true },
     "sofia-montes":    { name: "Dra. Sofía Montes",    role: "Exalumna de Postgrado · Cohorte 4", instagram: "https://www.instagram.com/dra.sofimo_/" },
     "pamela-flores":   { name: "Dra. Pamela Flores",   role: "Exalumna de Postgrado · Cohorte 5", instagram: "https://www.instagram.com/dra.pamelareneeflores/" },
-    "rafaela-melo":    { name: "Dra. Rafaela Melo",    role: "Speaker AFORMI" },
-    "malu-lobato":     { name: "Dra. Malu Lobato",     role: "Speaker AFORMI" },
-    "andrea-mazzo":    { name: "Dra. Andrea Mazzo",    role: "Docente Harmony Instituto Internacional", verified: true }
+    "rafaela-melo":    { name: "Dra. Rafaela Melo",    role: "Speaker AFORMI", instagram: "https://www.instagram.com/drarafaelamelo/" },
+    "malu-lobato":     { name: "Dra. Malu Lobato",     role: "Speaker AFORMI", instagram: "https://www.instagram.com/dramalulobato/" },
+    "andrea-mazzo":    { name: "Dra. Andrea Mazzo",    role: "Docente Harmony Instituto Internacional", verified: true, instagram: "https://www.instagram.com/doctoramazzo/" }
   };
 
   var EDITIONS = [
