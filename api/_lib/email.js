@@ -10,11 +10,6 @@ const FROM = "Harmony On Tour LATAM <harmonyontour@send.sanamaro.cl>";
 const REPLY_TO = "info@sanamaro.cl";
 const BCC = "relacionespublicas@sanamaro.cl";
 
-// Mismo corte que la landing (js/presale.js): 10 oct 2026 00:00 hora de Chile.
-// La preventa aplica solo a las sedes de Chile; las sedes con "precio" fijo no la usan.
-const PRESALE_END = Date.parse("2026-10-10T00:00:00-03:00");
-const PRICE_PRESALE = "$19.990";
-const PRICE_REGULAR = "$47.000";
 
 const SEDES = {
   "Concepción — 17 de octubre": {
@@ -24,6 +19,7 @@ const SEDES = {
     fecha: "Sábado 17 de octubre de 2026",
     pais: "Chile",
     lugar: "Hotel Aurelio",
+    precio: "$47.990 CLP",
     mapa: "https://maps.google.com/?cid=205314904127980124",
     speakers: ["Dra. Javiera Vergara", "Dra. Nathaly Fuentes", "Dra. Pamela Flores", "Dra. Marjorie Gold"],
   },
@@ -34,6 +30,7 @@ const SEDES = {
     fecha: "Sábado 24 de octubre de 2026",
     pais: "Chile",
     lugar: "Hotel Terrado Suites",
+    precio: "$47.990 CLP",
     mapa: "https://maps.google.com/?cid=2220393754344205012",
     speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Dra. Marjorie Gold", "Dra. Sofía Montes"],
   },
@@ -68,21 +65,18 @@ function field(label, value) {
                   </td>`;
 }
 
-function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
+function buildConfirmationEmail({ nombre, sede, payUrl }) {
   const info = SEDES[sede];
   if (!info) throw new Error(`Sede desconocida para el correo: ${sede}`);
 
-  const presale = !info.precio && now < PRESALE_END;
   // Abre la sección Cronograma de la landing con la pestaña de esta sede.
   const agendaUrl = `${SITE}/?cronograma=${info.slug}#cronograma`;
-  const price = info.precio || `${presale ? PRICE_PRESALE : PRICE_REGULAR} CLP`;
+  const price = info.precio;
   const hola = firstName(nombre);
   const subject = `Tu preinscripción a Harmony On Tour ${info.ciudad} quedó registrada`;
   const preheader = `${info.fecha} · 10:00 a 14:00 hrs${info.lugar ? ` · ${info.lugar}` : ""}. Completa el pago para recibir tu ticket de acceso.`;
 
-  const priceHtml = presale
-    ? `${PRICE_PRESALE} CLP <span style="font-size:13px;font-weight:500;color:#ada39a;">· preventa hasta el 9 oct (luego <s>${PRICE_REGULAR}</s>)</span>`
-    : esc(price);
+  const priceHtml = esc(price);
 
   const lugarHtml = info.lugar
     ? `${esc(info.lugar)}<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(info.ciudad)}, ${esc(info.pais)}</span>` +
@@ -165,7 +159,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
                     </tr>
                     <tr>${field("Lugar", lugarHtml)}
                     </tr>
-                    <tr>${field(presale ? "Valor preventa" : "Valor", priceHtml)}
+                    <tr>${field("Valor", priceHtml)}
                     </tr>
                   </table>
 
@@ -241,7 +235,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
     info.lugar
       ? `Lugar: ${info.lugar}, ${info.ciudad}, ${info.pais}${info.mapa ? ` (ubicación: ${info.mapa})` : ""}`
       : "Lugar: la dirección exacta te llegará junto con tu ticket de acceso.",
-    `Valor: ${price}${presale ? ` (preventa hasta el 9 de octubre; luego ${PRICE_REGULAR} CLP)` : ""}`,
+    `Valor: ${price}`,
     `Cronograma de la jornada: ${agendaUrl}`,
     "",
     "IMPORTANTE: tu entrada será efectiva y te enviaremos tu ticket de acceso cuando se confirme el pago.",
