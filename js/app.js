@@ -8,8 +8,8 @@
     "nathaly-fuentes": { name: "Dra. Nathaly Fuentes", role: "Exalumna de Postgrado · Cohorte 1", instagram: "https://www.instagram.com/dra.nathalyfuentes/" },
     "miguel-romero":   { name: "Dr. Miguel Romero",    role: "Alumno de Postgrado · Cohorte 7", instagram: "https://www.instagram.com/docmiguelromero/" },
     "marjorie-gold":   { name: "Dra. Marjorie Gold",   role: "Speaker Osamedic", instagram: "https://www.instagram.com/gyh.dentalyestetica/" },
-    // Cupo de Antofagasta aún sin nombre (patrocina Estética y Ortopedia).
-    "por-confirmar-eyo": { name: "Speaker por confirmar", role: "Speaker Estética y Ortopedia", noPhoto: true, pending: true },
+    // Cupo de Antofagasta aún sin speaker confirmado.
+    "por-confirmar": { name: "Speaker por confirmar", role: "Por confirmar", noPhoto: true, pending: true },
     "sofia-montes":    { name: "Dra. Sofía Montes",    role: "Exalumna de Postgrado · Cohorte 4", instagram: "https://www.instagram.com/dra.sofimo_/" },
     "pamela-flores":   { name: "Dra. Pamela Flores",   role: "Exalumna de Postgrado · Cohorte 5", instagram: "https://www.instagram.com/dra.pamelareneeflores/" },
     "rafaela-melo":    { name: "Dra. Rafaela Melo",    role: "Speaker AFORMI" },
@@ -33,11 +33,11 @@
     },
     {
       id: "edicion-antofagasta", num: "02", city: "Antofagasta", date: "Sáb 24 oct 2026",
-      speakers: ["loreto-campos", "miguel-romero", "por-confirmar-eyo", "sofia-montes"],
+      speakers: ["loreto-campos", "miguel-romero", "por-confirmar", "sofia-montes"],
       agenda: [
         { time: "10:00 – 10:10", kind: "info", title: "Bienvenida", detail: "Harmony Instituto Internacional" },
         { time: "10:10 – 10:55", speaker: "sofia-montes", topic: "¿Por qué dos pieles de la misma edad no envejecen igual?" },
-        { time: "10:55 – 11:40", speaker: "por-confirmar-eyo", topic: "Tema por confirmar" },
+        { time: "10:55 – 11:40", speaker: "por-confirmar", topic: "Tema por confirmar" },
         { time: "11:40 – 12:00", kind: "break", title: "Break" },
         { time: "12:00 – 12:45", speaker: "miguel-romero", topic: "Rellenos faciales full face, con criterio", subtitle: "Pensar por capas. Decidir por paciente." },
         { time: "12:45 – 13:30", speaker: "loreto-campos", topic: "Toxina botulínica: anatomía funcional, dinámica muscular y estrategias de aplicación para resultados predecibles y naturales" },
@@ -85,7 +85,7 @@
 
       var initials = s.name.replace(/^Dr[a]?\.\s*/, "").split(" ").map(function(w){ return w.charAt(0); }).join("").slice(0, 2);
       var photoHtml = s.noPhoto
-        ? '<div class="speaker-photo speaker-nophoto" role="img" aria-label="' + escapeHtml(s.name) + ', ' + escapeHtml(s.role) + '"><span>' + escapeHtml(s.pending ? "?" : initials) + '</span><small>' + (s.pending ? "Por confirmar" : "Foto próximamente") + '</small></div>'
+        ? '<div class="speaker-photo speaker-nophoto" role="img" aria-label="' + escapeHtml(s.name) + ', ' + escapeHtml(s.role) + '"><span>' + escapeHtml(s.pending ? "?" : initials) + '</span>' + (s.pending ? '' : '<small>Foto próximamente</small>') + '</div>'
         : '<img class="speaker-photo" src="' + escapeHtml(photo) + '" alt="' + escapeHtml(s.name) + ', ' + escapeHtml(s.role) + '" width="640" height="800" loading="lazy">';
 
       return (
@@ -142,7 +142,7 @@
               ? '<span class="ag-avatar ag-avatar-empty" aria-hidden="true">' + (s.pending ? "?" : escapeHtml(s.name.replace(/^Dr[a]?\.\s*/, "").split(" ").map(function(w){ return w.charAt(0); }).join("").slice(0, 2))) + '</span>'
               : '<img class="ag-avatar" src="/speakers/' + escapeHtml(item.speaker) + '.webp" alt="" width="56" height="56" loading="lazy">') +
             '<div class="ag-body">' +
-              '<p class="ag-speaker">' + escapeHtml(s.name) + '<span class="ag-role">' + escapeHtml(s.role) + '</span></p>' +
+              '<p class="ag-speaker">' + escapeHtml(s.name) + (s.pending ? '' : '<span class="ag-role">' + escapeHtml(s.role) + '</span>') + '</p>' +
               '<p class="ag-topic">' + escapeHtml(item.topic) + '</p>' +
               (item.subtitle ? '<p class="ag-subtitle">' + escapeHtml(item.subtitle) + '</p>' : '') +
             '</div>' +
