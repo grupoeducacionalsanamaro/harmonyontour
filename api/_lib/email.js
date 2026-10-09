@@ -35,7 +35,7 @@ const SEDES = {
     pais: "Chile",
     lugar: "Hotel Terrado Suites",
     mapa: "https://maps.google.com/?cid=2220393754344205012",
-    speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Dra. Marjorie Gold", "Dra. Sofía Montes"],
+    speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Speaker por confirmar (Estética y Ortopedia)", "Dra. Sofía Montes"],
   },
   "Guayaquil — Ecuador": {
     ciudad: "Guayaquil",
