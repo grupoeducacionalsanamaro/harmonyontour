@@ -18,8 +18,13 @@ const SCK_BY_SEDE = {
   "Guayaquil — Ecuador": "HOT_GUAYAQUIL",
 };
 
+// Sedes con oferta propia en Hotmart (precio y fecha de su evento).
+const PAY_BY_SEDE = {
+  "Guayaquil — Ecuador": "https://pay.hotmart.com/L107640931E?off=b6bidyqw",
+};
+
 function buildPayUrl({ sede, submissionId, email, nombre, tipoEntrada }) {
-  const url = new URL(PAY_OFFERS[tipoEntrada] || PAY_OFFERS.Individual);
+  const url = new URL(PAY_BY_SEDE[sede] || PAY_OFFERS[tipoEntrada] || PAY_OFFERS.Individual);
   url.searchParams.set("sck", SCK_BY_SEDE[sede]);
   if (submissionId) url.searchParams.set("src", "JF" + submissionId);
   url.searchParams.set("email", email);

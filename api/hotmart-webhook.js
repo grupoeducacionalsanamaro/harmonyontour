@@ -52,6 +52,7 @@ function isHarmonyProduct(product) {
 const OFFERS = {
   azs6ubw5: "Entrada individual",
   vt8lmjbk: "Promoción 2x1",
+  b6bidyqw: "Entrada Guayaquil",
 };
 
 const SEDES = {
