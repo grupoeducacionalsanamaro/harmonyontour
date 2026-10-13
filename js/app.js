@@ -315,6 +315,15 @@
     if(!profesion) errors.push("Selecciona tu profesión.");
     if(!nivel) errors.push("Selecciona tu nivel de formación.");
 
+    // Acompañante del 2x1 (solo formularios de Chile, opcional).
+    if(form.acompanante_email){
+      var acompEmail = form.acompanante_email.value.trim();
+      var acompNombre = form.acompanante_nombre.value.trim();
+      if(acompEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(acompEmail)) errors.push("El correo del acompañante no es válido.");
+      if(acompEmail && acompEmail.toLowerCase() === email.toLowerCase()) errors.push("El correo del acompañante debe ser distinto al tuyo.");
+      if(acompNombre && acompNombre.length < 3) errors.push("Ingresa el nombre y apellido del acompañante.");
+    }
+
     return errors;
   }
 
@@ -355,6 +364,8 @@
         whatsapp: form.whatsapp.value.trim(),
         profesion: form.profesion.value,
         nivel: form.nivel.value,
+        acompanante_nombre: form.acompanante_nombre ? form.acompanante_nombre.value.trim() : "",
+        acompanante_email: form.acompanante_email ? form.acompanante_email.value.trim() : "",
         empresa: form.empresa ? form.empresa.value : "",
         t: form._openedAt ? Date.now() - form._openedAt : 0
       };

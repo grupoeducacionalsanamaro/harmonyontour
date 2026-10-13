@@ -10,11 +10,6 @@ const FROM = "Harmony On Tour LATAM <harmonyontour@send.sanamaro.cl>";
 const REPLY_TO = "info@sanamaro.cl";
 const BCC = "relacionespublicas@sanamaro.cl";
 
-// Mismo corte que la landing (js/presale.js): 12 oct 2026 00:00 hora de Chile.
-// La preventa aplica solo a las sedes de Chile; las sedes con "precio" fijo no la usan.
-const PRESALE_END = Date.parse("2026-10-12T00:00:00-03:00");
-const PRICE_PRESALE = "$19.990";
-const PRICE_REGULAR = "$47.000";
 
 const SEDES = {
   "Concepción — 17 de octubre": {
@@ -25,6 +20,8 @@ const SEDES = {
     pais: "Chile",
     lugar: "Hotel Aurelio",
     mapa: "https://maps.google.com/?cid=205314904127980124",
+    precio: "$47.000 CLP",
+    promo: "Promoción 2x1 · 2 entradas",
     speakers: ["Dra. Javiera Vergara", "Dra. Nathaly Fuentes", "Dra. Pamela Flores", "Dra. Marjorie Gold"],
   },
   "Antofagasta — 24 de octubre": {
@@ -35,6 +32,8 @@ const SEDES = {
     pais: "Chile",
     lugar: "Hotel Terrado Suites",
     mapa: "https://maps.google.com/?cid=2220393754344205012",
+    precio: "$47.000 CLP",
+    promo: "Promoción 2x1 · 2 entradas",
     speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Speaker por confirmar", "Dra. Sofía Montes"],
   },
   "Guayaquil — Ecuador": {
@@ -68,21 +67,24 @@ function field(label, value) {
                   </td>`;
 }
 
-function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
+function buildConfirmationEmail({ nombre, sede, payUrl, acompNombre = "", acompEmail = "" }) {
   const info = SEDES[sede];
   if (!info) throw new Error(`Sede desconocida para el correo: ${sede}`);
 
-  const presale = !info.precio && now < PRESALE_END;
   // Abre la sección Cronograma de la landing con la pestaña de esta sede.
   const agendaUrl = `${SITE}/?cronograma=${info.slug}#cronograma`;
-  const price = info.precio || `${presale ? PRICE_PRESALE : PRICE_REGULAR} CLP`;
+  const price = info.precio + (info.promo ? ` · ${info.promo}` : "");
   const hola = firstName(nombre);
   const subject = `Tu preinscripción a Harmony On Tour ${info.ciudad} quedó registrada`;
   const preheader = `${info.fecha} · 10:00 a 14:00 hrs${info.lugar ? ` · ${info.lugar}` : ""}. Completa el pago para recibir tu ticket de acceso.`;
 
-  const priceHtml = presale
-    ? `${PRICE_PRESALE} CLP <span style="font-size:13px;font-weight:500;color:#ada39a;">· preventa hasta el 11 oct (luego <s>${PRICE_REGULAR}</s>)</span>`
-    : esc(price);
+  const priceHtml = esc(info.precio) +
+    (info.promo ? `<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(info.promo)}</span>` : "");
+
+  // Acompañante (promoción 2x1): se muestra solo si se informó.
+  const acompHtml = acompNombre || acompEmail
+    ? `${esc(acompNombre || "Por informar")}` + (acompEmail ? `<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(acompEmail)}</span>` : "")
+    : "";
 
   const lugarHtml = info.lugar
     ? `${esc(info.lugar)}<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(info.ciudad)}, ${esc(info.pais)}</span>` +
@@ -165,8 +167,10 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
                     </tr>
                     <tr>${field("Lugar", lugarHtml)}
                     </tr>
-                    <tr>${field(presale ? "Valor preventa" : "Valor", priceHtml)}
-                    </tr>
+                    <tr>${field(info.promo ? "Valor 2x1" : "Valor", priceHtml)}
+                    </tr>${acompHtml ? `
+                    <tr>${field("Acompañante (2x1)", acompHtml)}
+                    </tr>` : ""}
                   </table>
 
                   <!-- Botón secundario: cronograma en la web -->
@@ -241,7 +245,8 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
     info.lugar
       ? `Lugar: ${info.lugar}, ${info.ciudad}, ${info.pais}${info.mapa ? ` (ubicación: ${info.mapa})` : ""}`
       : "Lugar: la dirección exacta te llegará junto con tu ticket de acceso.",
-    `Valor: ${price}${presale ? ` (preventa hasta el 11 de octubre; luego ${PRICE_REGULAR} CLP)` : ""}`,
+    `Valor: ${price}`,
+    ...(acompNombre || acompEmail ? [`Acompañante (2x1): ${acompNombre || "Por informar"}${acompEmail ? ` <${acompEmail}>` : ""}`] : []),
     `Cronograma de la jornada: ${agendaUrl}`,
     "",
     "IMPORTANTE: tu entrada será efectiva y te enviaremos tu ticket de acceso cuando se confirme el pago.",
@@ -255,14 +260,14 @@ function buildConfirmationEmail({ nombre, sede, payUrl, now = Date.now() }) {
   return { subject, html, text };
 }
 
-async function sendConfirmationEmail({ to, nombre, sede, payUrl }) {
+async function sendConfirmationEmail({ to, nombre, sede, payUrl, acompNombre, acompEmail }) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.warn("RESEND_API_KEY no configurada: se omite el correo de confirmación.");
     return { sent: false, reason: "no-api-key" };
   }
 
-  const { subject, html, text } = buildConfirmationEmail({ nombre, sede, payUrl });
+  const { subject, html, text } = buildConfirmationEmail({ nombre, sede, payUrl, acompNombre, acompEmail });
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 6000);
   try {

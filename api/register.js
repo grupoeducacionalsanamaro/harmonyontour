@@ -32,6 +32,8 @@ const ALLOWED_ORIGINS = new Set([
 
 // Valores permitidos: deben coincidir con las opciones del formulario de la landing.
 const SEDES = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre", "Guayaquil — Ecuador"]);
+// Sedes con promoción 2x1 (2 entradas por $47.000): permiten registrar acompañante.
+const SEDES_2X1 = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre"]);
 const PROFESIONES = new Set([
   "Médico(a) cirujano(a)",
   "Cirujano(a)-dentista",
@@ -138,6 +140,10 @@ module.exports = async function handler(req, res) {
   const whatsapp = clean(body.whatsapp, 25);
   const profesion = clean(body.profesion, 80);
   const nivel = clean(body.nivel, 80);
+  // Acompañante de la promoción 2x1 (opcional; solo sedes de Chile).
+  const conAcompanante = SEDES_2X1.has(sede);
+  const acompNombre = conAcompanante ? noFormula(clean(body.acompanante_nombre, 100)) : "";
+  const acompEmail = conAcompanante ? clean(body.acompanante_email, 254).toLowerCase() : "";
 
   if (!sede || !nombre || !email || !whatsapp || !profesion || !nivel) {
     fail(res, 400, "Faltan campos obligatorios.");
@@ -157,6 +163,14 @@ module.exports = async function handler(req, res) {
   }
   if (!/^\+?[0-9\s()\-.]{8,25}$/.test(whatsapp) || whatsapp.replace(/[^0-9]/g, "").length < 8) {
     fail(res, 400, "Ingresa un número de WhatsApp válido.");
+    return;
+  }
+  if (acompEmail && (!isValidEmail(acompEmail) || acompEmail === email)) {
+    fail(res, 400, "Revisa el correo del acompañante.");
+    return;
+  }
+  if (acompNombre && (acompNombre.length < 3 || !/[a-záéíóúñü]/i.test(acompNombre))) {
+    fail(res, 400, "Ingresa el nombre y apellido del acompañante.");
     return;
   }
 
@@ -188,6 +202,13 @@ module.exports = async function handler(req, res) {
       matched++;
     }
 
+    // Campos opcionales del acompañante: se envían solo si existen en el formulario.
+    const acompFields = { "Nombre del acompañante": acompNombre, "Correo del acompañante": acompEmail };
+    for (const [label, value] of Object.entries(acompFields)) {
+      const qid = value && findQid(questions, label);
+      if (qid) params.append(`submission[${qid}]`, value);
+    }
+
     if (matched < 6) {
       throw new Error(
         `No se pudieron mapear todos los campos del formulario (${matched}/6). Revisa que las preguntas de Jotform no hayan cambiado de texto.`
@@ -214,7 +235,7 @@ module.exports = async function handler(req, res) {
 
     // Correo de confirmación: si falla, la inscripción igual queda registrada.
     const payUrl = buildPayUrl({ sede, submissionId, email, nombre });
-    const mail = await sendConfirmationEmail({ to: email, nombre, sede, payUrl });
+    const mail = await sendConfirmationEmail({ to: email, nombre, sede, payUrl, acompNombre, acompEmail });
 
     res.status(200).json({ success: true, submissionId, emailSent: mail.sent });
   } catch (err) {
