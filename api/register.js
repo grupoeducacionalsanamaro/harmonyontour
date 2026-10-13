@@ -7,15 +7,19 @@ const { FORM_ID, getQuestions, findQid } = require("./_lib/jotform");
 const { sendConfirmationEmail } = require("./_lib/email");
 
 // Mismo link y parámetros que arma la landing (js/app.js > buildPayUrl).
-const PAY_BASE = "https://pay.hotmart.com/L107640931E";
+// Ofertas (lotes) de Hotmart por tipo de entrada.
+const PAY_OFFERS = {
+  "Individual": "https://pay.hotmart.com/L107640931E?off=azs6ubw5",
+  "Promoción 2x1": "https://pay.hotmart.com/L107640931E?off=vt8lmjbk",
+};
 const SCK_BY_SEDE = {
   "Concepción — 17 de octubre": "HOT_CONCEPCION",
   "Antofagasta — 24 de octubre": "HOT_ANTOFAGASTA",
   "Guayaquil — Ecuador": "HOT_GUAYAQUIL",
 };
 
-function buildPayUrl({ sede, submissionId, email, nombre }) {
-  const url = new URL(PAY_BASE);
+function buildPayUrl({ sede, submissionId, email, nombre, tipoEntrada }) {
+  const url = new URL(PAY_OFFERS[tipoEntrada] || PAY_OFFERS.Individual);
   url.searchParams.set("sck", SCK_BY_SEDE[sede]);
   if (submissionId) url.searchParams.set("src", "JF" + submissionId);
   url.searchParams.set("email", email);
@@ -140,8 +144,11 @@ module.exports = async function handler(req, res) {
   const whatsapp = clean(body.whatsapp, 25);
   const profesion = clean(body.profesion, 80);
   const nivel = clean(body.nivel, 80);
-  // Acompañante de la promoción 2x1 (opcional; solo sedes de Chile).
-  const conAcompanante = SEDES_2X1.has(sede);
+  // Tipo de entrada: el 2x1 solo existe en las sedes de Chile; el resto es "Individual".
+  const tipoPedido = clean(body.tipo_entrada, 30);
+  const tipoEntrada = SEDES_2X1.has(sede) && tipoPedido === "Promoción 2x1" ? "Promoción 2x1" : "Individual";
+  // Acompañante: solo con la promoción 2x1 (opcional).
+  const conAcompanante = tipoEntrada === "Promoción 2x1";
   const acompNombre = conAcompanante ? noFormula(clean(body.acompanante_nombre, 100)) : "";
   const acompEmail = conAcompanante ? clean(body.acompanante_email, 254).toLowerCase() : "";
 
@@ -202,8 +209,8 @@ module.exports = async function handler(req, res) {
       matched++;
     }
 
-    // Campos opcionales del acompañante: se envían solo si existen en el formulario.
-    const acompFields = { "Nombre del acompañante": acompNombre, "Correo del acompañante": acompEmail };
+    // Campos opcionales (tipo de entrada y acompañante): se envían solo si existen en el formulario.
+    const acompFields = { "Tipo de entrada": tipoEntrada, "Nombre del acompañante": acompNombre, "Correo del acompañante": acompEmail };
     for (const [label, value] of Object.entries(acompFields)) {
       const qid = value && findQid(questions, label);
       if (qid) params.append(`submission[${qid}]`, value);
@@ -234,8 +241,8 @@ module.exports = async function handler(req, res) {
     const submissionId = (submitJson.content && submitJson.content.submissionID) || null;
 
     // Correo de confirmación: si falla, la inscripción igual queda registrada.
-    const payUrl = buildPayUrl({ sede, submissionId, email, nombre });
-    const mail = await sendConfirmationEmail({ to: email, nombre, sede, payUrl, acompNombre, acompEmail });
+    const payUrl = buildPayUrl({ sede, submissionId, email, nombre, tipoEntrada });
+    const mail = await sendConfirmationEmail({ to: email, nombre, sede, payUrl, tipoEntrada, acompNombre, acompEmail });
 
     res.status(200).json({ success: true, submissionId, emailSent: mail.sent });
   } catch (err) {

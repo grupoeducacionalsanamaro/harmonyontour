@@ -48,6 +48,12 @@ function isHarmonyProduct(product) {
   );
 }
 
+// Ofertas (lotes) de Hotmart → tipo de entrada.
+const OFFERS = {
+  azs6ubw5: "Entrada individual",
+  vt8lmjbk: "Promoción 2x1",
+};
+
 const SEDES = {
   HOT_CONCEPCION: "Concepción",
   HOT_ANTOFAGASTA: "Antofagasta",
@@ -188,6 +194,7 @@ module.exports = async function handler(req, res) {
     const detail = [
       purchase.transaction && `Transacción ${purchase.transaction}`,
       origin.sck && `Sede ${SEDES[origin.sck] || origin.sck}`,
+      purchase.offer && purchase.offer.code && (OFFERS[purchase.offer.code] || `Oferta ${purchase.offer.code}`),
       price.value != null &&
         `$${Number(price.value).toLocaleString("es-CL")} ${price.currency_value || ""}`.trim(),
       formatDate(purchase.approved_date || body.creation_date),

@@ -181,6 +181,18 @@
   }
   .promo-note strong{ font-family:var(--font-display); font-size:20px; letter-spacing:.02em; }
   .price-note{ display:block; margin-top:4px; font-family:var(--font-body); font-size:13px; font-weight:500; color:var(--silver); letter-spacing:0; }
+  .ticket-type{ border:0; margin:4px 0 0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .ticket-type legend{ font-size:12px; color:var(--silver); font-weight:500; margin-bottom:6px; padding:0; }
+  .tt-option{ position:relative; cursor:pointer; }
+  .tt-option input{ position:absolute; opacity:0; pointer-events:none; }
+  .tt-card{ display:flex; flex-direction:column; gap:3px; height:100%; padding:12px 14px; border:1px solid var(--line-strong); border-radius:10px; background:var(--bg); transition:border-color .2s ease, background .2s ease, box-shadow .2s ease; }
+  .tt-card b{ font-size:14px; color:var(--white); display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .tt-card em{ font-style:normal; font-family:var(--font-mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; background:var(--red-500); color:var(--white); padding:2px 6px; border-radius:999px; }
+  .tt-card small{ font-size:12.5px; color:var(--silver); }
+  .tt-option input:checked + .tt-card{ border-color:var(--red-500); background:rgba(210,26,26,.12); box-shadow:0 0 0 1px var(--red-500) inset; }
+  .tt-option input:focus-visible + .tt-card{ outline:2px solid var(--red-500); outline-offset:2px; }
+  .acomp-group{ display:grid; gap:12px; }
+  .acomp-group.is-showing{ animation:field-in .4s cubic-bezier(.2,.8,.2,1) both; }
   .field-optional{ font-weight:400; color:var(--silver); opacity:.8; }
   .field-group-title{ margin-top:6px; padding-top:14px; border-top:1px dashed var(--line); font-family:var(--font-mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--white); }
   .field-group-title small{ display:block; margin-top:4px; font-family:var(--font-body); font-size:12px; letter-spacing:0; text-transform:none; color:var(--silver); }
@@ -669,7 +681,7 @@
         </div>
       </div>
 
-      <p class="promo-note"><strong>Promoción 2x1</strong> <span>en las sedes de Chile (Concepción y Antofagasta): 2 entradas por $47.000. Inscribe a tu acompañante en el mismo formulario.</span></p>
+      <p class="promo-note"><strong>Promoción 2x1</strong> <span>en las sedes de Chile (Concepción y Antofagasta): 2 entradas por $47.000, el mismo valor de la entrada individual. Elige el tipo de entrada en el formulario de inscripción.</span></p>
 
       <div class="stops">
         <article class="stop">
@@ -689,7 +701,7 @@
                 <div class="tf"><dt>Horario</dt><dd><span class="nw">10:00 – 14:00</span> hrs</dd></div>
                 <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Vergara</span> · <span class="nw">Dra. Fuentes</span> · <span class="nw">Dra. Flores</span> · <span class="nw">Dra. Gold</span><br><a class="ticket-link" href="#edicion-concepcion">Ver equipo →</a> <a class="ticket-link" href="#cronograma" data-agenda="edicion-concepcion">Ver cronograma →</a></dd></div>
                 <div class="tf tf-wide"><dt>Lugar</dt><dd>Hotel Aurelio<br><a class="ticket-link" href="https://maps.google.com/?cid=205314904127980124" target="_blank" rel="noopener" aria-label="Ver ubicación de Hotel Aurelio en Google Maps">Ver ubicación →</a></dd></div>
-                <div class="tf tf-price"><dt>Valor 2x1</dt><dd><span class="nw">$47.000</span> <small class="cur">CLP</small><span class="price-note">2 entradas</span></dd></div>
+                <div class="tf tf-price"><dt>Valor</dt><dd><span class="nw">$47.000</span> <small class="cur">CLP</small><span class="price-note">Individual o 2x1 (2 entradas)</span></dd></div>
                 <div class="tf"><dt>Modalidad</dt><dd>Presencial</dd></div>
               </dl>
             </div>
@@ -702,7 +714,7 @@
 
               <button type="button" class="btn btn-primary btn-small js-toggle-form" data-target="form-concepcion">Inscribirme — Concepción</button>
 
-              <form class="reg-form hidden-form" id="form-concepcion" data-sede="Concepción — 17 de octubre" data-city="Concepción" data-sck="HOT_CONCEPCION" novalidate>
+              <form class="reg-form hidden-form" id="form-concepcion" data-sede="Concepción — 17 de octubre" data-city="Concepción" data-sck="HOT_CONCEPCION" data-pay-individual="https://pay.hotmart.com/L107640931E?off=azs6ubw5" data-pay-2x1="https://pay.hotmart.com/L107640931E?off=vt8lmjbk" novalidate>
                 <div class="reg-panel">
                   <div class="field">
                     <label for="nombre-concepcion">Nombre y Apellido</label>
@@ -738,14 +750,28 @@
                     </select>
                   </div>
 
-                  <p class="field-group-title">Tu acompañante (2x1)<small>Puedes completarlo ahora o informarlo después respondiendo el correo de confirmación.</small></p>
-                  <div class="field">
-                    <label for="acomp-nombre-concepcion">Nombre y Apellido del acompañante <span class="field-optional">(opcional)</span></label>
-                    <input id="acomp-nombre-concepcion" name="acompanante_nombre" type="text" autocomplete="off">
-                  </div>
-                  <div class="field">
-                    <label for="acomp-email-concepcion">Correo del acompañante <span class="field-optional">(opcional)</span></label>
-                    <input id="acomp-email-concepcion" name="acompanante_email" type="email" autocomplete="off">
+                  <fieldset class="ticket-type">
+                    <legend>Tipo de entrada</legend>
+                    <label class="tt-option">
+                      <input type="radio" name="tipo_entrada" value="Individual" checked>
+                      <span class="tt-card"><b>Entrada individual</b><small>1 entrada<br><span class="nw">$47.000 CLP</span></small></span>
+                    </label>
+                    <label class="tt-option">
+                      <input type="radio" name="tipo_entrada" value="Promoción 2x1">
+                      <span class="tt-card"><b>Promoción 2x1 <em>Promo</em></b><small>2 entradas<br><span class="nw">$47.000 CLP</span></small></span>
+                    </label>
+                  </fieldset>
+
+                  <div class="acomp-group" hidden>
+                    <p class="field-group-title">Tu acompañante (2x1)<small>Puedes completarlo ahora o informarlo después respondiendo el correo de confirmación.</small></p>
+                    <div class="field">
+                      <label for="acomp-nombre-concepcion">Nombre y Apellido del acompañante <span class="field-optional">(opcional)</span></label>
+                      <input id="acomp-nombre-concepcion" name="acompanante_nombre" type="text" autocomplete="off">
+                    </div>
+                    <div class="field">
+                      <label for="acomp-email-concepcion">Correo del acompañante <span class="field-optional">(opcional)</span></label>
+                      <input id="acomp-email-concepcion" name="acompanante_email" type="email" autocomplete="off">
+                    </div>
                   </div>
 
                   <div class="hp-field" aria-hidden="true"><label>Empresa<input name="empresa" type="text" tabindex="-1" autocomplete="off"></label></div>
@@ -760,7 +786,7 @@
                     <h4>¡Tu preinscripción quedó registrada!</h4>
                     <p>Para asegurar tu cupo en Concepción, completa ahora el pago.</p>
                     <p class="reg-mail-note" hidden>Te enviamos un correo a <b class="reg-mail-to"></b> con los detalles de tu jornada y el enlace de pago.</p>
-                    <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E?sck=HOT_CONCEPCION" data-pay-link target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
+                    <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E?off=azs6ubw5&sck=HOT_CONCEPCION" data-pay-link target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
                   </div>
                 </div>
               </form>
@@ -785,7 +811,7 @@
                 <div class="tf"><dt>Horario</dt><dd><span class="nw">10:00 – 14:00</span> hrs</dd></div>
                 <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Campos</span> · <span class="nw">Dr. Romero</span> · <span class="nw">Speaker por confirmar</span> · <span class="nw">Dra. Montes</span><br><a class="ticket-link" href="#edicion-antofagasta">Ver equipo →</a> <a class="ticket-link" href="#cronograma" data-agenda="edicion-antofagasta">Ver cronograma →</a></dd></div>
                 <div class="tf tf-wide"><dt>Lugar</dt><dd>Hotel Terrado Suites<br><a class="ticket-link" href="https://maps.google.com/?cid=2220393754344205012" target="_blank" rel="noopener" aria-label="Ver ubicación de Hotel Terrado Suites en Google Maps">Ver ubicación →</a></dd></div>
-                <div class="tf tf-price"><dt>Valor 2x1</dt><dd><span class="nw">$47.000</span> <small class="cur">CLP</small><span class="price-note">2 entradas</span></dd></div>
+                <div class="tf tf-price"><dt>Valor</dt><dd><span class="nw">$47.000</span> <small class="cur">CLP</small><span class="price-note">Individual o 2x1 (2 entradas)</span></dd></div>
                 <div class="tf"><dt>Modalidad</dt><dd>Presencial</dd></div>
               </dl>
             </div>
@@ -798,7 +824,7 @@
 
               <button type="button" class="btn btn-primary btn-small js-toggle-form" data-target="form-antofagasta">Inscribirme — Antofagasta</button>
 
-              <form class="reg-form hidden-form" id="form-antofagasta" data-sede="Antofagasta — 24 de octubre" data-city="Antofagasta" data-sck="HOT_ANTOFAGASTA" novalidate>
+              <form class="reg-form hidden-form" id="form-antofagasta" data-sede="Antofagasta — 24 de octubre" data-city="Antofagasta" data-sck="HOT_ANTOFAGASTA" data-pay-individual="https://pay.hotmart.com/L107640931E?off=azs6ubw5" data-pay-2x1="https://pay.hotmart.com/L107640931E?off=vt8lmjbk" novalidate>
                 <div class="reg-panel">
                   <div class="field">
                     <label for="nombre-antofagasta">Nombre y Apellido</label>
@@ -834,14 +860,28 @@
                     </select>
                   </div>
 
-                  <p class="field-group-title">Tu acompañante (2x1)<small>Puedes completarlo ahora o informarlo después respondiendo el correo de confirmación.</small></p>
-                  <div class="field">
-                    <label for="acomp-nombre-antofagasta">Nombre y Apellido del acompañante <span class="field-optional">(opcional)</span></label>
-                    <input id="acomp-nombre-antofagasta" name="acompanante_nombre" type="text" autocomplete="off">
-                  </div>
-                  <div class="field">
-                    <label for="acomp-email-antofagasta">Correo del acompañante <span class="field-optional">(opcional)</span></label>
-                    <input id="acomp-email-antofagasta" name="acompanante_email" type="email" autocomplete="off">
+                  <fieldset class="ticket-type">
+                    <legend>Tipo de entrada</legend>
+                    <label class="tt-option">
+                      <input type="radio" name="tipo_entrada" value="Individual" checked>
+                      <span class="tt-card"><b>Entrada individual</b><small>1 entrada<br><span class="nw">$47.000 CLP</span></small></span>
+                    </label>
+                    <label class="tt-option">
+                      <input type="radio" name="tipo_entrada" value="Promoción 2x1">
+                      <span class="tt-card"><b>Promoción 2x1 <em>Promo</em></b><small>2 entradas<br><span class="nw">$47.000 CLP</span></small></span>
+                    </label>
+                  </fieldset>
+
+                  <div class="acomp-group" hidden>
+                    <p class="field-group-title">Tu acompañante (2x1)<small>Puedes completarlo ahora o informarlo después respondiendo el correo de confirmación.</small></p>
+                    <div class="field">
+                      <label for="acomp-nombre-antofagasta">Nombre y Apellido del acompañante <span class="field-optional">(opcional)</span></label>
+                      <input id="acomp-nombre-antofagasta" name="acompanante_nombre" type="text" autocomplete="off">
+                    </div>
+                    <div class="field">
+                      <label for="acomp-email-antofagasta">Correo del acompañante <span class="field-optional">(opcional)</span></label>
+                      <input id="acomp-email-antofagasta" name="acompanante_email" type="email" autocomplete="off">
+                    </div>
                   </div>
 
                   <div class="hp-field" aria-hidden="true"><label>Empresa<input name="empresa" type="text" tabindex="-1" autocomplete="off"></label></div>
@@ -856,7 +896,7 @@
                     <h4>¡Tu preinscripción quedó registrada!</h4>
                     <p>Para asegurar tu cupo en Antofagasta, completa ahora el pago.</p>
                     <p class="reg-mail-note" hidden>Te enviamos un correo a <b class="reg-mail-to"></b> con los detalles de tu jornada y el enlace de pago.</p>
-                    <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E?sck=HOT_ANTOFAGASTA" data-pay-link target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
+                    <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E?off=azs6ubw5&sck=HOT_ANTOFAGASTA" data-pay-link target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
                   </div>
                 </div>
               </form>
@@ -894,7 +934,7 @@
 
               <button type="button" class="btn btn-primary btn-small js-toggle-form" data-target="form-guayaquil">Inscribirme — Guayaquil</button>
 
-              <form class="reg-form hidden-form" id="form-guayaquil" data-sede="Guayaquil — Ecuador" data-city="Guayaquil" data-sck="HOT_GUAYAQUIL" novalidate>
+              <form class="reg-form hidden-form" id="form-guayaquil" data-sede="Guayaquil — Ecuador" data-city="Guayaquil" data-sck="HOT_GUAYAQUIL" data-pay-individual="https://pay.hotmart.com/L107640931E?off=azs6ubw5" novalidate>
                 <div class="reg-panel">
                   <div class="field">
                     <label for="nombre-guayaquil">Nombre y Apellido</label>
@@ -942,7 +982,7 @@
                     <h4>¡Tu preinscripción quedó registrada!</h4>
                     <p>Para asegurar tu cupo en Guayaquil, completa ahora el pago.</p>
                     <p class="reg-mail-note" hidden>Te enviamos un correo a <b class="reg-mail-to"></b> con los detalles de tu jornada y el enlace de pago.</p>
-                    <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E?sck=HOT_GUAYAQUIL" data-pay-link target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
+                    <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E?off=azs6ubw5&sck=HOT_GUAYAQUIL" data-pay-link target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
                   </div>
                 </div>
               </form>

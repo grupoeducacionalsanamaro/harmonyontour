@@ -316,7 +316,7 @@
     if(!nivel) errors.push("Selecciona tu nivel de formación.");
 
     // Acompañante del 2x1 (solo formularios de Chile, opcional).
-    if(form.acompanante_email){
+    if(form.acompanante_email && ticketType(form) === "Promoción 2x1"){
       var acompEmail = form.acompanante_email.value.trim();
       var acompNombre = form.acompanante_nombre.value.trim();
       if(acompEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(acompEmail)) errors.push("El correo del acompañante no es válido.");
@@ -331,6 +331,30 @@
   //  - sck: sede (HOT_CONCEPCION / HOT_ANTOFAGASTA / HOT_GUAYAQUIL) -> Reportes > Ventas por origen de checkout
   //  - src: id de la preinscripción en Jotform (JF<id>) -> enlaza el pago con su inscripción
   //  - email / name: autocompletan el checkout para que el correo coincida con Jotform
+  // Tipo de entrada elegido (formularios de Chile). Sin selector = "Individual".
+  function ticketType(form){
+    var checked = form.querySelector('input[name="tipo_entrada"]:checked');
+    return checked ? checked.value : "Individual";
+  }
+
+  // Cada tipo de entrada tiene su oferta (lote) en Hotmart: data-pay-individual / data-pay-2x1.
+  function payBaseFor(form, fallbackHref){
+    var attr = ticketType(form) === "Promoción 2x1" ? "data-pay-2x1" : "data-pay-individual";
+    return form.getAttribute(attr) || fallbackHref;
+  }
+
+  // El bloque del acompañante solo se muestra al elegir la promoción 2x1.
+  document.querySelectorAll('.reg-form input[name="tipo_entrada"]').forEach(function(radio){
+    radio.addEventListener("change", function(){
+      var form = radio.closest(".reg-form");
+      var group = form.querySelector(".acomp-group");
+      if(!group) return;
+      var show = ticketType(form) === "Promoción 2x1";
+      group.hidden = !show;
+      group.classList.toggle("is-showing", show);
+    });
+  });
+
   function buildPayUrl(baseHref, form, payload, submissionId){
     var url = new URL(baseHref);
     url.searchParams.set("sck", form.getAttribute("data-sck"));
@@ -364,8 +388,9 @@
         whatsapp: form.whatsapp.value.trim(),
         profesion: form.profesion.value,
         nivel: form.nivel.value,
-        acompanante_nombre: form.acompanante_nombre ? form.acompanante_nombre.value.trim() : "",
-        acompanante_email: form.acompanante_email ? form.acompanante_email.value.trim() : "",
+        tipo_entrada: ticketType(form),
+        acompanante_nombre: form.acompanante_nombre && ticketType(form) === "Promoción 2x1" ? form.acompanante_nombre.value.trim() : "",
+        acompanante_email: form.acompanante_email && ticketType(form) === "Promoción 2x1" ? form.acompanante_email.value.trim() : "",
         empresa: form.empresa ? form.empresa.value : "",
         t: form._openedAt ? Date.now() - form._openedAt : 0
       };
@@ -389,7 +414,7 @@
           mailNote.hidden = false;
         }
         var payLink = form.querySelector("[data-pay-link]");
-        if(payLink) payLink.href = buildPayUrl(payLink.href, form, payload, result.data.submissionId);
+        if(payLink) payLink.href = buildPayUrl(payBaseFor(form, payLink.href), form, payload, result.data.submissionId);
         form.querySelectorAll(".field, .reg-msg, button[type=submit], .reg-fallback").forEach(function(el){ el.style.display = "none"; });
         success.classList.add("show");
       })

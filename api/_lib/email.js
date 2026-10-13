@@ -21,7 +21,7 @@ const SEDES = {
     lugar: "Hotel Aurelio",
     mapa: "https://maps.google.com/?cid=205314904127980124",
     precio: "$47.000 CLP",
-    promo: "Promoción 2x1 · 2 entradas",
+    promo2x1: true,
     speakers: ["Dra. Javiera Vergara", "Dra. Nathaly Fuentes", "Dra. Pamela Flores", "Dra. Marjorie Gold"],
   },
   "Antofagasta — 24 de octubre": {
@@ -33,7 +33,7 @@ const SEDES = {
     lugar: "Hotel Terrado Suites",
     mapa: "https://maps.google.com/?cid=2220393754344205012",
     precio: "$47.000 CLP",
-    promo: "Promoción 2x1 · 2 entradas",
+    promo2x1: true,
     speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Speaker por confirmar", "Dra. Sofía Montes"],
   },
   "Guayaquil — Ecuador": {
@@ -67,22 +67,24 @@ function field(label, value) {
                   </td>`;
 }
 
-function buildConfirmationEmail({ nombre, sede, payUrl, acompNombre = "", acompEmail = "" }) {
+function buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada = "Individual", acompNombre = "", acompEmail = "" }) {
   const info = SEDES[sede];
   if (!info) throw new Error(`Sede desconocida para el correo: ${sede}`);
 
   // Abre la sección Cronograma de la landing con la pestaña de esta sede.
   const agendaUrl = `${SITE}/?cronograma=${info.slug}#cronograma`;
-  const price = info.precio + (info.promo ? ` · ${info.promo}` : "");
+  const es2x1 = info.promo2x1 && tipoEntrada === "Promoción 2x1";
+  const tipoTexto = info.promo2x1 ? (es2x1 ? "Promoción 2x1 (2 entradas)" : "Entrada individual (1 entrada)") : "";
+  const price = info.precio + (tipoTexto ? ` · ${tipoTexto}` : "");
   const hola = firstName(nombre);
   const subject = `Tu preinscripción a Harmony On Tour ${info.ciudad} quedó registrada`;
   const preheader = `${info.fecha} · 10:00 a 14:00 hrs${info.lugar ? ` · ${info.lugar}` : ""}. Completa el pago para recibir tu ticket de acceso.`;
 
   const priceHtml = esc(info.precio) +
-    (info.promo ? `<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(info.promo)}</span>` : "");
+    (tipoTexto ? `<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(tipoTexto)}</span>` : "");
 
   // Acompañante (promoción 2x1): se muestra solo si se informó.
-  const acompHtml = acompNombre || acompEmail
+  const acompHtml = es2x1 && (acompNombre || acompEmail)
     ? `${esc(acompNombre || "Por informar")}` + (acompEmail ? `<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(acompEmail)}</span>` : "")
     : "";
 
@@ -167,7 +169,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, acompNombre = "", acompE
                     </tr>
                     <tr>${field("Lugar", lugarHtml)}
                     </tr>
-                    <tr>${field(info.promo ? "Valor 2x1" : "Valor", priceHtml)}
+                    <tr>${field("Valor", priceHtml)}
                     </tr>${acompHtml ? `
                     <tr>${field("Acompañante (2x1)", acompHtml)}
                     </tr>` : ""}
@@ -246,7 +248,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, acompNombre = "", acompE
       ? `Lugar: ${info.lugar}, ${info.ciudad}, ${info.pais}${info.mapa ? ` (ubicación: ${info.mapa})` : ""}`
       : "Lugar: la dirección exacta te llegará junto con tu ticket de acceso.",
     `Valor: ${price}`,
-    ...(acompNombre || acompEmail ? [`Acompañante (2x1): ${acompNombre || "Por informar"}${acompEmail ? ` <${acompEmail}>` : ""}`] : []),
+    ...(es2x1 && (acompNombre || acompEmail) ? [`Acompañante (2x1): ${acompNombre || "Por informar"}${acompEmail ? ` <${acompEmail}>` : ""}`] : []),
     `Cronograma de la jornada: ${agendaUrl}`,
     "",
     "IMPORTANTE: tu entrada será efectiva y te enviaremos tu ticket de acceso cuando se confirme el pago.",
@@ -260,14 +262,14 @@ function buildConfirmationEmail({ nombre, sede, payUrl, acompNombre = "", acompE
   return { subject, html, text };
 }
 
-async function sendConfirmationEmail({ to, nombre, sede, payUrl, acompNombre, acompEmail }) {
+async function sendConfirmationEmail({ to, nombre, sede, payUrl, tipoEntrada, acompNombre, acompEmail }) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.warn("RESEND_API_KEY no configurada: se omite el correo de confirmación.");
     return { sent: false, reason: "no-api-key" };
   }
 
-  const { subject, html, text } = buildConfirmationEmail({ nombre, sede, payUrl, acompNombre, acompEmail });
+  const { subject, html, text } = buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada, acompNombre, acompEmail });
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 6000);
   try {
