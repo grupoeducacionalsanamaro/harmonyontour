@@ -231,26 +231,6 @@
     /* Si queda un ticket solo en la última fila, se centra con el mismo ancho */
     .stop:last-child:nth-child(odd){ grid-column:1 / -1; justify-self:center; width:calc(50% - 16px); }
   }
-  /* Escritorio amplio: las 3 sedes en una fila, con el ticket más compacto */
-  @media (min-width:1180px){
-    .stops{ grid-template-columns:repeat(3, 1fr); gap:22px; }
-    .stop:last-child:nth-child(odd){ grid-column:auto; justify-self:stretch; width:auto; }
-    .stops .ticket{ --rule-inset:16px; }
-    .stops .ticket-top{ padding:22px 20px 20px; }
-    .stops .ticket-brand{ font-size:10px; letter-spacing:.1em; margin-bottom:14px; }
-    .stops .ticket-city{ font-size:38px; }
-    .stops .ticket-edition{ font-size:11px; letter-spacing:.06em; }
-    .stops .ticket-body{ padding:20px 20px 22px; }
-    .stops .ticket-fields{ gap:16px 14px; }
-    .stops .tf dt{ font-size:10.5px; letter-spacing:.1em; }
-    .stops .tf dd{ font-size:15px; }
-    .stops .tf-price dd{ font-size:24px; }
-    .stops .ticket-link{ font-size:12.5px; }
-    .stops .ticket-link + .ticket-link{ margin-left:10px; }
-    .stops .ticket-stub{ padding:20px 20px 22px; }
-    .stops .barcode{ width:96px; height:34px; }
-    .stops .ticket-stub .btn-small{ font-size:14.5px; padding:14px 14px; }
-  }
   .stop{ position:relative; z-index:1; display:flex; flex-direction:column; }
 
   .stop-marker{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
@@ -312,6 +292,56 @@
   .soldout-word{ font-family:var(--font-display); font-size:clamp(40px,3.8vw,52px); line-height:.95; text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
   .soldout-sub{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:rgba(247,244,241,.92); white-space:nowrap; }
   .btn-closed{ width:100%; background:rgba(247,244,241,.06); border:1px solid var(--line-strong); color:var(--silver); cursor:not-allowed; }
+  /* ---------- SEDE INTERNACIONAL (Guayaquil): ticket horizontal premium ---------- */
+  .intl{ margin-top:clamp(56px,8vw,88px); scroll-margin-top:84px; }
+  .intl-head{ max-width:68ch; margin:0 auto 28px; text-align:center; }
+  .intl-head .eyebrow{ justify-content:center; margin-bottom:12px; }
+  .intl-title{ font-family:var(--font-display); font-size:clamp(28px,4.4vw,44px); line-height:1.05; text-transform:uppercase; color:var(--white); }
+  .intl-head .route-sub{ margin:12px auto 0; max-width:60ch; }
+  .ticket.ticket-intl{
+    --notch:var(--bg-2);
+    display:grid; grid-template-columns:minmax(0,1.55fr) 2px minmax(320px,1fr);
+    overflow:hidden; border-radius:22px;
+    border:1px solid rgba(255,209,0,.38);
+    background:linear-gradient(120deg, var(--surface) 0%, #1b1613 60%, #1a1410 100%);
+    box-shadow:0 30px 70px -30px rgba(0,0,0,.9), 0 0 0 1px rgba(255,209,0,.08) inset;
+  }
+  .ticket.ticket-intl:hover{ border-color:rgba(255,209,0,.6); box-shadow:0 34px 80px -30px rgba(3,78,162,.45); }
+  /* Bandera de Ecuador (amarillo, azul, rojo) con fade de derecha a izquierda */
+  .intl-flag{
+    position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:linear-gradient(180deg, #ffd100 0 50%, #034ea2 50% 75%, #ed1c24 75% 100%);
+    opacity:.3;
+    -webkit-mask-image:linear-gradient(to left, #000 0%, rgba(0,0,0,.75) 30%, rgba(0,0,0,.25) 60%, transparent 85%);
+            mask-image:linear-gradient(to left, #000 0%, rgba(0,0,0,.75) 30%, rgba(0,0,0,.25) 60%, transparent 85%);
+  }
+  .intl-main, .intl-side, .intl-rule{ position:relative; z-index:1; }
+  .intl-main{ padding:clamp(26px,3vw,40px) clamp(24px,3vw,44px); }
+  .intl-city{ font-size:clamp(46px,6vw,76px); }
+  .intl-badge{ background:linear-gradient(90deg,#ffd100,#ffe36b); color:#1a1300 !important; border-color:#ffd100 !important; font-weight:700; }
+  .intl-fields{ margin-top:22px; }
+  .intl-side{ display:flex; flex-direction:column; justify-content:center; gap:18px; padding:clamp(26px,3vw,40px) clamp(22px,2.6vw,36px); background:rgba(10,9,8,.28); }
+  .intl-side .ticket-fields{ grid-template-columns:1fr 1fr; }
+  .intl-side .tf-price dd{ font-size:34px; }
+  /* Perforación vertical con muescas arriba y abajo */
+  .intl-rule{ background:repeating-linear-gradient(180deg, var(--line-strong) 0 10px, transparent 10px 18px); margin-block:26px; }
+  .intl-rule::before, .intl-rule::after{
+    content:""; position:absolute; left:50%; width:30px; height:30px; border-radius:50%;
+    background:var(--notch); border:1px solid rgba(255,209,0,.38); transform:translateX(-50%);
+  }
+  .intl-rule::before{ top:-42px; clip-path:inset(50% 0 0 0); }
+  .intl-rule::after{ bottom:-42px; clip-path:inset(0 0 50% 0); }
+  @media (max-width:859px){
+    .ticket.ticket-intl{ grid-template-columns:1fr; }
+    .intl-flag{
+      -webkit-mask-image:linear-gradient(to bottom, #000 0%, rgba(0,0,0,.6) 30%, rgba(0,0,0,.15) 60%, transparent 85%);
+              mask-image:linear-gradient(to bottom, #000 0%, rgba(0,0,0,.6) 30%, rgba(0,0,0,.15) 60%, transparent 85%);
+    }
+    .intl-rule{ height:2px; margin:0 16px; background:repeating-linear-gradient(90deg, var(--line-strong) 0 10px, transparent 10px 18px); }
+    .intl-rule::before{ left:-32px; top:50%; transform:translateY(-50%); clip-path:inset(0 0 0 50%); }
+    .intl-rule::after{ left:auto; right:-32px; bottom:auto; top:50%; transform:translateY(-50%); clip-path:inset(0 50% 0 0); }
+    .intl-side{ background:rgba(10,9,8,.35); }
+  }
   .ticket-link{ display:inline-block; margin-top:2px; font-size:13.5px; font-weight:600; color:var(--red-500); text-decoration:none; }
   .ticket-link:hover{ text-decoration:underline; }
   .ticket-link + .ticket-link{ margin-left:14px; }
@@ -870,89 +900,96 @@
           </div>
         </article>
 
-        <article class="stop">
-          <div class="stop-marker">
-            <span class="stop-num">03</span>
-            <span class="stop-label">Sede internacional</span>
+      </div>
+
+      <div class="intl" id="sede-guayaquil">
+        <div class="intl-head">
+          <p class="eyebrow">EDICIÓN INTERNACIONAL · ECUADOR</p>
+          <h3 class="intl-title">Harmony llega por primera vez a <span class="accent">Ecuador</span></h3>
+          <p class="route-sub">Por primera vez, Harmony Instituto Internacional estará de forma presencial en Ecuador: una jornada única en Guayaquil con docentes Harmony y speakers invitadas de AFORMI.</p>
+        </div>
+
+        <article class="ticket ticket-intl">
+          <div class="intl-flag" aria-hidden="true"></div>
+
+          <div class="intl-main">
+            <div class="ticket-brand"><span>Harmony On Tour · LATAM 2026</span><span class="admit intl-badge">Primera vez en Ecuador</span></div>
+            <h3 class="ticket-city intl-city">Guayaquil</h3>
+            <p class="ticket-edition">Edición 03 · Ecuador · Cupos limitados</p>
+            <dl class="ticket-fields intl-fields">
+              <div class="tf"><dt>Fecha</dt><dd>Sáb 28 nov 2026</dd></div>
+              <div class="tf"><dt>Horario</dt><dd><span class="nw">10:00 – 14:00</span> hrs</dd></div>
+              <div class="tf tf-wide"><dt>Lugar</dt><dd>Hotel Wyndham Guayaquil Puerto Santa Ana<br><a class="ticket-link" href="https://maps.google.com/?cid=7259335876104380102" target="_blank" rel="noopener" aria-label="Ver ubicación de Hotel Wyndham Guayaquil Puerto Santa Ana en Google Maps">Ver ubicación →</a></dd></div>
+              <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Melo</span> · <span class="nw">Dra. Lobato</span> · <span class="nw">Dra. Mazzo</span> · <span class="nw">Dra. Vergara</span><br><a class="ticket-link" href="#edicion-guayaquil">Ver equipo →</a> <a class="ticket-link" href="#cronograma" data-agenda="edicion-guayaquil">Ver cronograma →</a></dd></div>
+            </dl>
           </div>
-          <div class="ticket">
-            <div class="ticket-top">
-              <div class="ticket-brand"><span>Harmony On Tour · LATAM 2026</span><span class="admit">Admisión general</span></div>
-              <h3 class="ticket-city">Guayaquil</h3>
-              <p class="ticket-edition">Edición 03 · Ecuador · Cupos limitados</p>
+
+          <div class="intl-rule" aria-hidden="true"></div>
+
+          <div class="intl-side ticket-stub">
+            <dl class="ticket-fields">
+              <div class="tf tf-price"><dt>Valor</dt><dd><span class="nw">$49.99</span> <small class="cur">USD</small></dd></div>
+              <div class="tf"><dt>Modalidad</dt><dd>Presencial</dd></div>
+            </dl>
+            <div class="stub-meta">
+              <span class="stub-no">Ticket Nº 03<b>GUAYAQUIL</b></span>
+              <span class="barcode" aria-hidden="true"></span>
             </div>
-            <div class="ticket-body">
-              <dl class="ticket-fields">
-                <div class="tf"><dt>Fecha</dt><dd>Sáb 28 nov 2026</dd></div>
-                <div class="tf"><dt>Horario</dt><dd><span class="nw">10:00 – 14:00</span> hrs</dd></div>
-                <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Melo</span> · <span class="nw">Dra. Lobato</span> · <span class="nw">Dra. Mazzo</span> · <span class="nw">Dra. Vergara</span><br><a class="ticket-link" href="#edicion-guayaquil">Ver equipo →</a> <a class="ticket-link" href="#cronograma" data-agenda="edicion-guayaquil">Ver cronograma →</a></dd></div>
-                <div class="tf tf-wide"><dt>Lugar</dt><dd>Hotel Wyndham Guayaquil Puerto Santa Ana<br><a class="ticket-link" href="https://maps.google.com/?cid=7259335876104380102" target="_blank" rel="noopener" aria-label="Ver ubicación de Hotel Wyndham Guayaquil Puerto Santa Ana en Google Maps">Ver ubicación →</a></dd></div>
-                <div class="tf tf-price"><dt>Valor</dt><dd><span class="nw">$49.99</span> <small class="cur">USD</small></dd></div>
-                <div class="tf"><dt>Modalidad</dt><dd>Presencial</dd></div>
-              </dl>
-            </div>
-            <div class="ticket-rule" aria-hidden="true"></div>
-            <div class="ticket-stub">
-              <div class="stub-meta">
-                <span class="stub-no">Ticket Nº 03<b>GUAYAQUIL</b></span>
-                <span class="barcode" aria-hidden="true"></span>
-              </div>
 
-              <button type="button" class="btn btn-primary btn-small js-toggle-form" data-target="form-guayaquil">Inscribirme — Guayaquil</button>
+            <button type="button" class="btn btn-primary btn-small js-toggle-form" data-target="form-guayaquil">Inscribirme — Guayaquil</button>
 
-              <form class="reg-form hidden-form" id="form-guayaquil" data-sede="Guayaquil — Ecuador" data-city="Guayaquil" data-sck="HOT_GUAYAQUIL" data-pay-individual="https://pay.hotmart.com/L107640931E?off=b6bidyqw" novalidate>
-                <div class="reg-panel">
-                  <div class="field">
-                    <label for="nombre-guayaquil">Nombre y Apellido</label>
-                    <input id="nombre-guayaquil" name="nombre" type="text" autocomplete="name" required>
-                  </div>
-                  <div class="field">
-                    <label for="email-guayaquil">Correo electrónico</label>
-                    <input id="email-guayaquil" name="email" type="email" autocomplete="email" required>
-                  </div>
-                  <div class="field">
-                    <label for="whatsapp-guayaquil">WhatsApp</label>
-                    <input id="whatsapp-guayaquil" name="whatsapp" type="tel" inputmode="tel" placeholder="+593 99 123 4567" autocomplete="tel" required>
-                  </div>
-                  <div class="field">
-                    <label for="profesion-guayaquil">Profesión</label>
-                    <select id="profesion-guayaquil" name="profesion" required>
-                      <option value="" disabled selected>Selecciona una opción</option>
-                      <option>Médico(a) cirujano(a)</option>
-                      <option>Cirujano(a)-dentista</option>
-                      <option>Estudiante de Medicina</option>
-                      <option>Estudiante de Odontología</option>
-                      <option>Otro profesional de la salud</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="nivel-guayaquil">Nivel de formación en armonización orofacial</label>
-                    <select id="nivel-guayaquil" name="nivel" required>
-                      <option value="" disabled selected>Selecciona una opción</option>
-                      <option>Sin experiencia</option>
-                      <option>Cursos iniciales</option>
-                      <option>Formación intermedia (Diplomado)</option>
-                      <option>Formación avanzada (Postgrado / Especialista)</option>
-                    </select>
-                  </div>
+                  <form class="reg-form hidden-form" id="form-guayaquil" data-sede="Guayaquil — Ecuador" data-city="Guayaquil" data-sck="HOT_GUAYAQUIL" data-pay-individual="https://pay.hotmart.com/L107640931E?off=b6bidyqw" novalidate>
+                    <div class="reg-panel">
+                      <div class="field">
+                        <label for="nombre-guayaquil">Nombre y Apellido</label>
+                        <input id="nombre-guayaquil" name="nombre" type="text" autocomplete="name" required>
+                      </div>
+                      <div class="field">
+                        <label for="email-guayaquil">Correo electrónico</label>
+                        <input id="email-guayaquil" name="email" type="email" autocomplete="email" required>
+                      </div>
+                      <div class="field">
+                        <label for="whatsapp-guayaquil">WhatsApp</label>
+                        <input id="whatsapp-guayaquil" name="whatsapp" type="tel" inputmode="tel" placeholder="+593 99 123 4567" autocomplete="tel" required>
+                      </div>
+                      <div class="field">
+                        <label for="profesion-guayaquil">Profesión</label>
+                        <select id="profesion-guayaquil" name="profesion" required>
+                          <option value="" disabled selected>Selecciona una opción</option>
+                          <option>Médico(a) cirujano(a)</option>
+                          <option>Cirujano(a)-dentista</option>
+                          <option>Estudiante de Medicina</option>
+                          <option>Estudiante de Odontología</option>
+                          <option>Otro profesional de la salud</option>
+                        </select>
+                      </div>
+                      <div class="field">
+                        <label for="nivel-guayaquil">Nivel de formación en armonización orofacial</label>
+                        <select id="nivel-guayaquil" name="nivel" required>
+                          <option value="" disabled selected>Selecciona una opción</option>
+                          <option>Sin experiencia</option>
+                          <option>Cursos iniciales</option>
+                          <option>Formación intermedia (Diplomado)</option>
+                          <option>Formación avanzada (Postgrado / Especialista)</option>
+                        </select>
+                      </div>
 
-                  <div class="hp-field" aria-hidden="true"><label>Empresa<input name="empresa" type="text" tabindex="-1" autocomplete="off"></label></div>
+                      <div class="hp-field" aria-hidden="true"><label>Empresa<input name="empresa" type="text" tabindex="-1" autocomplete="off"></label></div>
 
-                  <p class="reg-msg error" role="alert"></p>
+                      <p class="reg-msg error" role="alert"></p>
 
-                  <button type="submit" class="btn btn-primary btn-small">Enviar inscripción</button>
-                  <p class="reg-fallback">¿Problemas al enviar? <a href="https://form.jotform.com/262586485506064?dropdown0=Guayaquil%20%E2%80%94%20Ecuador" target="_blank" rel="noopener">Complétalo aquí</a>.</p>
+                      <button type="submit" class="btn btn-primary btn-small">Enviar inscripción</button>
+                      <p class="reg-fallback">¿Problemas al enviar? <a href="https://form.jotform.com/262586485506064?dropdown0=Guayaquil%20%E2%80%94%20Ecuador" target="_blank" rel="noopener">Complétalo aquí</a>.</p>
 
-                  <div class="reg-success">
-                    <span class="check">✅</span>
-                    <h4>¡Tu preinscripción quedó registrada!</h4>
-                    <p>Para asegurar tu cupo en Guayaquil, completa ahora el pago.</p>
-                    <p class="reg-mail-note" hidden>Te enviamos un correo a <b class="reg-mail-to"></b> con los detalles de tu jornada y el enlace de pago.</p>
-                    <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E?off=b6bidyqw&sck=HOT_GUAYAQUIL" data-pay-link target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
-                  </div>
-                </div>
-              </form>
-            </div>
+                      <div class="reg-success">
+                        <span class="check">✅</span>
+                        <h4>¡Tu preinscripción quedó registrada!</h4>
+                        <p>Para asegurar tu cupo en Guayaquil, completa ahora el pago.</p>
+                        <p class="reg-mail-note" hidden>Te enviamos un correo a <b class="reg-mail-to"></b> con los detalles de tu jornada y el enlace de pago.</p>
+                        <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E?off=b6bidyqw&sck=HOT_GUAYAQUIL" data-pay-link target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
+                      </div>
+                    </div>
+                  </form>
           </div>
         </article>
       </div>
