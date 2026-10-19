@@ -307,22 +307,35 @@
     box-shadow:0 30px 70px -30px rgba(0,0,0,.9), 0 0 0 1px rgba(255,209,0,.08) inset;
   }
   .ticket.ticket-intl:hover{ border-color:rgba(255,209,0,.6); box-shadow:0 34px 80px -30px rgba(3,78,162,.45); }
-  /* Bandera de Ecuador (amarillo, azul, rojo) con fade de derecha a izquierda */
+  /* Bandera de Ecuador (imagen) bajo la información; se oscurece hacia la perforación */
   .intl-flag{
-    position:absolute; inset:0; z-index:0; pointer-events:none;
-    background:linear-gradient(180deg, #ffd100 0 50%, #034ea2 50% 75%, #ed1c24 75% 100%);
-    opacity:.3;
-    -webkit-mask-image:linear-gradient(to left, #000 0%, rgba(0,0,0,.75) 30%, rgba(0,0,0,.25) 60%, transparent 85%);
-            mask-image:linear-gradient(to left, #000 0%, rgba(0,0,0,.75) 30%, rgba(0,0,0,.25) 60%, transparent 85%);
+    position:absolute; top:0; bottom:0; left:0; width:62%; z-index:0; pointer-events:none;
+    background:
+      linear-gradient(90deg, rgba(10,9,8,.62) 0%, rgba(10,9,8,.55) 45%, rgba(10,9,8,.82) 80%, #14100e 100%),
+      url("/img/ecuador-flag.webp") left center / cover no-repeat;
   }
   .intl-main, .intl-side, .intl-rule{ position:relative; z-index:1; }
   .intl-main{ padding:clamp(26px,3vw,40px) clamp(24px,3vw,44px); }
   .intl-city{ font-size:clamp(46px,6vw,76px); }
   .intl-badge{ background:linear-gradient(90deg,#ffd100,#ffe36b); color:#1a1300 !important; border-color:#ffd100 !important; font-weight:700; }
   .intl-fields{ margin-top:22px; }
-  .intl-side{ display:flex; flex-direction:column; justify-content:center; gap:18px; padding:clamp(26px,3vw,40px) clamp(22px,2.6vw,36px); background:rgba(10,9,8,.28); }
-  .intl-side .ticket-fields{ grid-template-columns:1fr 1fr; }
-  .intl-side .tf-price dd{ font-size:34px; }
+  .intl-main .ticket-link{ color:#ffd84d; }
+  .intl-main .tf dt{ color:rgba(247,244,241,.78); }
+  /* Lado de inscripción: mismo degradado rojo que las cabeceras de los tickets de Chile */
+  .intl-side{
+    display:flex; flex-direction:column; justify-content:center; gap:20px;
+    padding:clamp(26px,3vw,40px) clamp(22px,2.6vw,36px);
+    background:
+      radial-gradient(120% 140% at 100% 0%, rgba(210,26,26,.38), transparent 55%),
+      linear-gradient(135deg, var(--red-900), #1c0a09 70%);
+  }
+  .intl-price{ display:flex; flex-direction:column; gap:6px; }
+  .intl-label{ font-family:var(--font-mono); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:rgba(247,244,241,.75); }
+  .intl-amount{ font-family:var(--font-display); font-size:clamp(40px,4vw,52px); line-height:1; color:var(--white); }
+  .intl-amount small{ font-family:var(--font-mono); font-size:13px; letter-spacing:.1em; color:rgba(247,244,241,.75); }
+  .intl-mode{ font-size:14px; color:rgba(247,244,241,.82); }
+  .intl-stub{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding-top:18px; border-top:1px dashed rgba(247,244,241,.25); }
+  .intl-stub .stub-no{ color:rgba(247,244,241,.7); }
   /* Perforación vertical con muescas arriba y abajo */
   .intl-rule{ background:repeating-linear-gradient(180deg, var(--line-strong) 0 10px, transparent 10px 18px); margin-block:26px; }
   .intl-rule::before, .intl-rule::after{
@@ -334,13 +347,15 @@
   @media (max-width:859px){
     .ticket.ticket-intl{ grid-template-columns:1fr; }
     .intl-flag{
-      -webkit-mask-image:linear-gradient(to bottom, #000 0%, rgba(0,0,0,.6) 30%, rgba(0,0,0,.15) 60%, transparent 85%);
-              mask-image:linear-gradient(to bottom, #000 0%, rgba(0,0,0,.6) 30%, rgba(0,0,0,.15) 60%, transparent 85%);
+      width:100%; height:58%; bottom:auto;
+      background:
+        linear-gradient(180deg, rgba(10,9,8,.6) 0%, rgba(10,9,8,.62) 55%, #14100e 100%),
+        url("/img/ecuador-flag.webp") left center / cover no-repeat;
     }
     .intl-rule{ height:2px; margin:0 16px; background:repeating-linear-gradient(90deg, var(--line-strong) 0 10px, transparent 10px 18px); }
     .intl-rule::before{ left:-32px; top:50%; transform:translateY(-50%); clip-path:inset(0 0 0 50%); }
     .intl-rule::after{ left:auto; right:-32px; bottom:auto; top:50%; transform:translateY(-50%); clip-path:inset(0 50% 0 0); }
-    .intl-side{ background:rgba(10,9,8,.35); }
+
   }
   .ticket-link{ display:inline-block; margin-top:2px; font-size:13.5px; font-weight:600; color:var(--red-500); text-decoration:none; }
   .ticket-link:hover{ text-decoration:underline; }
@@ -927,11 +942,12 @@
           <div class="intl-rule" aria-hidden="true"></div>
 
           <div class="intl-side ticket-stub">
-            <dl class="ticket-fields">
-              <div class="tf tf-price"><dt>Valor</dt><dd><span class="nw">$49.99</span> <small class="cur">USD</small></dd></div>
-              <div class="tf"><dt>Modalidad</dt><dd>Presencial</dd></div>
-            </dl>
-            <div class="stub-meta">
+            <div class="intl-price">
+              <span class="intl-label">Valor de la entrada</span>
+              <span class="intl-amount">$49.99 <small>USD</small></span>
+              <span class="intl-mode">Modalidad presencial · Entrada individual</span>
+            </div>
+            <div class="intl-stub">
               <span class="stub-no">Ticket Nº 03<b>GUAYAQUIL</b></span>
               <span class="barcode" aria-hidden="true"></span>
             </div>
