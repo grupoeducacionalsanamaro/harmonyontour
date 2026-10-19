@@ -570,14 +570,16 @@
 
   /* ---------- CERTIFICADOS ---------- */
   .certs{ padding-block:clamp(56px,9vw,96px); background:var(--bg); border-bottom:1px solid var(--line); }
-  .certs .section-head{ margin-bottom:28px; max-width:62ch; }
+  .certs .section-head{ margin:0 auto 28px; max-width:62ch; text-align:center; }
+  .certs .section-head .eyebrow{ justify-content:center; }
+  .certs .route-sub{ margin-inline:auto; }
   .certs h2{ font-size:clamp(28px,4.4vw,40px); margin-top:10px; }
   .cert-box{
-    display:grid; gap:14px; grid-template-columns:1fr; max-width:760px;
+    display:grid; gap:14px; grid-template-columns:1fr; max-width:880px; margin-inline:auto;
     padding:24px; background:var(--surface); border:1px solid var(--line-strong); border-radius:16px;
   }
   @media (min-width:760px){
-    .cert-box{ grid-template-columns:1fr 1.3fr auto; align-items:end; }
+    .cert-box{ grid-template-columns:minmax(260px,1.1fr) 1.3fr auto; align-items:end; }
     .cert-box .btn{ height:44px; }
   }
   .cert-box .btn{ padding:12px 20px; }
@@ -1032,7 +1034,7 @@
         </div>
         <div class="field">
           <label for="cert-nombre">Nombre y Apellido</label>
-          <input id="cert-nombre" name="nombre" type="text" autocomplete="name" placeholder="Ej: Camila Inzunza" required>
+          <input id="cert-nombre" name="nombre" type="text" autocomplete="name" placeholder="Ej: María González" required>
         </div>
         <button type="submit" class="btn btn-primary">Buscar mi certificado</button>
         <div class="cert-result" role="status" aria-live="polite" hidden></div>

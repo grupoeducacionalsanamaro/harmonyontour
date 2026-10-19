@@ -468,7 +468,7 @@
       e.preventDefault();
       var nombre = certForm.nombre.value.trim();
       if(nombre.split(/\s+/).length < 2){
-        showCert("warn", "✍️", "Escribe tu nombre y apellido", "Por ejemplo: Camila Inzunza.");
+        showCert("warn", "✍️", "Escribe tu nombre y apellido", "Por ejemplo: María González.");
         return;
       }
       certBtn.disabled = true;
