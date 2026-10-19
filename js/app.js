@@ -426,4 +426,83 @@
       });
     });
   });
+
+  // ---------- CERTIFICADOS: búsqueda por sede y nombre ----------
+  // El servidor (/api/certificado) tiene la lista; aquí solo se muestra el resultado.
+  var certForm = document.getElementById("cert-form");
+  if(certForm){
+    var certResult = certForm.querySelector(".cert-result");
+    var certBtn = certForm.querySelector("button[type=submit]");
+
+    function showCert(kind, icon, title, text, link){
+      certResult.className = "cert-result " + kind;
+      certResult.textContent = "";
+      var ic = document.createElement("span");
+      ic.className = "cert-icon";
+      ic.setAttribute("aria-hidden", "true");
+      ic.textContent = icon;
+      var box = document.createElement("div");
+      var b = document.createElement("b");
+      b.textContent = title;
+      box.appendChild(b);
+      if(text){
+        var p = document.createElement("p");
+        p.textContent = text;
+        box.appendChild(p);
+      }
+      if(link){
+        var a = document.createElement("a");
+        a.className = "btn btn-primary";
+        a.href = link;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = "Descargar certificado";
+        box.appendChild(a);
+      }
+      certResult.appendChild(ic);
+      certResult.appendChild(box);
+      certResult.hidden = false;
+    }
+
+    certForm.addEventListener("submit", function(e){
+      e.preventDefault();
+      var nombre = certForm.nombre.value.trim();
+      if(nombre.split(/\s+/).length < 2){
+        showCert("warn", "✍️", "Escribe tu nombre y apellido", "Por ejemplo: Camila Inzunza.");
+        return;
+      }
+      certBtn.disabled = true;
+      certBtn.textContent = "Buscando…";
+
+      fetch("/api/certificado", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sede: certForm.sede.value, nombre: nombre })
+      })
+      .then(function(res){ return res.json().then(function(d){ return { ok: res.ok, data: d }; }); })
+      .then(function(r){
+        var d = r.data || {};
+        if(!r.ok){ throw new Error(d.error || "Error"); }
+        var safeLink = typeof d.link === "string" && /^https:\/\/mega\.nz\//.test(d.link) ? d.link : null;
+        if(d.status === "found" && safeLink){
+          showCert("ok", "🎓", "¡Listo, " + d.nombre + "!", "Tu certificado de participación está disponible. Se abrirá en MEGA para descargarlo.", safeLink);
+        } else if(d.status === "pending"){
+          showCert("warn", "⏳", "Encontramos tu inscripción, " + d.nombre, "Tu certificado estará disponible muy pronto. Vuelve a intentarlo más tarde.");
+        } else if(d.status === "ambiguous"){
+          showCert("warn", "🔎", "Hay más de una persona con ese nombre", "Escribe tu nombre y apellidos completos tal como te inscribiste.");
+        } else if(d.status === "sede_unavailable"){
+          showCert("warn", "📅", "Certificados aún no disponibles", "Los certificados de esta sede estarán disponibles después de la jornada.");
+        } else {
+          showCert("warn", "❓", "No encontramos tu nombre", "Revisa que esté escrito como te inscribiste (puedes probar con tus dos apellidos). Si el problema sigue, escríbenos a info@sanamaro.cl.");
+        }
+      })
+      .catch(function(err){
+        showCert("warn", "⚠️", "No pudimos buscar tu certificado", err.message && err.message !== "Error" ? err.message : "Inténtalo de nuevo en unos minutos.");
+      })
+      .finally(function(){
+        certBtn.disabled = false;
+        certBtn.textContent = "Buscar mi certificado";
+      });
+    });
+  }
 })();

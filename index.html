@@ -568,6 +568,27 @@
     .ag-subtitle{ font-size:13.5px; }
   }
 
+  /* ---------- CERTIFICADOS ---------- */
+  .certs{ padding-block:clamp(56px,9vw,96px); background:var(--bg); border-bottom:1px solid var(--line); }
+  .certs .section-head{ margin-bottom:28px; max-width:62ch; }
+  .certs h2{ font-size:clamp(28px,4.4vw,40px); margin-top:10px; }
+  .cert-box{
+    display:grid; gap:14px; grid-template-columns:1fr; max-width:760px;
+    padding:24px; background:var(--surface); border:1px solid var(--line-strong); border-radius:16px;
+  }
+  @media (min-width:760px){
+    .cert-box{ grid-template-columns:1fr 1.3fr auto; align-items:end; }
+    .cert-box .btn{ height:44px; }
+  }
+  .cert-box .btn{ padding:12px 20px; }
+  .cert-result{ grid-column:1 / -1; display:flex; align-items:flex-start; gap:14px; padding:16px 18px; border-radius:12px; font-size:15px; line-height:1.55; }
+  .cert-result.ok{ background:rgba(62,165,100,.12); border:1px solid rgba(62,165,100,.45); }
+  .cert-result.warn{ background:rgba(210,26,26,.1); border:1px solid rgba(210,26,26,.45); }
+  .cert-result b{ color:var(--white); }
+  .cert-result p{ color:var(--silver); }
+  .cert-result .btn{ margin-top:10px; }
+  .cert-result .cert-icon{ flex:none; font-size:22px; line-height:1; }
+
   footer{ padding-block:36px; }
   .foot-inner{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px; }
   .foot-copy{ font-size:12px; color:var(--silver); }
@@ -990,6 +1011,32 @@
           </div>
         </article>
       </div>
+    </div>
+  </section>
+  <section class="certs" id="certificados">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">CERTIFICADOS</p>
+        <h2>Certificados de Participación</h2>
+        <p class="route-sub">Si asististe a Harmony On Tour, elige tu sede y escribe tu nombre y apellido tal como te inscribiste para descargar tu certificado.</p>
+      </div>
+
+      <form class="cert-box" id="cert-form" novalidate>
+        <div class="field">
+          <label for="cert-sede">Sede</label>
+          <select id="cert-sede" name="sede" required>
+            <option value="concepcion" selected>Concepción — 17 de octubre</option>
+            <option value="antofagasta" disabled>Antofagasta — 24 de octubre (próximamente)</option>
+            <option value="guayaquil" disabled>Guayaquil — 28 de noviembre (próximamente)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="cert-nombre">Nombre y Apellido</label>
+          <input id="cert-nombre" name="nombre" type="text" autocomplete="name" placeholder="Ej: Camila Inzunza" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar mi certificado</button>
+        <div class="cert-result" role="status" aria-live="polite" hidden></div>
+      </form>
     </div>
   </section>
 </main>
