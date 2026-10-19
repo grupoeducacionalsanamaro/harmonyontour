@@ -9,7 +9,8 @@ const { sendConfirmationEmail } = require("./_lib/email");
 // Mismo link y parámetros que arma la landing (js/app.js > buildPayUrl).
 // Ofertas (lotes) de Hotmart por tipo de entrada.
 const PAY_OFFERS = {
-  "Individual": "https://pay.hotmart.com/L107640931E?off=azs6ubw5",
+  // Antofagasta "últimas entradas" $29.990 (antes off=azs6ubw5 a $47.000).
+  "Individual": "https://pay.hotmart.com/L107640931E?off=yfkc12se",
   "Promoción 2x1": "https://pay.hotmart.com/L107640931E?off=vt8lmjbk",
 };
 const SCK_BY_SEDE = {
@@ -18,13 +19,22 @@ const SCK_BY_SEDE = {
   "Guayaquil — Ecuador": "HOT_GUAYAQUIL",
 };
 
+// Pre-venta exclusiva Guayaquil (USD 24.99) hasta el 10 nov 2026; luego USD 49.99.
+// Misma fecha que js/presale.js y api/_lib/email.js.
+const GYE_PRESALE_END = Date.parse("2026-11-11T00:00:00-05:00");
+
 // Sedes con oferta propia en Hotmart (precio y fecha de su evento).
-const PAY_BY_SEDE = {
-  "Guayaquil — Ecuador": "https://pay.hotmart.com/L107640931E?off=b6bidyqw",
-};
+function payBySede(sede) {
+  if (sede === "Guayaquil — Ecuador") {
+    return Date.now() < GYE_PRESALE_END
+      ? "https://pay.hotmart.com/L107640931E?off=jwzix3jd"
+      : "https://pay.hotmart.com/L107640931E?off=b6bidyqw";
+  }
+  return "";
+}
 
 function buildPayUrl({ sede, submissionId, email, nombre, tipoEntrada }) {
-  const url = new URL(PAY_BY_SEDE[sede] || PAY_OFFERS[tipoEntrada] || PAY_OFFERS.Individual);
+  const url = new URL(payBySede(sede) || PAY_OFFERS[tipoEntrada] || PAY_OFFERS.Individual);
   url.searchParams.set("sck", SCK_BY_SEDE[sede]);
   if (submissionId) url.searchParams.set("src", "JF" + submissionId);
   url.searchParams.set("email", email);
@@ -43,7 +53,7 @@ const ALLOWED_ORIGINS = new Set([
 const SEDES = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre", "Guayaquil — Ecuador"]);
 // Sedes ya realizadas / agotadas: no aceptan nuevas inscripciones.
 const SEDES_CERRADAS = new Set(["Concepción — 17 de octubre"]);
-// Sedes con promoción 2x1 (2 entradas por $47.000): permiten registrar acompañante.
+// Sedes con promoción 2x1 (2 entradas por $47.000; individual $29.990): permiten registrar acompañante.
 const SEDES_2X1 = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre"]);
 const PROFESIONES = new Set([
   "Médico(a) cirujano(a)",

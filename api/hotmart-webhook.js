@@ -51,8 +51,10 @@ function isHarmonyProduct(product) {
 // Ofertas (lotes) de Hotmart → tipo de entrada.
 const OFFERS = {
   azs6ubw5: "Entrada individual",
+  yfkc12se: "Entrada individual (últimas entradas)",
   vt8lmjbk: "Promoción 2x1",
   b6bidyqw: "Entrada Guayaquil",
+  jwzix3jd: "Pre-venta Guayaquil",
 };
 
 const SEDES = {

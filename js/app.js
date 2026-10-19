@@ -346,10 +346,24 @@
   }
 
   // Cada tipo de entrada tiene su oferta (lote) en Hotmart: data-pay-individual / data-pay-2x1.
+  // Guayaquil: data-pay-individual = pre-venta; al terminar (html.presale-over, ver js/presale.js) usa data-pay-regular.
   function payBaseFor(form, fallbackHref){
+    if(document.documentElement.classList.contains("presale-over") && form.getAttribute("data-pay-regular")){
+      return form.getAttribute("data-pay-regular");
+    }
     var attr = ticketType(form) === "Promoción 2x1" ? "data-pay-2x1" : "data-pay-individual";
     return form.getAttribute(attr) || fallbackHref;
   }
+
+  // Pre-venta Guayaquil: días restantes (termina el 11 nov 2026 00:00, hora de Ecuador).
+  (function(){
+    var el = document.querySelector("[data-presale-countdown]");
+    if(!el) return;
+    var ms = Date.parse("2026-11-11T00:00:00-05:00") - Date.now();
+    if(ms <= 0) return;
+    var days = Math.ceil(ms / 86400000);
+    el.textContent = days > 1 ? "· Quedan " + days + " días" : "· ¡Último día!";
+  })();
 
   // El bloque del acompañante solo se muestra al elegir la promoción 2x1.
   document.querySelectorAll('.reg-form input[name="tipo_entrada"]').forEach(function(radio){

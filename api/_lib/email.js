@@ -10,6 +10,9 @@ const FROM = "Harmony On Tour LATAM <harmonyontour@send.sanamaro.cl>";
 const REPLY_TO = "info@sanamaro.cl";
 const BCC = "relacionespublicas@sanamaro.cl";
 
+// Pre-venta exclusiva Guayaquil hasta el 10 nov 2026 (misma fecha que js/presale.js).
+const GYE_PRESALE_END = Date.parse("2026-11-11T00:00:00-05:00");
+
 
 const SEDES = {
   "Concepción — 17 de octubre": {
@@ -32,7 +35,8 @@ const SEDES = {
     pais: "Chile",
     lugar: "Hotel Terrado Suites",
     mapa: "https://maps.google.com/?cid=2220393754344205012",
-    precio: "$47.000 CLP",
+    precio: "$29.990 CLP",
+    precio2x1: "$47.000 CLP",
     promo2x1: true,
     speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Dra. Carla Ossadon", "Dra. Sofía Montes"],
   },
@@ -45,6 +49,7 @@ const SEDES = {
     lugar: "Hotel Wyndham Guayaquil Puerto Santa Ana",
     mapa: "https://maps.google.com/?cid=7259335876104380102",
     precio: "$49.99 USD",
+    preventa: { precio: "$24.99 USD", hasta: "Pre-venta exclusiva hasta el 10 de noviembre", fin: GYE_PRESALE_END },
     speakers: ["Dra. Rafaela Melo", "Dra. Malu Lobato", "Dra. Andrea Mazzo", "Dra. Javiera Vergara"],
   },
 };
@@ -75,13 +80,15 @@ function buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada = "Individua
   const agendaUrl = `${SITE}/?cronograma=${info.slug}#cronograma`;
   const es2x1 = info.promo2x1 && tipoEntrada === "Promoción 2x1";
   const tipoTexto = info.promo2x1 ? (es2x1 ? "Promoción 2x1 (2 entradas)" : "Entrada individual (1 entrada)") : "";
-  const price = info.precio + (tipoTexto ? ` · ${tipoTexto}` : "");
+  const enPreventa = info.preventa && Date.now() < info.preventa.fin;
+  const precio = enPreventa ? info.preventa.precio : (es2x1 && info.precio2x1) || info.precio;
+  const notaPrecio = enPreventa ? `${info.preventa.hasta} (valor normal ${info.precio})` : tipoTexto;
   const hola = firstName(nombre);
   const subject = `Tu preinscripción a Harmony On Tour ${info.ciudad} quedó registrada`;
   const preheader = `${info.fecha} · 10:00 a 14:00 hrs${info.lugar ? ` · ${info.lugar}` : ""}. Completa el pago para recibir tu ticket de acceso.`;
 
-  const priceHtml = esc(info.precio) +
-    (tipoTexto ? `<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(tipoTexto)}</span>` : "");
+  const priceHtml = esc(precio) +
+    (notaPrecio ? `<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(notaPrecio)}</span>` : "");
 
   // Acompañante (promoción 2x1): se muestra solo si se informó.
   const acompHtml = es2x1 && (acompNombre || acompEmail)
@@ -247,7 +254,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada = "Individua
     info.lugar
       ? `Lugar: ${info.lugar}, ${info.ciudad}, ${info.pais}${info.mapa ? ` (ubicación: ${info.mapa})` : ""}`
       : "Lugar: la dirección exacta te llegará junto con tu ticket de acceso.",
-    `Valor: ${price}`,
+    `Valor: ${precio}${notaPrecio ? ` · ${notaPrecio}` : ""}`,
     ...(es2x1 && (acompNombre || acompEmail) ? [`Acompañante (2x1): ${acompNombre || "Por informar"}${acompEmail ? ` <${acompEmail}>` : ""}`] : []),
     `Cronograma de la jornada: ${agendaUrl}`,
     "",
