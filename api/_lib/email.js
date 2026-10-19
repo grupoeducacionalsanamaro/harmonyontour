@@ -34,7 +34,7 @@ const SEDES = {
     mapa: "https://maps.google.com/?cid=2220393754344205012",
     precio: "$47.000 CLP",
     promo2x1: true,
-    speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Speaker por confirmar", "Dra. Sofía Montes"],
+    speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Dra. Carla Ossadon", "Dra. Sofía Montes"],
   },
   "Guayaquil — Ecuador": {
     ciudad: "Guayaquil",
