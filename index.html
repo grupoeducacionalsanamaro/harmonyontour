@@ -301,7 +301,7 @@
   .ticket.ticket-intl{
     --notch:var(--bg-2);
     display:grid; grid-template-columns:minmax(0,1.55fr) 2px minmax(320px,1fr);
-    overflow:hidden; border-radius:22px;
+    border-radius:22px;
     border:1px solid rgba(255,209,0,.38);
     background:linear-gradient(120deg, var(--surface) 0%, #1b1613 60%, #1a1410 100%);
     box-shadow:0 30px 70px -30px rgba(0,0,0,.9), 0 0 0 1px rgba(255,209,0,.08) inset;
@@ -314,7 +314,11 @@
       linear-gradient(90deg, rgba(10,9,8,.7) 0%, rgba(10,9,8,.64) 45%, rgba(10,9,8,.86) 80%, #14100e 100%),
       url("/img/ecuador-flag.webp") left center / cover no-repeat;
   }
-  .intl-main, .intl-side, .intl-rule{ position:relative; z-index:1; }
+  .intl-main, .intl-side{ position:relative; z-index:1; }
+  /* La perforación va sobre ambos lados: sus muescas cortan el borde dorado */
+  .intl-rule{ position:relative; z-index:3; }
+  .intl-flag{ border-radius:21px 0 0 21px; }
+  .intl-side{ border-radius:0 21px 21px 0; }
   .intl-main{ padding:clamp(26px,3vw,40px) clamp(24px,3vw,44px); }
   .intl-city{ font-size:clamp(46px,6vw,76px); }
   .intl-badge{ background:linear-gradient(90deg,#ffd100,#ffe36b); color:#1a1300 !important; border-color:#ffd100 !important; font-weight:700; }
@@ -342,10 +346,12 @@
     content:""; position:absolute; left:50%; width:30px; height:30px; border-radius:50%;
     background:var(--notch); border:1px solid rgba(255,209,0,.38); transform:translateX(-50%);
   }
-  .intl-rule::before{ top:-42px; clip-path:inset(50% 0 0 0); }
-  .intl-rule::after{ bottom:-42px; clip-path:inset(0 0 50% 0); }
+  .intl-rule::before{ top:-42px; clip-path:inset(calc(50% - 2px) 0 0 0); }
+  .intl-rule::after{ bottom:-42px; clip-path:inset(0 0 calc(50% - 2px) 0); }
   @media (max-width:859px){
     .ticket.ticket-intl{ grid-template-columns:1fr; }
+    .intl-flag{ border-radius:21px; }
+    .intl-side{ border-radius:0 0 21px 21px; }
     /* Celular: imagen vertical (bandera arriba, fade a negro hacia la inscripción) */
     .intl-flag{
       width:100%; height:auto; bottom:0;
@@ -354,8 +360,8 @@
         url("/img/ecuador-flag-mobile.webp") center top / cover no-repeat;
     }
     .intl-rule{ height:2px; margin:0 16px; background:repeating-linear-gradient(90deg, var(--line-strong) 0 10px, transparent 10px 18px); }
-    .intl-rule::before{ left:-32px; top:50%; transform:translateY(-50%); clip-path:inset(0 0 0 50%); }
-    .intl-rule::after{ left:auto; right:-32px; bottom:auto; top:50%; transform:translateY(-50%); clip-path:inset(0 50% 0 0); }
+    .intl-rule::before{ left:-32px; top:50%; transform:translateY(-50%); clip-path:inset(0 0 0 calc(50% - 2px)); }
+    .intl-rule::after{ left:auto; right:-32px; bottom:auto; top:50%; transform:translateY(-50%); clip-path:inset(0 calc(50% - 2px) 0 0); }
 
   }
   .ticket-link{ display:inline-block; margin-top:2px; font-size:13.5px; font-weight:600; color:var(--red-500); text-decoration:none; }
