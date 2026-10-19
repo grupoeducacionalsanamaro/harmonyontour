@@ -41,6 +41,8 @@ const ALLOWED_ORIGINS = new Set([
 
 // Valores permitidos: deben coincidir con las opciones del formulario de la landing.
 const SEDES = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre", "Guayaquil — Ecuador"]);
+// Sedes ya realizadas / agotadas: no aceptan nuevas inscripciones.
+const SEDES_CERRADAS = new Set(["Concepción — 17 de octubre"]);
 // Sedes con promoción 2x1 (2 entradas por $47.000): permiten registrar acompañante.
 const SEDES_2X1 = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre"]);
 const PROFESIONES = new Set([
@@ -159,6 +161,10 @@ module.exports = async function handler(req, res) {
 
   if (!sede || !nombre || !email || !whatsapp || !profesion || !nivel) {
     fail(res, 400, "Faltan campos obligatorios.");
+    return;
+  }
+  if (SEDES_CERRADAS.has(sede)) {
+    fail(res, 400, "Las inscripciones para Concepción están cerradas: la jornada ya se realizó (sold out).");
     return;
   }
   if (!SEDES.has(sede) || !PROFESIONES.has(profesion) || !NIVELES.has(nivel)) {

@@ -19,7 +19,9 @@
 
   var EDITIONS = [
     {
-      id: "edicion-concepcion", num: "01", city: "Concepción", date: "Sáb 17 oct 2026",
+      id: "edicion-concepcion", num: "01", city: "Concepción", date: "Sáb 17 oct 2026 · Realizada", tabDate: "Realizada · Sold out",
+      // Jornada ya realizada: el cronograma muestra el aviso de sold out.
+      soldout: true, heldOn: "sábado 17 de octubre",
       speakers: ["javiera-vergara", "nathaly-fuentes", "pamela-flores", "marjorie-gold"],
       agenda: [
         { time: "10:00 – 10:10", kind: "info", title: "Bienvenida", detail: "Harmony Instituto Internacional" },
@@ -178,6 +180,13 @@
     var panels = EDITIONS.map(function(ed, i){
       return (
         '<div class="ag-panel" role="tabpanel" id="panel-' + escapeHtml(ed.id) + '" aria-labelledby="tab-' + escapeHtml(ed.id) + '"' + (i === 0 ? '' : ' hidden') + '>' +
+          (ed.soldout
+            ? '<div class="ag-soldout" role="note">' +
+                '<span class="ag-soldout-word">Sold out</span>' +
+                '<div><p class="ag-title">¡Jornada realizada con éxito!</p>' +
+                '<p class="ag-detail">Harmony On Tour ' + escapeHtml(ed.city) + ' se realizó el ' + escapeHtml(ed.heldOn || ed.date) + ' con todas las entradas agotadas. ¡Gracias a quienes llenaron la sala! Este fue el programa de la jornada.</p></div>' +
+              '</div>'
+            : '') +
           (ed.agenda
             ? '<ol class="ag-list">' + ed.agenda.map(agendaItem).join("") + '</ol>'
             : '<div class="ag-pending">' +

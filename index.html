@@ -299,6 +299,19 @@
   .ticket-brand .admit.promo{ background:var(--red-500); border-color:var(--red-500); }
   .tf-price .cur{ font-family:var(--font-mono); font-size:12px; font-weight:500; letter-spacing:.1em; color:var(--silver); }
   .nw{ white-space:nowrap; }
+  /* Sede realizada: ticket atenuado + sello rojo superpuesto */
+  .ticket.is-soldout > :not(.soldout-stamp){ opacity:.45; filter:saturate(.6); }
+  .soldout-stamp{
+    position:absolute; z-index:3; left:50%; top:42%; transform:translate(-50%,-50%) rotate(-12deg);
+    display:flex; flex-direction:column; align-items:center; gap:6px; width:max-content; max-width:92%;
+    padding:14px 26px 16px; border:4px double rgba(210,26,26,.85); border-radius:12px;
+    background:rgba(10,9,8,.55); backdrop-filter:blur(1px);
+    color:rgba(210,26,26,.92); text-align:center; pointer-events:none;
+    box-shadow:0 0 0 1px rgba(210,26,26,.25), 0 18px 40px -18px rgba(0,0,0,.9);
+  }
+  .soldout-word{ font-family:var(--font-display); font-size:clamp(40px,3.8vw,52px); line-height:.95; text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
+  .soldout-sub{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:rgba(247,244,241,.92); white-space:nowrap; }
+  .btn-closed{ width:100%; background:rgba(247,244,241,.06); border:1px solid var(--line-strong); color:var(--silver); cursor:not-allowed; }
   .ticket-link{ display:inline-block; margin-top:2px; font-size:13.5px; font-weight:600; color:var(--red-500); text-decoration:none; }
   .ticket-link:hover{ text-decoration:underline; }
   .ticket-link + .ticket-link{ margin-left:14px; }
@@ -537,6 +550,9 @@
   .ag-title{ font-family:var(--font-display); font-size:17px; text-transform:uppercase; letter-spacing:.04em; color:var(--white); }
   .ag-detail{ font-size:13.5px; color:var(--silver); margin-top:2px; }
   .ag-break .ag-time, .ag-networking .ag-time, .ag-info .ag-time{ color:var(--silver); }
+  .ag-soldout{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom:16px; padding:18px 22px; border:1px solid rgba(210,26,26,.6); border-radius:14px; background:linear-gradient(135deg, rgba(210,26,26,.18), rgba(94,0,0,.18)); }
+  .ag-soldout-word{ flex:none; font-family:var(--font-display); font-size:30px; line-height:1; text-transform:uppercase; letter-spacing:.06em; color:rgba(210,26,26,.95); border:3px double rgba(210,26,26,.85); border-radius:8px; padding:6px 12px; transform:rotate(-6deg); }
+  .ag-soldout .ag-detail{ font-size:14.5px; line-height:1.55; margin-top:4px; max-width:70ch; }
   .ag-pending{ display:flex; align-items:flex-start; gap:16px; padding:22px 24px; border:1px dashed var(--line-strong); border-radius:14px; background:rgba(210,26,26,.05); }
   .ag-pending .ag-detail{ font-size:15px; line-height:1.6; margin-top:6px; max-width:62ch; }
 
@@ -704,19 +720,23 @@
         </div>
       </div>
 
-      <p class="promo-note"><strong>Promoción 2x1</strong> <span>en las sedes de Chile (Concepción y Antofagasta): 2 entradas por $47.000, el mismo valor de la entrada individual. Elige el tipo de entrada en el formulario de inscripción.</span></p>
+      <p class="promo-note"><strong>Promoción 2x1</strong> <span>en la sede de Antofagasta: 2 entradas por $47.000, el mismo valor de la entrada individual. Elige el tipo de entrada en el formulario de inscripción.</span></p>
 
       <div class="stops">
         <article class="stop">
           <div class="stop-marker">
             <span class="stop-num">01</span>
-            <span class="stop-label">Primera fecha</span>
+            <span class="stop-label">Primera fecha · Realizada</span>
           </div>
-          <div class="ticket">
+          <div class="ticket is-soldout">
+            <div class="soldout-stamp" role="note" aria-label="Sede Concepción: jornada realizada con éxito, sold out">
+              <span class="soldout-word">Sold out</span>
+              <span class="soldout-sub">¡Jornada realizada con éxito!</span>
+            </div>
             <div class="ticket-top">
-              <div class="ticket-brand"><span>Harmony On Tour · LATAM 2026</span><span class="admit promo">2x1</span></div>
+              <div class="ticket-brand"><span>Harmony On Tour · LATAM 2026</span><span class="admit promo">Sold out</span></div>
               <h3 class="ticket-city">Concepción</h3>
-              <p class="ticket-edition">Edición 01 · Cupos limitados</p>
+              <p class="ticket-edition">Edición 01 · Realizada el 17 oct</p>
             </div>
             <div class="ticket-body">
               <dl class="ticket-fields">
@@ -735,84 +755,7 @@
                 <span class="barcode" aria-hidden="true"></span>
               </div>
 
-              <button type="button" class="btn btn-primary btn-small js-toggle-form" data-target="form-concepcion">Inscribirme — Concepción</button>
-
-              <form class="reg-form hidden-form" id="form-concepcion" data-sede="Concepción — 17 de octubre" data-city="Concepción" data-sck="HOT_CONCEPCION" data-pay-individual="https://pay.hotmart.com/L107640931E?off=azs6ubw5" data-pay-2x1="https://pay.hotmart.com/L107640931E?off=vt8lmjbk" novalidate>
-                <div class="reg-panel">
-                  <div class="field">
-                    <label for="nombre-concepcion">Nombre y Apellido</label>
-                    <input id="nombre-concepcion" name="nombre" type="text" autocomplete="name" required>
-                  </div>
-                  <div class="field">
-                    <label for="email-concepcion">Correo electrónico</label>
-                    <input id="email-concepcion" name="email" type="email" autocomplete="email" required>
-                  </div>
-                  <div class="field">
-                    <label for="whatsapp-concepcion">WhatsApp</label>
-                    <input id="whatsapp-concepcion" name="whatsapp" type="tel" inputmode="tel" placeholder="+56 9 1234 5678" autocomplete="tel" required>
-                  </div>
-                  <div class="field">
-                    <label for="profesion-concepcion">Profesión</label>
-                    <select id="profesion-concepcion" name="profesion" required>
-                      <option value="" disabled selected>Selecciona una opción</option>
-                      <option>Médico(a) cirujano(a)</option>
-                      <option>Cirujano(a)-dentista</option>
-                      <option>Estudiante de Medicina</option>
-                      <option>Estudiante de Odontología</option>
-                      <option>Otro profesional de la salud</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="nivel-concepcion">Nivel de formación en armonización orofacial</label>
-                    <select id="nivel-concepcion" name="nivel" required>
-                      <option value="" disabled selected>Selecciona una opción</option>
-                      <option>Sin experiencia</option>
-                      <option>Cursos iniciales</option>
-                      <option>Formación intermedia (Diplomado)</option>
-                      <option>Formación avanzada (Postgrado / Especialista)</option>
-                    </select>
-                  </div>
-
-                  <fieldset class="ticket-type">
-                    <legend>Tipo de entrada</legend>
-                    <label class="tt-option">
-                      <input type="radio" name="tipo_entrada" value="Individual" checked>
-                      <span class="tt-card"><b>Entrada individual</b><small>1 entrada<br><span class="nw">$47.000 CLP</span></small></span>
-                    </label>
-                    <label class="tt-option">
-                      <input type="radio" name="tipo_entrada" value="Promoción 2x1">
-                      <span class="tt-card"><b>Promoción 2x1 <em>Promo</em></b><small>2 entradas<br><span class="nw">$47.000 CLP</span></small></span>
-                    </label>
-                  </fieldset>
-
-                  <div class="acomp-group" hidden>
-                    <p class="field-group-title">Tu acompañante (2x1)<small>Puedes completarlo ahora o informarlo después respondiendo el correo de confirmación.</small></p>
-                    <div class="field">
-                      <label for="acomp-nombre-concepcion">Nombre y Apellido del acompañante <span class="field-optional">(opcional)</span></label>
-                      <input id="acomp-nombre-concepcion" name="acompanante_nombre" type="text" autocomplete="off">
-                    </div>
-                    <div class="field">
-                      <label for="acomp-email-concepcion">Correo del acompañante <span class="field-optional">(opcional)</span></label>
-                      <input id="acomp-email-concepcion" name="acompanante_email" type="email" autocomplete="off">
-                    </div>
-                  </div>
-
-                  <div class="hp-field" aria-hidden="true"><label>Empresa<input name="empresa" type="text" tabindex="-1" autocomplete="off"></label></div>
-
-                  <p class="reg-msg error" role="alert"></p>
-
-                  <button type="submit" class="btn btn-primary btn-small">Enviar inscripción</button>
-                  <p class="reg-fallback">¿Problemas al enviar? <a href="https://form.jotform.com/262586485506064?dropdown0=Concepci%C3%B3n%20%E2%80%94%2017%20de%20octubre" target="_blank" rel="noopener">Complétalo aquí</a>.</p>
-
-                  <div class="reg-success">
-                    <span class="check">✅</span>
-                    <h4>¡Tu preinscripción quedó registrada!</h4>
-                    <p>Para asegurar tu cupo en Concepción, completa ahora el pago.</p>
-                    <p class="reg-mail-note" hidden>Te enviamos un correo a <b class="reg-mail-to"></b> con los detalles de tu jornada y el enlace de pago.</p>
-                    <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E?off=azs6ubw5&sck=HOT_CONCEPCION" data-pay-link target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
-                  </div>
-                </div>
-              </form>
+              <button type="button" class="btn btn-small btn-closed" disabled>Inscripciones cerradas · Sold out</button>
             </div>
           </div>
         </article>
