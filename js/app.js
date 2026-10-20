@@ -8,7 +8,7 @@
     "nathaly-fuentes": { name: "Dra. Nathaly Fuentes", role: "Exalumna de Postgrado · Cohorte 1", instagram: "https://www.instagram.com/dra.nathalyfuentes/" },
     "miguel-romero":   { name: "Dr. Miguel Romero",    role: "Alumno de Postgrado · Cohorte 7", instagram: "https://www.instagram.com/docmiguelromero/" },
     "marjorie-gold":   { name: "Dra. Marjorie Gold",   role: "Speaker Osamedic", instagram: "https://www.instagram.com/gyh.dentalyestetica/" },
-    "carla-ossadon":   { name: "Dra. Carla Ossadon",   role: "Alumna de Postgrado · Cohorte 8", instagram: "https://www.instagram.com/dracarlaossandon/" },
+    "carla-ossandon":   { name: "Dra. Carla Ossandon",   role: "Alumna de Postgrado · Cohorte 8", instagram: "https://www.instagram.com/dracarlaossandon/" },
     "sofia-montes":    { name: "Dra. Sofía Montes",    role: "Exalumna de Postgrado · Cohorte 4", instagram: "https://www.instagram.com/dra.sofimo_/" },
     "pamela-flores":   { name: "Dra. Pamela Flores",   role: "Exalumna de Postgrado · Cohorte 5", instagram: "https://www.instagram.com/dra.pamelareneeflores/" },
     "rafaela-melo":    { name: "Dra. Rafaela Melo",    role: "Speaker AFORMI", instagram: "https://www.instagram.com/drarafaelamelo/" },
@@ -34,11 +34,11 @@
     },
     {
       id: "edicion-antofagasta", num: "02", city: "Antofagasta", date: "Sáb 24 oct 2026",
-      speakers: ["loreto-campos", "miguel-romero", "carla-ossadon", "sofia-montes"],
+      speakers: ["loreto-campos", "miguel-romero", "carla-ossandon", "sofia-montes"],
       agenda: [
         { time: "10:00 – 10:10", kind: "info", title: "Bienvenida", detail: "Harmony Instituto Internacional" },
         { time: "10:10 – 10:55", speaker: "sofia-montes", topic: "¿Por qué dos pieles de la misma edad no envejecen igual?" },
-        { time: "10:55 – 11:40", speaker: "carla-ossadon", topic: "Exosomas y calidad de piel: potencial regenerativo y perspectivas clínicas", subtitle: "Evidencia actual en estética facial" },
+        { time: "10:55 – 11:40", speaker: "carla-ossandon", topic: "Exosomas y calidad de piel: potencial regenerativo y perspectivas clínicas", subtitle: "Evidencia actual en estética facial" },
         { time: "11:40 – 12:00", kind: "break", title: "Break" },
         { time: "12:00 – 12:45", speaker: "miguel-romero", topic: "Rellenos faciales full face, con criterio", subtitle: "Pensar por capas. Decidir por paciente." },
         { time: "12:45 – 13:30", speaker: "loreto-campos", topic: "Toxina botulínica: anatomía funcional, dinámica muscular y estrategias de aplicación para resultados predecibles y naturales" },

@@ -38,7 +38,7 @@ const SEDES = {
     precio: "$29.990 CLP",
     precio2x1: "$47.000 CLP",
     promo2x1: true,
-    speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Dra. Carla Ossadon", "Dra. Sofía Montes"],
+    speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Dra. Carla Ossandon", "Dra. Sofía Montes"],
   },
   "Guayaquil — Ecuador": {
     ciudad: "Guayaquil",
