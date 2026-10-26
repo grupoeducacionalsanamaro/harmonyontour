@@ -8,7 +8,7 @@
     "nathaly-fuentes": { name: "Dra. Nathaly Fuentes", role: "Exalumna de Postgrado · Cohorte 1", instagram: "https://www.instagram.com/dra.nathalyfuentes/" },
     "miguel-romero":   { name: "Dr. Miguel Romero",    role: "Alumno de Postgrado · Cohorte 7", instagram: "https://www.instagram.com/docmiguelromero/" },
     "marjorie-gold":   { name: "Dra. Marjorie Gold",   role: "Speaker Osamedic", instagram: "https://www.instagram.com/gyh.dentalyestetica/" },
-    "carla-ossandon":   { name: "Dra. Carla Ossandon",   role: "Alumna de Postgrado · Cohorte 8", instagram: "https://www.instagram.com/dracarlaossandon/" },
+    "carla-ossandon":   { name: "Dra. Carla Ossandón",   role: "Alumna de Postgrado · Cohorte 8", instagram: "https://www.instagram.com/dracarlaossandon/" },
     "sofia-montes":    { name: "Dra. Sofía Montes",    role: "Exalumna de Postgrado · Cohorte 4", instagram: "https://www.instagram.com/dra.sofimo_/" },
     "pamela-flores":   { name: "Dra. Pamela Flores",   role: "Exalumna de Postgrado · Cohorte 5", instagram: "https://www.instagram.com/dra.pamelareneeflores/" },
     "rafaela-melo":    { name: "Dra. Rafaela Melo",    role: "Speaker AFORMI", instagram: "https://www.instagram.com/drarafaelamelo/" },
