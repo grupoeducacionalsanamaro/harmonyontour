@@ -52,7 +52,7 @@ const ALLOWED_ORIGINS = new Set([
 // Valores permitidos: deben coincidir con las opciones del formulario de la landing.
 const SEDES = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre", "Guayaquil — Ecuador"]);
 // Sedes ya realizadas / agotadas: no aceptan nuevas inscripciones.
-const SEDES_CERRADAS = new Set(["Concepción — 17 de octubre"]);
+const SEDES_CERRADAS = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre"]);
 // Sedes con promoción 2x1 (2 entradas por $47.000; individual $29.990): permiten registrar acompañante.
 const SEDES_2X1 = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre"]);
 const PROFESIONES = new Set([

@@ -33,7 +33,8 @@
       ]
     },
     {
-      id: "edicion-antofagasta", num: "02", city: "Antofagasta", date: "Sáb 24 oct 2026",
+      id: "edicion-antofagasta", num: "02", city: "Antofagasta", date: "Sáb 24 oct 2026 · Realizada", tabDate: "Realizada · Sold out",
+      soldout: true, heldOn: "sábado 24 de octubre",
       speakers: ["loreto-campos", "miguel-romero", "carla-ossandon", "sofia-montes"],
       agenda: [
         { time: "10:00 – 10:10", kind: "info", title: "Bienvenida", detail: "Harmony Instituto Internacional" },
