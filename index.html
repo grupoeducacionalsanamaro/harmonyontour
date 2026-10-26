@@ -334,6 +334,26 @@
   .intl-city{ font-size:clamp(46px,6vw,76px); }
   .intl-badge{ background:linear-gradient(90deg,#ffd100,#ffe36b); color:#1a1300 !important; border-color:#ffd100 !important; font-weight:700; }
   .intl-fields{ margin-top:22px; }
+  /* Escritorio: con el formulario de Guayaquil abierto, explica el proceso de postulación en el espacio libre */
+  .intl-process{ display:none; }
+  @media (min-width:860px){
+    .ticket-intl:has(#form-guayaquil:not(.hidden-form)) .intl-process{ display:block; animation:field-in .45s ease both; }
+  }
+  .intl-process{
+    margin-top:26px; padding:22px 24px; border-radius:16px;
+    background:rgba(10,9,8,.72); border:1px solid rgba(255,209,0,.28); backdrop-filter:blur(2px);
+  }
+  .intl-process h4{ margin:0 0 4px; font-family:var(--font-display); font-size:22px; letter-spacing:.02em; text-transform:uppercase; color:var(--white); }
+  .intl-process .ip-sub{ margin:0 0 16px; font-size:14px; color:rgba(247,244,241,.78); }
+  .intl-process ol{ list-style:none; margin:0; padding:0; display:grid; gap:14px; counter-reset:paso; }
+  .intl-process li{ display:grid; grid-template-columns:30px 1fr; gap:12px; align-items:start; counter-increment:paso; }
+  .intl-process li::before{
+    content:counter(paso); display:grid; place-items:center; width:30px; height:30px; border-radius:50%;
+    font-family:var(--font-mono); font-size:13px; font-weight:700; color:#1a1300; background:linear-gradient(135deg,#ffd100,#ffe36b);
+  }
+  .intl-process li b{ display:block; font-size:15px; color:var(--white); }
+  .intl-process li span{ display:block; font-size:13.5px; line-height:1.5; color:rgba(247,244,241,.78); }
+  .intl-process .ip-note{ margin:16px 0 0; padding-top:14px; border-top:1px dashed rgba(247,244,241,.2); font-size:13px; color:#fff3c4; }
   .intl-main .ticket-link{ color:#ffd84d; }
   .intl-main .tf dt{ color:rgba(247,244,241,.78); }
   /* Lado de inscripción: mismo degradado rojo que las cabeceras de los tickets de Chile */
@@ -898,6 +918,18 @@
               <div class="tf tf-wide"><dt>Lugar</dt><dd>Hotel Wyndham Guayaquil Puerto Santa Ana<br><a class="ticket-link" href="https://maps.google.com/?cid=7259335876104380102" target="_blank" rel="noopener" aria-label="Ver ubicación de Hotel Wyndham Guayaquil Puerto Santa Ana en Google Maps">Ver ubicación →</a></dd></div>
               <div class="tf tf-wide"><dt>Speakers</dt><dd><span class="nw">Dra. Melo</span> · <span class="nw">Dra. Lobato</span> · <span class="nw">Dra. Mazzo</span> · <span class="nw">Dra. Vergara</span><br><a class="ticket-link" href="#edicion-guayaquil">Ver equipo →</a> <a class="ticket-link" href="#cronograma" data-agenda="edicion-guayaquil">Ver cronograma →</a></dd></div>
             </dl>
+            <aside class="intl-process" aria-label="Cómo funciona la postulación">
+              <h4>Cómo funciona la postulación</h4>
+              <p class="ip-sub">La entrada es gratuita y los cupos son exclusivos: cada solicitud pasa por una revisión del equipo Harmony.</p>
+              <ol>
+                <li><div><b>Postula</b><span>Completa el formulario con tus datos. Recibirás un correo confirmando tu solicitud. Postulaciones hasta el 19 de noviembre.</span></div></li>
+                <li><div><b>Revisión</b><span>Nuestro equipo evalúa cada postulación. Hay 60 cupos, con prioridad para profesionales de la salud.</span></div></li>
+                <li><div><b>Respuesta</b><span>Te escribiremos por correo a más tardar el 20 de noviembre.</span></div></li>
+                <li><div><b>Confirma tu cupo</b><span>Si eres aprobado(a), recibirás tu ticket con un código personal. Confírmalo dentro de 72 horas para mantener tu lugar.</span></div></li>
+                <li><div><b>Día de la jornada</b><span>Presenta tu código en el ingreso: sábado 28 de noviembre, 10:00 hrs, Hotel Wyndham Guayaquil.</span></div></li>
+              </ol>
+              <p class="ip-note">Revisa también tu bandeja de spam o promociones para no perderte nuestros correos.</p>
+            </aside>
           </div>
 
           <div class="intl-rule" aria-hidden="true"></div>
