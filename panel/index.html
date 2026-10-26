@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel de postulaciones — Harmony On Tour Guayaquil</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<meta name="theme-color" content="#0a0908">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0908; --surface:#141110; --surface-2:#1b1715; --line:#2c2623; --line-strong:#3d3531;
+    --white:#f7f4f1; --silver:#ada39a; --muted:#8f8680;
+    --red:#d21a1a; --red-900:#5e0000; --gold:#ffd84d; --green:#3ecf8e; --blue:#6aa8ff;
+    --font-display:Oswald,'Arial Narrow',Arial,sans-serif; --font-body:Inter,Arial,sans-serif; --font-mono:'JetBrains Mono',Consolas,monospace;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; background:var(--bg); color:var(--white); font-family:var(--font-body); }
+  body{ min-height:100vh; }
+  button,input,select{ font:inherit; }
+  [hidden]{ display:none !important; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 16px; }
+
+  /* Ingreso */
+  .login{ min-height:100vh; display:grid; place-items:center; padding:24px 16px; }
+  .login-card{ width:100%; max-width:420px; background:var(--surface); border:1px solid var(--line-strong); border-radius:18px; overflow:hidden; }
+  .login-top{ padding:24px 26px; background:linear-gradient(135deg,#7a0707 0%,#3a0806 60%,#1c0a09 100%); }
+  .eyebrow{ font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#e8dcd8; }
+  .login-top h1{ font-family:var(--font-display); font-size:34px; text-transform:uppercase; margin:12px 0 0; line-height:1.05; }
+  .login-form{ padding:24px 26px 28px; display:grid; gap:16px; }
+  .field{ display:grid; gap:6px; }
+  .field label{ font-size:12.5px; color:var(--silver); font-weight:500; }
+  .field input,.field select{ width:100%; padding:13px 14px; border-radius:10px; border:1px solid var(--line-strong); background:var(--bg); color:var(--white); }
+  .field input:focus,.field select:focus{ outline:2px solid var(--red); outline-offset:1px; }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 18px; border-radius:10px; border:1px solid transparent; font-weight:600; font-size:14px; cursor:pointer; color:var(--white); background:var(--surface-2); border-color:var(--line-strong); white-space:nowrap; }
+  .btn:hover{ border-color:var(--silver); }
+  .btn:disabled{ opacity:.55; cursor:progress; }
+  .btn-primary{ background:linear-gradient(135deg,var(--red),var(--red-900)); border-color:transparent; }
+  .btn-primary:hover{ border-color:transparent; filter:brightness(1.08); }
+  .btn-approve{ background:#123d2a; border-color:#1f6b48; color:#c9f5df; }
+  .btn-wait{ background:#3a3010; border-color:#6b5a12; color:#ffe9a3; }
+  .btn-reject{ background:#2a1212; border-color:#5a2222; color:#f3c2c2; }
+  .btn-small{ padding:8px 12px; font-size:13px; }
+  .msg{ font-size:13.5px; padding:10px 12px; border-radius:10px; background:#2a1212; border:1px solid #5a2222; color:#f3c2c2; }
+
+  /* Barra superior */
+  .topbar{ position:sticky; top:0; z-index:10; background:rgba(10,9,8,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); }
+  .topbar .wrap{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding-top:12px; padding-bottom:12px; flex-wrap:wrap; }
+  .brand{ font-family:var(--font-display); font-size:20px; text-transform:uppercase; letter-spacing:.02em; }
+  .brand small{ display:block; font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; color:var(--silver); }
+  .who{ display:flex; align-items:center; gap:10px; font-size:13px; color:var(--silver); flex-wrap:wrap; }
+  .who b{ color:var(--white); }
+
+  /* Resumen */
+  .stats{ display:grid; grid-template-columns:2fr repeat(4,1fr); gap:12px; margin:22px 0 16px; }
+  .stat{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+  .stat .k{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--silver); }
+  .stat .v{ font-family:var(--font-display); font-size:30px; line-height:1.1; margin-top:4px; }
+  .stat .v small{ font-size:16px; color:var(--silver); }
+  .bar{ height:8px; border-radius:99px; background:var(--line); margin-top:10px; overflow:hidden; }
+  .bar span{ display:block; height:100%; background:linear-gradient(90deg,var(--green),var(--gold)); border-radius:99px; transition:width .4s ease; }
+  .stat-cupo .note{ font-size:12px; color:var(--muted); margin-top:6px; }
+
+  /* Filtros */
+  .tools{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+  .chips{ display:flex; gap:6px; flex-wrap:wrap; }
+  .chip{ padding:7px 12px; border-radius:99px; border:1px solid var(--line-strong); background:transparent; color:var(--silver); font-size:13px; cursor:pointer; }
+  .chip[aria-pressed="true"]{ background:var(--white); color:#120f0d; border-color:var(--white); font-weight:600; }
+  .chip b{ font-weight:700; margin-left:4px; }
+  .tools .grow{ flex:1 1 220px; }
+  .tools input,.tools select{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--line-strong); background:var(--surface); color:var(--white); }
+
+  /* Lista */
+  .list{ display:grid; gap:10px; padding-bottom:60px; }
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px; display:grid; grid-template-columns:1fr auto; gap:12px 18px; }
+  .card.is-busy{ opacity:.6; pointer-events:none; }
+  .name{ font-weight:700; font-size:16.5px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .tag{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; padding:3px 8px; border-radius:99px; border:1px solid var(--line-strong); color:var(--silver); font-weight:600; }
+  .tag-pro{ border-color:#1f6b48; color:#9be8c4; }
+  .tag-est{ border-color:#2d4a7a; color:#a9c8ff; }
+  .tag-pago{ border-color:#6b5a12; color:#ffe9a3; }
+  .meta{ display:flex; flex-wrap:wrap; gap:4px 16px; margin-top:6px; font-size:13.5px; color:var(--silver); }
+  .meta a{ color:var(--white); text-decoration:none; border-bottom:1px dotted var(--muted); }
+  .meta .ok{ color:var(--white); }
+  .audit{ margin-top:8px; font-size:12px; color:var(--muted); }
+  .side{ display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
+  .estado{ font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; padding:5px 10px; border-radius:6px; font-weight:700; }
+  .e-revision{ background:#24201d; color:var(--silver); }
+  .e-aprobado{ background:#123d2a; color:#9be8c4; }
+  .e-confirmado{ background:#3ecf8e; color:#06261a; }
+  .e-espera{ background:#3a3010; color:#ffe9a3; }
+  .e-rechazado{ background:#2a1212; color:#f3c2c2; }
+  .codigo{ font-family:var(--font-mono); font-size:15px; font-weight:700; color:var(--gold); letter-spacing:.08em; }
+  .actions{ display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+  .empty{ text-align:center; color:var(--muted); padding:40px 0; }
+
+  .toast{ position:fixed; left:50%; bottom:20px; transform:translateX(-50%); max-width:calc(100% - 32px); background:var(--white); color:#120f0d; padding:12px 16px; border-radius:10px; font-size:14px; font-weight:600; box-shadow:0 10px 30px rgba(0,0,0,.5); z-index:20; }
+  .toast.error{ background:#f3c2c2; color:#3a0b0b; }
+
+  @media (max-width:860px){
+    .topbar{ position:static; }
+    .stats{ grid-template-columns:repeat(2,1fr); }
+    .stat-cupo{ grid-column:1 / -1; }
+    .card{ grid-template-columns:1fr; }
+    .side{ align-items:flex-start; }
+    .actions{ justify-content:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<section class="login" id="login" hidden>
+  <div class="login-card">
+    <div class="login-top">
+      <div class="eyebrow">Harmony On Tour · LATAM 2026</div>
+      <h1>Panel de postulaciones<br>Guayaquil</h1>
+    </div>
+    <form class="login-form" id="login-form" novalidate>
+      <div class="field">
+        <label for="role">¿Quién ingresa?</label>
+        <select id="role" name="role" required>
+          <option value="" disabled selected>Selecciona tu rol</option>
+          <option value="rrpp">Relaciones Públicas · Carla Fuenmayor</option>
+          <option value="marketing">Marketing · Elio Rincón</option>
+          <option value="direccion">Dirección · Alexis Gonzalez</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="password">Contraseña del panel</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <p class="msg" id="login-msg" role="alert" hidden></p>
+      <button class="btn btn-primary" type="submit">Ingresar</button>
+    </form>
+  </div>
+</section>
+
+<div id="app" hidden>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">Postulaciones Guayaquil<small>Harmony On Tour · Sáb 28 nov 2026</small></div>
+      <div class="who">
+        <span>Ingresaste como <b id="who-role"></b></span>
+        <button class="btn btn-small" id="refresh" type="button">Actualizar</button>
+        <button class="btn btn-small" id="export" type="button">Descargar CSV</button>
+        <button class="btn btn-small" id="logout" type="button">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="stats" aria-label="Resumen">
+      <div class="stat stat-cupo">
+        <div class="k">Cupos ocupados (aprobados + confirmados)</div>
+        <div class="v"><span id="s-ocupados">0</span> <small>/ <span id="s-cupo">60</span></small></div>
+        <div class="bar"><span id="s-bar" style="width:0%"></span></div>
+        <div class="note" id="s-note"></div>
+      </div>
+      <div class="stat"><div class="k">En revisión</div><div class="v" id="s-revision">0</div></div>
+      <div class="stat"><div class="k">Confirmados</div><div class="v" id="s-confirmados">0</div></div>
+      <div class="stat"><div class="k">Lista de espera</div><div class="v" id="s-espera">0</div></div>
+      <div class="stat"><div class="k">Total postulaciones</div><div class="v" id="s-total">0</div></div>
+    </section>
+
+    <div class="tools">
+      <div class="chips" id="chips" role="group" aria-label="Filtrar por estado"></div>
+      <div class="grow"><input id="search" type="search" placeholder="Buscar por nombre, correo, profesión o código…" aria-label="Buscar"></div>
+      <div><select id="sort" aria-label="Ordenar">
+        <option value="prioridad">Profesionales primero</option>
+        <option value="recientes">Más recientes</option>
+        <option value="antiguos">Más antiguos</option>
+        <option value="nombre">Nombre (A–Z)</option>
+      </select></div>
+    </div>
+
+    <div class="list" id="list" aria-live="polite"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="/js/panel.js"></script>
+</body>
+</html>

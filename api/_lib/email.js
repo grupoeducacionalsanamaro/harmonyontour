@@ -278,13 +278,17 @@ ${payUrl ? `
 }
 
 async function sendConfirmationEmail({ to, nombre, sede, payUrl, tipoEntrada, acompNombre, acompEmail }) {
+  return sendEmail({ to, ...buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada, acompNombre, acompEmail }) });
+}
+
+// Envío genérico vía Resend (mismo remitente, respuesta a info@ y copia a Relaciones Públicas).
+async function sendEmail({ to, subject, html, text }) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    console.warn("RESEND_API_KEY no configurada: se omite el correo de confirmación.");
+    console.warn("RESEND_API_KEY no configurada: se omite el correo.");
     return { sent: false, reason: "no-api-key" };
   }
 
-  const { subject, html, text } = buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada, acompNombre, acompEmail });
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 6000);
   try {
@@ -301,11 +305,11 @@ async function sendConfirmationEmail({ to, nombre, sede, payUrl, tipoEntrada, ac
     }
     return { sent: true };
   } catch (err) {
-    console.error("Error enviando correo de confirmación:", err.message);
+    console.error("Error enviando correo:", err.message);
     return { sent: false, reason: "error" };
   } finally {
     clearTimeout(timer);
   }
 }
 
-module.exports = { buildConfirmationEmail, sendConfirmationEmail, SEDES };
+module.exports = { buildConfirmationEmail, sendConfirmationEmail, sendEmail, esc, SEDES, SITE, REPLY_TO };
