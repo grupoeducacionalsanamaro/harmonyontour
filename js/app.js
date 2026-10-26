@@ -310,6 +310,19 @@
     });
   });
 
+  // "Otro profesional de la salud": muestra un campo para escribir la profesión.
+  var OTRA_PROFESION = "Otro profesional de la salud";
+  document.querySelectorAll('.reg-form select[name="profesion"]').forEach(function(select){
+    select.addEventListener("change", function(){
+      var otra = select.closest(".reg-form").querySelector(".field-otra");
+      if(!otra) return;
+      var show = select.value === OTRA_PROFESION;
+      otra.hidden = !show;
+      otra.classList.toggle("is-revealed", show);
+      if(show) otra.querySelector("input").focus({ preventScroll: true });
+    });
+  });
+
   function validate(form){
     var errors = [];
     var nombre = form.nombre.value.trim();
@@ -322,6 +335,7 @@
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push("Ingresa un correo válido.");
     if(whatsapp.replace(/[^0-9]/g,"").length < 8) errors.push("Ingresa un número de WhatsApp válido.");
     if(!profesion) errors.push("Selecciona tu profesión.");
+    if(profesion === OTRA_PROFESION && form.profesion_otra && form.profesion_otra.value.trim().length < 3) errors.push("Escribe cuál es tu profesión.");
     if(!nivel) errors.push("Selecciona tu nivel de formación.");
 
     // Acompañante del 2x1 (solo formularios de Chile, opcional).
@@ -406,6 +420,7 @@
         email: form.email.value.trim(),
         whatsapp: form.whatsapp.value.trim(),
         profesion: form.profesion.value,
+        profesion_otra: form.profesion_otra && form.profesion.value === OTRA_PROFESION ? form.profesion_otra.value.trim() : "",
         nivel: form.nivel.value,
         tipo_entrada: ticketType(form),
         acompanante_nombre: form.acompanante_nombre && ticketType(form) === "Promoción 2x1" ? form.acompanante_nombre.value.trim() : "",

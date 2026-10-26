@@ -437,6 +437,8 @@
     gap:12px;
   }
   .field{ display:grid; gap:6px; }
+  .field[hidden]{ display:none; }
+  .field-otra.is-revealed{ animation:field-in .3s ease both; }
   .field label{ font-size:12px; color:var(--silver); font-weight:500; }
   .field input, .field select{
     font-family:var(--font-body); font-size:14.5px; color:var(--white);
@@ -942,6 +944,10 @@
                           <option>Estudiante de Odontología</option>
                           <option>Otro profesional de la salud</option>
                         </select>
+                      </div>
+                      <div class="field field-otra" hidden>
+                        <label for="profesion-otra-guayaquil">¿Cuál es tu profesión?</label>
+                        <input id="profesion-otra-guayaquil" name="profesion_otra" type="text" maxlength="80" placeholder="Ej: Enfermero(a), Kinesiólogo(a)…" autocomplete="organization-title">
                       </div>
                       <div class="field">
                         <label for="nivel-guayaquil">Nivel de formación en armonización orofacial</label>

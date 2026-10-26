@@ -152,6 +152,8 @@ module.exports = async function handler(req, res) {
   const email = clean(body.email, 254).toLowerCase();
   const whatsapp = clean(body.whatsapp, 25);
   const profesion = clean(body.profesion, 80);
+  // "Otro profesional de la salud": la profesión escrita por la persona.
+  const profesionOtra = profesion === "Otro profesional de la salud" ? noFormula(clean(body.profesion_otra, 80)) : "";
   const nivel = clean(body.nivel, 80);
   // Tipo de entrada: el 2x1 solo existe en las sedes de Chile; el resto es "Individual".
   const tipoPedido = clean(body.tipo_entrada, 30);
@@ -176,6 +178,11 @@ module.exports = async function handler(req, res) {
   }
   if (!SEDES.has(sede) || !PROFESIONES.has(profesion) || !NIVELES.has(nivel)) {
     fail(res, 400, "Selecciona una opción válida en cada campo.");
+    return;
+  }
+  if (body.profesion_otra !== undefined && profesion === "Otro profesional de la salud" &&
+      (profesionOtra.length < 3 || !/[a-záéíóúñü]/i.test(profesionOtra))) {
+    fail(res, 400, "Escribe cuál es tu profesión.");
     return;
   }
   if (nombre.length < 3 || !/[a-záéíóúñü]/i.test(nombre)) {
@@ -232,6 +239,7 @@ module.exports = async function handler(req, res) {
       "Tipo de entrada": tipoEntrada,
       "Nombre del acompañante": acompNombre,
       "Correo del acompañante": acompEmail,
+      "Otra profesión": profesionOtra,
       // Postulación: queda en revisión hasta que el equipo apruebe el cupo.
       "Estado de inscripción": postulacion ? "En revisión" : "",
     };
