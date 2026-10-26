@@ -19,22 +19,14 @@ const SCK_BY_SEDE = {
   "Guayaquil — Ecuador": "HOT_GUAYAQUIL",
 };
 
-// Pre-venta exclusiva Guayaquil (USD 24.99) hasta el 10 nov 2026; luego USD 49.99.
-// Misma fecha que js/presale.js y api/_lib/email.js.
-const GYE_PRESALE_END = Date.parse("2026-11-11T00:00:00-05:00");
-
-// Sedes con oferta propia en Hotmart (precio y fecha de su evento).
-function payBySede(sede) {
-  if (sede === "Guayaquil — Ecuador") {
-    return Date.now() < GYE_PRESALE_END
-      ? "https://pay.hotmart.com/L107640931E?off=jwzix3jd"
-      : "https://pay.hotmart.com/L107640931E?off=b6bidyqw";
-  }
-  return "";
-}
+// Sedes gratuitas con postulación (sin pago): el equipo aprueba los cupos.
+// Guayaquil: postulaciones hasta el 19 nov 2026 (cierre 20 nov 00:00 hora de Ecuador).
+const SEDES_POSTULACION = {
+  "Guayaquil — Ecuador": { cierre: Date.parse("2026-11-20T00:00:00-05:00") },
+};
 
 function buildPayUrl({ sede, submissionId, email, nombre, tipoEntrada }) {
-  const url = new URL(payBySede(sede) || PAY_OFFERS[tipoEntrada] || PAY_OFFERS.Individual);
+  const url = new URL(PAY_OFFERS[tipoEntrada] || PAY_OFFERS.Individual);
   url.searchParams.set("sck", SCK_BY_SEDE[sede]);
   if (submissionId) url.searchParams.set("src", "JF" + submissionId);
   url.searchParams.set("email", email);
@@ -174,7 +166,12 @@ module.exports = async function handler(req, res) {
     return;
   }
   if (SEDES_CERRADAS.has(sede)) {
-    fail(res, 400, "Las inscripciones para Concepción están cerradas: la jornada ya se realizó (sold out).");
+    fail(res, 400, `Las inscripciones para ${sede.split(" — ")[0]} están cerradas: la jornada ya se realizó (sold out).`);
+    return;
+  }
+  const postulacion = SEDES_POSTULACION[sede] || null;
+  if (postulacion && Date.now() >= postulacion.cierre) {
+    fail(res, 400, "Las postulaciones para Guayaquil cerraron el 19 de noviembre.");
     return;
   }
   if (!SEDES.has(sede) || !PROFESIONES.has(profesion) || !NIVELES.has(nivel)) {
@@ -231,7 +228,13 @@ module.exports = async function handler(req, res) {
     }
 
     // Campos opcionales (tipo de entrada y acompañante): se envían solo si existen en el formulario.
-    const acompFields = { "Tipo de entrada": tipoEntrada, "Nombre del acompañante": acompNombre, "Correo del acompañante": acompEmail };
+    const acompFields = {
+      "Tipo de entrada": tipoEntrada,
+      "Nombre del acompañante": acompNombre,
+      "Correo del acompañante": acompEmail,
+      // Postulación: queda en revisión hasta que el equipo apruebe el cupo.
+      "Estado de inscripción": postulacion ? "En revisión" : "",
+    };
     for (const [label, value] of Object.entries(acompFields)) {
       const qid = value && findQid(questions, label);
       if (qid) params.append(`submission[${qid}]`, value);
@@ -262,10 +265,10 @@ module.exports = async function handler(req, res) {
     const submissionId = (submitJson.content && submitJson.content.submissionID) || null;
 
     // Correo de confirmación: si falla, la inscripción igual queda registrada.
-    const payUrl = buildPayUrl({ sede, submissionId, email, nombre, tipoEntrada });
+    const payUrl = postulacion ? "" : buildPayUrl({ sede, submissionId, email, nombre, tipoEntrada });
     const mail = await sendConfirmationEmail({ to: email, nombre, sede, payUrl, tipoEntrada, acompNombre, acompEmail });
 
-    res.status(200).json({ success: true, submissionId, emailSent: mail.sent });
+    res.status(200).json({ success: true, submissionId, emailSent: mail.sent, postulacion: !!postulacion });
   } catch (err) {
     console.error("register error:", err);
     res.status(502).json({

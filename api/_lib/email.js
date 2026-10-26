@@ -10,9 +10,6 @@ const FROM = "Harmony On Tour LATAM <harmonyontour@send.sanamaro.cl>";
 const REPLY_TO = "info@sanamaro.cl";
 const BCC = "relacionespublicas@sanamaro.cl";
 
-// Pre-venta exclusiva Guayaquil hasta el 10 nov 2026 (misma fecha que js/presale.js).
-const GYE_PRESALE_END = Date.parse("2026-11-11T00:00:00-05:00");
-
 
 const SEDES = {
   "Concepción — 17 de octubre": {
@@ -48,8 +45,8 @@ const SEDES = {
     fecha: "Sábado 28 de noviembre de 2026",
     lugar: "Hotel Wyndham Guayaquil Puerto Santa Ana",
     mapa: "https://maps.google.com/?cid=7259335876104380102",
-    precio: "$49.99 USD",
-    preventa: { precio: "$24.99 USD", hasta: "Pre-venta exclusiva hasta el 10 de noviembre", fin: GYE_PRESALE_END },
+    // Entrada liberada con postulación: el equipo aprueba los cupos (sin pago).
+    postulacion: { precio: "Entrada liberada", nota: "Sujeta a aprobación · 60 cupos", respuesta: "20 de noviembre" },
     speakers: ["Dra. Rafaela Melo", "Dra. Malu Lobato", "Dra. Andrea Mazzo", "Dra. Javiera Vergara"],
   },
 };
@@ -80,12 +77,20 @@ function buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada = "Individua
   const agendaUrl = `${SITE}/?cronograma=${info.slug}#cronograma`;
   const es2x1 = info.promo2x1 && tipoEntrada === "Promoción 2x1";
   const tipoTexto = info.promo2x1 ? (es2x1 ? "Promoción 2x1 (2 entradas)" : "Entrada individual (1 entrada)") : "";
-  const enPreventa = info.preventa && Date.now() < info.preventa.fin;
-  const precio = enPreventa ? info.preventa.precio : (es2x1 && info.precio2x1) || info.precio;
-  const notaPrecio = enPreventa ? `${info.preventa.hasta} (valor normal ${info.precio})` : tipoTexto;
+  const post = info.postulacion || null;
+  const precio = post ? post.precio : (es2x1 && info.precio2x1) || info.precio;
+  const notaPrecio = post ? post.nota : tipoTexto;
   const hola = firstName(nombre);
-  const subject = `Tu preinscripción a Harmony On Tour ${info.ciudad} quedó registrada`;
-  const preheader = `${info.fecha} · 10:00 a 14:00 hrs${info.lugar ? ` · ${info.lugar}` : ""}. Completa el pago para recibir tu ticket de acceso.`;
+  const subject = post
+    ? `Recibimos tu postulación a Harmony On Tour ${info.ciudad}`
+    : `Tu preinscripción a Harmony On Tour ${info.ciudad} quedó registrada`;
+  const preheader = `${info.fecha} · 10:00 a 14:00 hrs${info.lugar ? ` · ${info.lugar}` : ""}. ` +
+    (post ? `Te responderemos a más tardar el ${post.respuesta}.` : "Completa el pago para recibir tu ticket de acceso.");
+  const titulo = post ? "Recibimos tu postulación" : "Tu preinscripción quedó registrada";
+  const intro = post
+    ? `Gracias por postular a <strong style="color:#f7f4f1;">Harmony On Tour LATAM 2026</strong> en ${esc(info.ciudad)}. La entrada es liberada y los cupos son limitados: nuestro equipo revisará tu solicitud.`
+    : `Gracias por inscribirte en <strong style="color:#f7f4f1;">Harmony On Tour LATAM 2026</strong>. Estos son los datos de tu jornada.`;
+  const etiqueta = post ? "Postulación" : "Preinscripción";
 
   const priceHtml = esc(precio) +
     (notaPrecio ? `<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(notaPrecio)}</span>` : "");
@@ -141,9 +146,9 @@ function buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada = "Individua
         <!-- Saludo -->
         <tr>
           <td class="px" style="padding:0 8px 26px;">
-            <div style="font-family:Oswald,'Arial Narrow',Arial,sans-serif;font-size:30px;font-weight:700;line-height:1.1;color:#f7f4f1;text-transform:uppercase;">¡Hola${hola ? ", " + esc(hola) : ""}! Tu preinscripción quedó registrada</div>
+            <div style="font-family:Oswald,'Arial Narrow',Arial,sans-serif;font-size:30px;font-weight:700;line-height:1.1;color:#f7f4f1;text-transform:uppercase;">¡Hola${hola ? ", " + esc(hola) : ""}! ${titulo}</div>
             <div style="font-family:Inter,Arial,sans-serif;font-size:16px;line-height:1.65;color:#ada39a;padding-top:14px;">
-              Gracias por inscribirte en <strong style="color:#f7f4f1;">Harmony On Tour LATAM 2026</strong>. Estos son los datos de tu jornada.
+              ${intro}
             </div>
           </td>
         </tr>
@@ -157,7 +162,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada = "Individua
                 <td class="px" bgcolor="#5e0000" style="background:#5e0000;background-image:linear-gradient(135deg,#7a0707 0%,#3a0806 60%,#1c0a09 100%);border-radius:17px 17px 0 0;padding:26px 30px 24px;">
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
                     <td style="font-family:'JetBrains Mono',Consolas,monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#e8dcd8;">Harmony On Tour · LATAM 2026</td>
-                    <td align="right"><span style="display:inline-block;font-family:'JetBrains Mono',Consolas,monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ffffff;background:#d21a1a;padding:4px 9px;border-radius:4px;">Preinscripción</span></td>
+                    <td align="right"><span style="display:inline-block;font-family:'JetBrains Mono',Consolas,monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#ffffff;background:#d21a1a;padding:4px 9px;border-radius:4px;">${etiqueta}</span></td>
                   </tr></table>
                   <div class="city" style="font-family:Oswald,'Arial Narrow',Impact,Arial,sans-serif;font-size:50px;font-weight:700;line-height:1;color:#f7f4f1;text-transform:uppercase;padding-top:18px;">${esc(info.ciudad)}</div>
                   <div style="font-family:'JetBrains Mono',Consolas,monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e8dcd8;padding-top:10px;">Edición ${info.edicion} · Presencial</div>
@@ -206,11 +211,13 @@ function buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada = "Individua
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#2a0d0b;border:1px solid #6b1714;border-radius:12px;">
                     <tr>
                       <td style="padding:16px 18px;font-family:Inter,Arial,sans-serif;font-size:14.5px;line-height:1.6;color:#f7f4f1;">
-                        <strong>Importante:</strong> tu entrada será efectiva y te enviaremos tu <strong>ticket de acceso</strong> cuando se confirme el pago. Los cupos son limitados.
+                        ${post
+                          ? `<strong>Tu solicitud está en revisión.</strong> Te responderemos por correo a más tardar el <strong>${esc(post.respuesta)}</strong>. Si tu cupo es aprobado, recibirás tu <strong>ticket de acceso</strong> personal.`
+                          : `<strong>Importante:</strong> tu entrada será efectiva y te enviaremos tu <strong>ticket de acceso</strong> cuando se confirme el pago. Los cupos son limitados.`}
                       </td>
                     </tr>
                   </table>
-
+${payUrl ? `
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:22px;">
                     <tr>
                       <td align="center" bgcolor="#b70000" style="border-radius:10px;background:#b70000;background-image:linear-gradient(135deg,#d21a1a,#5e0000);">
@@ -220,7 +227,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada = "Individua
                   </table>
                   <div style="font-family:Inter,Arial,sans-serif;font-size:12.5px;line-height:1.6;color:#8f8680;text-align:center;padding-top:12px;">
                     Pago seguro a través de Hotmart. Si ya pagaste, puedes ignorar este botón.
-                  </div>
+                  </div>` : ""}
                 </td>
               </tr>
             </table>
@@ -233,7 +240,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada = "Individua
             ¿Dudas? Responde este correo o escríbenos a <a href="mailto:${REPLY_TO}" style="color:#d21a1a;text-decoration:none;">${REPLY_TO}</a>.<br>
             <a href="${SITE}" style="color:#ada39a;text-decoration:underline;">harmonyontour.sanamaro.cl</a><br><br>
             © 2026 Harmony Instituto Internacional · Grupo Educacional San Amaro<br>
-            Recibes este correo porque te preinscribiste en Harmony On Tour LATAM 2026.
+            Recibes este correo porque ${post ? "postulaste a" : "te preinscribiste en"} Harmony On Tour LATAM 2026.
           </td>
         </tr>
 
@@ -245,7 +252,9 @@ function buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada = "Individua
 </html>`;
 
   const text = [
-    `¡Hola${hola ? ", " + hola : ""}! Tu preinscripción a Harmony On Tour LATAM 2026 quedó registrada.`,
+    post
+      ? `¡Hola${hola ? ", " + hola : ""}! Recibimos tu postulación a Harmony On Tour LATAM 2026 (${info.ciudad}).`
+      : `¡Hola${hola ? ", " + hola : ""}! Tu preinscripción a Harmony On Tour LATAM 2026 quedó registrada.`,
     "",
     `Sede: ${info.ciudad} (Edición ${info.edicion}, presencial)`,
     `Fecha: ${info.fecha}`,
@@ -258,10 +267,9 @@ function buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada = "Individua
     ...(es2x1 && (acompNombre || acompEmail) ? [`Acompañante (2x1): ${acompNombre || "Por informar"}${acompEmail ? ` <${acompEmail}>` : ""}`] : []),
     `Cronograma de la jornada: ${agendaUrl}`,
     "",
-    "IMPORTANTE: tu entrada será efectiva y te enviaremos tu ticket de acceso cuando se confirme el pago.",
-    "",
-    `Finalizar inscripción — Pagar: ${payUrl}`,
-    "",
+    ...(post
+      ? [`Tu solicitud está en revisión. Te responderemos por correo a más tardar el ${post.respuesta}. Si tu cupo es aprobado, recibirás tu ticket de acceso personal.`, ""]
+      : ["IMPORTANTE: tu entrada será efectiva y te enviaremos tu ticket de acceso cuando se confirme el pago.", "", `Finalizar inscripción — Pagar: ${payUrl}`, ""]),
     `¿Dudas? Responde este correo o escríbenos a ${REPLY_TO}.`,
     "Harmony Instituto Internacional · harmonyontour.sanamaro.cl",
   ].join("\n");

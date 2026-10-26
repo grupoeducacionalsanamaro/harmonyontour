@@ -54,7 +54,7 @@ const OFFERS = {
   yfkc12se: "Entrada individual (últimas entradas)",
   vt8lmjbk: "Promoción 2x1",
   b6bidyqw: "Entrada Guayaquil",
-  jwzix3jd: "Pre-venta Guayaquil",
+  jwzix3jd: "Pre-venta Guayaquil", // ya no se usa: Guayaquil pasó a entrada gratuita con postulación
 };
 
 const SEDES = {

@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0a0908">
-<script src="/js/presale.js"></script>
+<script src="/js/postulacion.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -186,10 +186,10 @@
   .promo-pill.pill-gold{ background:rgba(255,209,0,.1); border-color:rgba(255,209,0,.55); }
   .promo-pill s{ color:var(--silver); }
   @media (max-width:359px){ .promo-pill s{ display:none; } }
-  /* Pre-venta Guayaquil: visible hasta el 10 nov; js/presale.js agrega .presale-over al <html> después */
-  .regular-only{ display:none !important; }
-  .presale-over .presale-only{ display:none !important; }
-  .presale-over .regular-only{ display:revert !important; }
+  /* Postulación Guayaquil: abierta hasta el 19 nov; js/postulacion.js agrega .postulacion-cerrada al <html> después */
+  .closed-only{ display:none !important; }
+  .postulacion-cerrada .open-only{ display:none !important; }
+  .postulacion-cerrada .closed-only{ display:revert !important; }
   .price-note{ display:block; margin-top:4px; font-family:var(--font-body); font-size:13px; font-weight:500; color:var(--silver); letter-spacing:0; }
   .ticket-type{ border:0; margin:4px 0 0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   .ticket-type legend{ font-size:12px; color:var(--silver); font-weight:500; margin-bottom:6px; padding:0; }
@@ -355,9 +355,8 @@
     color:#1a1300; background:linear-gradient(90deg,#ffd100,#ffe36b); padding:6px 12px; border-radius:999px;
     box-shadow:0 8px 24px -10px rgba(255,209,0,.7);
   }
-  .presale-badge .pb-off{ background:#1a1300; color:#ffd84d; padding:2px 7px; border-radius:999px; letter-spacing:.06em; }
   .intl-was{ font-size:14px; color:rgba(247,244,241,.82); }
-  .intl-was s{ color:rgba(247,244,241,.6); text-decoration-color:#ffd84d; text-decoration-thickness:2px; }
+  .intl-was b{ color:#ffd84d; }
   .presale-deadline{
     align-self:flex-start; display:inline-flex; flex-wrap:wrap; gap:4px 10px; margin-top:4px; padding:8px 12px;
     border:1px dashed rgba(255,209,0,.6); border-radius:10px; background:rgba(255,209,0,.08);
@@ -713,7 +712,7 @@
     <div class="wrap hero-inner">
       <p class="eyebrow reveal">HARMONY INSTITUTO INTERNACIONAL PRESENTA</p>
       <div class="promo-pills reveal">
-        <p class="promo-pill pill-gold presale-only"><span class="pp-tag pp-gold">Guayaquil</span> <span>Pre-venta</span> <b>USD 24.99</b> <s>49.99</s></p>
+        <p class="promo-pill pill-gold open-only"><span class="pp-tag pp-gold">Guayaquil</span> <span>Entrada gratuita</span> <b>Postula</b></p>
       </div>
       <h1 class="reveal">HARMONY<br>ON TOUR <span class="accent">LATAM</span></h1>
       <p class="hero-tagline reveal">Una actualización necesaria.</p>
@@ -881,7 +880,7 @@
         <div class="intl-head">
           <p class="eyebrow">EDICIÓN INTERNACIONAL · ECUADOR</p>
           <h3 class="intl-title">Harmony llega por primera vez a <span class="accent">Ecuador</span></h3>
-          <p class="route-sub">Por primera vez, Harmony Instituto Internacional estará de forma presencial en Ecuador: una jornada única en Guayaquil con docentes Harmony y speakers invitadas de AFORMI desde Brasil.</p>
+          <p class="route-sub">Por primera vez, Harmony Instituto Internacional estará de forma presencial en Ecuador: una jornada única en Guayaquil con docentes Harmony y speakers invitadas de AFORMI desde Brasil. La entrada es gratuita, con cupos exclusivos sujetos a aprobación.</p>
         </div>
 
         <article class="ticket ticket-intl">
@@ -903,21 +902,23 @@
 
           <div class="intl-side ticket-stub">
             <div class="intl-price">
-              <span class="presale-badge presale-only">Pre-venta exclusiva <span class="pb-off">−50%</span></span>
-              <span class="intl-label"><span class="presale-only">Valor pre-venta</span><span class="regular-only">Valor de la entrada</span></span>
-              <span class="intl-amount"><span class="presale-only">$24.99</span><span class="regular-only">$49.99</span> <small>USD</small></span>
-              <span class="intl-was presale-only">Valor normal <s>$49.99 USD</s></span>
-              <span class="presale-deadline presale-only"><span>Válida <b>hasta el 10 de noviembre</b></span><span data-presale-countdown></span></span>
-              <span class="intl-mode">Modalidad presencial · Entrada individual</span>
+              <span class="presale-badge">Cupos exclusivos</span>
+              <span class="intl-label">Valor de la entrada</span>
+              <span class="intl-amount">Gratuita</span>
+              <span class="intl-was">Sujeta a aprobación · <b>60 cupos</b></span>
+              <span class="presale-deadline open-only"><span>Postula <b>hasta el 19 de noviembre</b></span><span data-post-countdown></span></span>
+              <span class="presale-deadline closed-only"><span><b>Postulaciones cerradas</b> · respuestas hasta el 20 de noviembre</span></span>
+              <span class="intl-mode">Modalidad presencial · Respuesta por correo antes del 20 de noviembre</span>
             </div>
             <div class="intl-stub">
               <span class="stub-no">Ticket Nº 03<b>GUAYAQUIL</b></span>
               <span class="barcode" aria-hidden="true"></span>
             </div>
 
-            <button type="button" class="btn btn-primary btn-small js-toggle-form" data-target="form-guayaquil">Inscribirme — Guayaquil</button>
+            <button type="button" class="btn btn-primary btn-small js-toggle-form open-only" data-target="form-guayaquil">Postular a mi cupo — Guayaquil</button>
+            <button type="button" class="btn btn-small btn-closed closed-only" disabled>Postulaciones cerradas</button>
 
-                  <form class="reg-form hidden-form" id="form-guayaquil" data-sede="Guayaquil — Ecuador" data-city="Guayaquil" data-sck="HOT_GUAYAQUIL" data-pay-individual="https://pay.hotmart.com/L107640931E?off=jwzix3jd" data-pay-regular="https://pay.hotmart.com/L107640931E?off=b6bidyqw" novalidate>
+                  <form class="reg-form hidden-form open-only" id="form-guayaquil" data-sede="Guayaquil — Ecuador" data-city="Guayaquil" novalidate>
                     <div class="reg-panel">
                       <div class="field">
                         <label for="nombre-guayaquil">Nombre y Apellido</label>
@@ -957,15 +958,14 @@
 
                       <p class="reg-msg error" role="alert"></p>
 
-                      <button type="submit" class="btn btn-primary btn-small">Enviar inscripción</button>
+                      <button type="submit" class="btn btn-primary btn-small">Enviar postulación</button>
                       <p class="reg-fallback">¿Problemas al enviar? <a href="https://form.jotform.com/262586485506064?dropdown0=Guayaquil%20%E2%80%94%20Ecuador" target="_blank" rel="noopener">Complétalo aquí</a>.</p>
 
                       <div class="reg-success">
                         <span class="check">✅</span>
-                        <h4>¡Tu preinscripción quedó registrada!</h4>
-                        <p>Para asegurar tu cupo en Guayaquil, completa ahora el pago.</p>
-                        <p class="reg-mail-note" hidden>Te enviamos un correo a <b class="reg-mail-to"></b> con los detalles de tu jornada y el enlace de pago.</p>
-                        <a class="btn btn-primary" href="https://pay.hotmart.com/L107640931E?off=jwzix3jd&sck=HOT_GUAYAQUIL" data-pay-link target="_blank" rel="noopener">Finalizar inscripción — Ir a pago</a>
+                        <h4>¡Recibimos tu postulación!</h4>
+                        <p>Nuestro equipo revisará tu solicitud y te responderemos por correo a más tardar el 20 de noviembre. Si tu cupo es aprobado, recibirás tu ticket de acceso personal.</p>
+                        <p class="reg-mail-note" hidden>Te enviamos un correo a <b class="reg-mail-to"></b> con el resumen de tu postulación.</p>
                       </div>
                     </div>
                   </form>
