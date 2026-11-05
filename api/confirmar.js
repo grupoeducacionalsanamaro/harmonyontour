@@ -96,7 +96,7 @@ module.exports = async function handler(req, res) {
     if (item.estado === ESTADOS.confirmado) {
       page(res, 200, {
         titulo: "Asistencia confirmada",
-        texto: `<p>¡Gracias${nombre ? ", " + nombre : ""}! Tu asistencia ya estaba confirmada. Te esperamos el <b>sábado 28 de noviembre</b>, de 10:00 a 14:00 hrs, en <b>Lima, Perú</b>.</p><div class="code">${esc(item.codigo)}</div>`,
+        texto: `<p>¡Gracias${nombre ? ", " + nombre : ""}! Tu asistencia ya estaba confirmada. Te esperamos el <b>sábado 28 de noviembre</b>, de 10:00 a 14:00 hrs, en el <b>Auditorio del Laboratorio Abbott</b> (Av. César Vallejo 565, Lince, Lima).</p><div class="code">${esc(item.codigo)}</div>`,
       });
       return;
     }
@@ -111,7 +111,7 @@ module.exports = async function handler(req, res) {
     if (req.method === "GET") {
       page(res, 200, {
         titulo: "Confirma tu asistencia",
-        texto: `<p>Hola${nombre ? ", " + nombre : ""}. Tu cupo para el <b>sábado 28 de noviembre</b> (10:00 a 14:00 hrs, Lima, Perú) está aprobado. Confírmalo para mantenerlo.</p><div class="code">${esc(item.codigo)}</div>`,
+        texto: `<p>Hola${nombre ? ", " + nombre : ""}. Tu cupo para el <b>sábado 28 de noviembre</b> (10:00 a 14:00 hrs, Auditorio del Laboratorio Abbott, Lince, Lima) está aprobado. Confírmalo para mantenerlo.</p><div class="code">${esc(item.codigo)}</div>`,
         form: `<form method="post" action="/api/confirmar"><input type="hidden" name="id" value="${esc(id)}"><input type="hidden" name="t" value="${esc(t)}"><button type="submit">Confirmo mi asistencia</button></form>`,
       });
       return;
@@ -123,7 +123,7 @@ module.exports = async function handler(req, res) {
     }, apiKey);
     page(res, 200, {
       titulo: "¡Asistencia confirmada!",
-      texto: `<p>¡Gracias${nombre ? ", " + nombre : ""}! Te esperamos el <b>sábado 28 de noviembre</b>, de 10:00 a 14:00 hrs, en <b>Lima, Perú</b>. Presenta este código en el ingreso:</p><div class="code">${esc(item.codigo)}</div>`,
+      texto: `<p>¡Gracias${nombre ? ", " + nombre : ""}! Te esperamos el <b>sábado 28 de noviembre</b>, de 10:00 a 14:00 hrs, en el <b>Auditorio del Laboratorio Abbott</b> (Av. César Vallejo 565, Lince, Lima). Presenta este código en el ingreso:</p><div class="code">${esc(item.codigo)}</div>`,
     });
   } catch (err) {
     console.error("confirmar error:", err);

@@ -43,9 +43,8 @@ const SEDES = {
     edicion: "03",
     pais: "Perú",
     fecha: "Sábado 28 de noviembre de 2026",
-    // Lugar por confirmar: el correo indica que la dirección llegará más adelante.
-    lugar: "",
-    mapa: "",
+    lugar: "Auditorio del Laboratorio Abbott · Av. César Vallejo 565, Lince",
+    mapa: "https://www.google.com/maps/search/?api=1&query=Auditorio%20Laboratorio%20Abbott%2C%20Av.%20C%C3%A9sar%20Vallejo%20565%2C%20Lince%2C%20Lima",
     // Entrada liberada con postulación: el equipo aprueba los cupos (sin pago).
     postulacion: { precio: "Entrada liberada", nota: "Sujeta a aprobación · 60 cupos", respuesta: "20 de noviembre" },
     speakers: ["Dra. Rafaela Melo", "Dra. Malu Lobato", "Dra. Andrea Mazzo", "Dra. Javiera Vergara"],

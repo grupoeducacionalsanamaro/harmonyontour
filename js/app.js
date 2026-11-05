@@ -49,7 +49,7 @@
     {
       // Sede internacional. Sin "agenda" el cronograma muestra "en elaboración".
       id: "edicion-lima", num: "03", city: "Lima", date: "Perú · Sáb 28 nov 2026", tabDate: "Sáb 28 nov 2026",
-      venue: "Lima, Perú · lugar por confirmar",
+      venue: "Auditorio Laboratorio Abbott · Av. César Vallejo 565, Lince, Lima",
       speakers: ["rafaela-melo", "malu-lobato", "andrea-mazzo", "javiera-vergara"]
     }
   ];
