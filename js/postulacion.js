@@ -1,5 +1,5 @@
-// Postulaciones Guayaquil (entrada gratuita, cupos sujetos a aprobación) hasta el 19 de noviembre de 2026.
-// Cierran el 20 de noviembre, 00:00 hora de Ecuador (UTC-5); la API aplica la misma fecha.
+// Postulaciones Lima (entrada gratuita, cupos sujetos a aprobación) hasta el 19 de noviembre de 2026.
+// Cierran el 20 de noviembre, 00:00 hora de Perú (UTC-5); la API aplica la misma fecha.
 // Va en el <head> para que el estado correcto se vea desde el primer pintado.
 // Para probar: agregar ?postulacion=cerrada o ?postulacion=abierta a la URL.
 (function(){

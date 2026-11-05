@@ -1,4 +1,4 @@
-// Panel privado de postulaciones (Guayaquil): sesión, roles y acceso a Jotform.
+// Panel privado de postulaciones (Lima): sesión, roles y acceso a Jotform.
 //
 // Acceso: contraseña compartida (variable de entorno PANEL_PASSWORD) + rol elegido al entrar.
 // La sesión es una cookie HttpOnly firmada (HMAC) con una clave derivada de PANEL_PASSWORD:
@@ -16,9 +16,11 @@ const ROLES = {
   direccion: "Dirección · Alexis Gonzalez",
 };
 
-const SEDE = "Guayaquil — Ecuador";
+const SEDE = "Lima — Perú";
+// La sede internacional se llamó "Guayaquil — Ecuador" hasta el 5 nov 2026: esas postulaciones siguen en el panel.
+const SEDES_PANEL = new Set([SEDE, "Guayaquil — Ecuador"]);
 const CUPO = 60;
-const CODE_PREFIX = "GYE-";
+const CODE_PREFIX = "LIM-";
 
 const ESTADOS = {
   revision: "En revisión",
@@ -188,7 +190,7 @@ async function listPostulaciones(apiKey) {
   const ids = await fieldIds(apiKey);
   const subs = await jotformGet(`/form/${FORM_ID}/submissions?limit=1000&orderby=created_at`, apiKey);
   const list = (Array.isArray(subs) ? subs : [])
-    .filter((s) => s.status !== "DELETED" && answerOf(s, ids.sede) === SEDE)
+    .filter((s) => s.status !== "DELETED" && SEDES_PANEL.has(answerOf(s, ids.sede)))
     .map((s) => toPostulacion(s, ids))
     .sort((a, b) => String(a.fecha).localeCompare(String(b.fecha)));
   return { ids, list };
@@ -197,7 +199,7 @@ async function listPostulaciones(apiKey) {
 async function getPostulacion(submissionId, apiKey) {
   const ids = await fieldIds(apiKey);
   const sub = await jotformGet(`/submission/${submissionId}`, apiKey);
-  if (!sub || sub.form_id !== FORM_ID || sub.status === "DELETED" || answerOf(sub, ids.sede) !== SEDE) return { ids, item: null };
+  if (!sub || sub.form_id !== FORM_ID || sub.status === "DELETED" || !SEDES_PANEL.has(answerOf(sub, ids.sede))) return { ids, item: null };
   return { ids, item: toPostulacion(sub, ids) };
 }
 
@@ -207,15 +209,16 @@ function ocupaCupo(estado) {
 
 function nextCode(list) {
   const max = list.reduce((m, p) => {
-    const n = parseInt(String(p.codigo).replace(CODE_PREFIX, ""), 10);
+    // Número final del código (cuenta también los GYE-… emitidos antes del cambio de sede).
+    const n = parseInt((/(\d+)$/.exec(String(p.codigo)) || [])[1], 10);
     return Number.isFinite(n) && n > m ? n : m;
   }, 0);
   return CODE_PREFIX + String(max + 1).padStart(3, "0");
 }
 
-// Fecha y hora de Ecuador para el registro "Revisado por".
+// Fecha y hora de Perú para el registro "Revisado por".
 function stamp() {
-  return new Date().toLocaleString("es-EC", { timeZone: "America/Guayaquil", dateStyle: "short", timeStyle: "short" });
+  return new Date().toLocaleString("es-PE", { timeZone: "America/Lima", dateStyle: "short", timeStyle: "short" });
 }
 
 module.exports = {

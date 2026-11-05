@@ -1,18 +1,18 @@
-// Correo "¡Tu cupo fue aprobado!" (postulación Guayaquil): ticket con código personal,
+// Correo "¡Tu cupo fue aprobado!" (postulación Lima): ticket con código personal,
 // botón para confirmar asistencia (72 horas) y enlace para agregar al calendario.
 // Lo envía el panel privado al aprobar una postulación.
 
 const { sendEmail, esc, SEDES, SITE, REPLY_TO } = require("./email");
 
-const INFO = SEDES["Guayaquil — Ecuador"];
+const INFO = SEDES["Lima — Perú"];
 
-// 28 nov 2026, 10:00–14:00 hora de Ecuador (UTC-5) = 15:00–19:00 UTC.
+// 28 nov 2026, 10:00–14:00 hora de Perú (UTC-5) = 15:00–19:00 UTC.
 const CALENDAR_URL = "https://calendar.google.com/calendar/render?" + new URLSearchParams({
   action: "TEMPLATE",
-  text: "Harmony On Tour Guayaquil",
+  text: "Harmony On Tour Lima",
   dates: "20261128T150000Z/20261128T190000Z",
-  location: `${INFO.lugar}, Guayaquil, Ecuador`,
-  details: `Harmony On Tour LATAM 2026 · Edición 03 Guayaquil. Cronograma: ${SITE}/?cronograma=guayaquil#cronograma`,
+  location: INFO.lugar ? `${INFO.lugar}, Lima, Perú` : "Lima, Perú",
+  details: `Harmony On Tour LATAM 2026 · Edición 03 Lima. Cronograma: ${SITE}/?cronograma=lima#cronograma`,
 }).toString();
 
 function field(label, value) {
@@ -25,9 +25,9 @@ function field(label, value) {
 
 function buildApprovalEmail({ nombre, codigo, confirmUrl }) {
   const hola = String(nombre).trim().split(/\s+/)[0] || "";
-  const subject = "¡Tu cupo para Harmony On Tour Guayaquil fue aprobado!";
+  const subject = "¡Tu cupo para Harmony On Tour Lima fue aprobado!";
   const preheader = `Tu código de acceso es ${codigo}. Confirma tu asistencia dentro de las próximas 72 horas.`;
-  const agendaUrl = `${SITE}/?cronograma=guayaquil#cronograma`;
+  const agendaUrl = `${SITE}/?cronograma=lima#cronograma`;
 
   const html = `<!doctype html>
 <html lang="es">
@@ -70,7 +70,7 @@ function buildApprovalEmail({ nombre, codigo, confirmUrl }) {
           <td class="px" style="padding:0 8px 26px;">
             <div style="font-family:Oswald,'Arial Narrow',Arial,sans-serif;font-size:30px;font-weight:700;line-height:1.1;color:#f7f4f1;text-transform:uppercase;">¡Felicitaciones${hola ? ", " + esc(hola) : ""}! Tu cupo fue aprobado</div>
             <div style="font-family:Inter,Arial,sans-serif;font-size:16px;line-height:1.65;color:#ada39a;padding-top:14px;">
-              Nuestro equipo revisó tu postulación y tienes un lugar reservado en <strong style="color:#f7f4f1;">Harmony On Tour LATAM 2026 · Guayaquil</strong>. Este es tu ticket de acceso personal.
+              Nuestro equipo revisó tu postulación y tienes un lugar reservado en <strong style="color:#f7f4f1;">Harmony On Tour LATAM 2026 · Lima</strong>. Este es tu ticket de acceso personal.
             </div>
           </td>
         </tr>
@@ -84,8 +84,8 @@ function buildApprovalEmail({ nombre, codigo, confirmUrl }) {
                     <td style="font-family:'JetBrains Mono',Consolas,monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#e8dcd8;">Harmony On Tour · LATAM 2026</td>
                     <td align="right"><span style="display:inline-block;font-family:'JetBrains Mono',Consolas,monospace;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#1a1300;background:#ffd100;padding:4px 9px;border-radius:4px;">Cupo aprobado</span></td>
                   </tr></table>
-                  <div class="city" style="font-family:Oswald,'Arial Narrow',Impact,Arial,sans-serif;font-size:50px;font-weight:700;line-height:1;color:#f7f4f1;text-transform:uppercase;padding-top:18px;">Guayaquil</div>
-                  <div style="font-family:'JetBrains Mono',Consolas,monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e8dcd8;padding-top:10px;">Edición 03 · Ecuador · Presencial</div>
+                  <div class="city" style="font-family:Oswald,'Arial Narrow',Impact,Arial,sans-serif;font-size:50px;font-weight:700;line-height:1;color:#f7f4f1;text-transform:uppercase;padding-top:18px;">Lima</div>
+                  <div style="font-family:'JetBrains Mono',Consolas,monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#e8dcd8;padding-top:10px;">Edición 03 · Perú · Presencial</div>
                 </td>
               </tr>
 
@@ -95,7 +95,9 @@ function buildApprovalEmail({ nombre, codigo, confirmUrl }) {
                     ${field("Asistente", esc(nombre))}
                     ${field("Fecha", esc(INFO.fecha))}
                     ${field("Horario", "10:00 a 14:00 hrs")}
-                    ${field("Lugar", `${esc(INFO.lugar)}<br><span style="font-size:13px;font-weight:500;color:#ada39a;">Guayaquil, Ecuador</span><br><a href="${esc(INFO.mapa)}" target="_blank" style="font-size:13.5px;font-weight:600;color:#d21a1a;text-decoration:none;">Ver ubicación &rarr;</a>`)}
+                    ${field("Lugar", INFO.lugar
+                      ? `${esc(INFO.lugar)}<br><span style="font-size:13px;font-weight:500;color:#ada39a;">Lima, Perú</span>` + (INFO.mapa ? `<br><a href="${esc(INFO.mapa)}" target="_blank" style="font-size:13.5px;font-weight:600;color:#d21a1a;text-decoration:none;">Ver ubicación &rarr;</a>` : "")
+                      : `Lima, Perú<br><span style="font-size:13px;font-weight:500;color:#ada39a;">Lugar por confirmar: te enviaremos la dirección exacta por correo.</span>`)}
                     ${field("Entrada", "Liberada (sin costo)")}
                   </table>
                 </td>
@@ -166,12 +168,12 @@ function buildApprovalEmail({ nombre, codigo, confirmUrl }) {
 </html>`;
 
   const text = [
-    `¡Felicitaciones${hola ? ", " + hola : ""}! Tu cupo para Harmony On Tour LATAM 2026 · Guayaquil fue aprobado.`,
+    `¡Felicitaciones${hola ? ", " + hola : ""}! Tu cupo para Harmony On Tour LATAM 2026 · Lima fue aprobado.`,
     "",
     `Asistente: ${nombre}`,
     `Código de acceso: ${codigo} (preséntalo en el ingreso)`,
     `Fecha: ${INFO.fecha} · 10:00 a 14:00 hrs`,
-    `Lugar: ${INFO.lugar}, Guayaquil, Ecuador (${INFO.mapa})`,
+    INFO.lugar ? `Lugar: ${INFO.lugar}, Lima, Perú${INFO.mapa ? ` (${INFO.mapa})` : ""}` : "Lugar: Lima, Perú (por confirmar: te enviaremos la dirección exacta por correo)",
     "Entrada: liberada (sin costo)",
     "",
     "IMPORTANTE: confirma tu asistencia dentro de las próximas 72 horas. Si no confirmas, tu cupo podría liberarse para otra persona en lista de espera.",

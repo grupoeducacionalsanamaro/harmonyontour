@@ -48,8 +48,8 @@
     },
     {
       // Sede internacional. Sin "agenda" el cronograma muestra "en elaboración".
-      id: "edicion-guayaquil", num: "03", city: "Guayaquil", date: "Ecuador · Sáb 28 nov 2026", tabDate: "Sáb 28 nov 2026",
-      venue: "Hotel Wyndham Guayaquil Puerto Santa Ana",
+      id: "edicion-lima", num: "03", city: "Lima", date: "Perú · Sáb 28 nov 2026", tabDate: "Sáb 28 nov 2026",
+      venue: "Lima, Perú · lugar por confirmar",
       speakers: ["rafaela-melo", "malu-lobato", "andrea-mazzo", "javiera-vergara"]
     }
   ];
@@ -351,7 +351,7 @@
   }
 
   // Un solo producto/link de Hotmart para todas las sedes. Se agregan parámetros:
-  //  - sck: sede (HOT_CONCEPCION / HOT_ANTOFAGASTA / HOT_GUAYAQUIL) -> Reportes > Ventas por origen de checkout
+  //  - sck: sede (HOT_CONCEPCION / HOT_ANTOFAGASTA) -> Reportes > Ventas por origen de checkout
   //  - src: id de la preinscripción en Jotform (JF<id>) -> enlaza el pago con su inscripción
   //  - email / name: autocompletan el checkout para que el correo coincida con Jotform
   // Tipo de entrada elegido (formularios de Chile). Sin selector = "Individual".
@@ -366,7 +366,7 @@
     return form.getAttribute(attr) || fallbackHref;
   }
 
-  // Postulaciones Guayaquil: días restantes (cierran el 20 nov 2026 00:00, hora de Ecuador).
+  // Postulaciones Lima: días restantes (cierran el 20 nov 2026 00:00, hora de Perú).
   (function(){
     var el = document.querySelector("[data-post-countdown]");
     if(!el) return;

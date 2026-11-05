@@ -1,4 +1,4 @@
-// Serverless function (Vercel, Node runtime): "Confirmo mi asistencia" (postulación Guayaquil).
+// Serverless function (Vercel, Node runtime): "Confirmo mi asistencia" (postulación Lima).
 //
 //   GET  /api/confirmar?id=<submission>&t=<firma>  → página con el botón de confirmar
 //   POST /api/confirmar  (id, t)                   → marca "Confirmado" en Jotform
@@ -24,7 +24,7 @@ function page(res, status, { titulo, texto, form = "" }) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>${esc(titulo)} — Harmony On Tour Guayaquil</title>
+<title>${esc(titulo)} — Harmony On Tour Lima</title>
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -44,7 +44,7 @@ function page(res, status, { titulo, texto, form = "" }) {
 </head>
 <body>
   <main class="card">
-    <div class="top"><div class="brand">Harmony On Tour · LATAM 2026</div><div class="city">Guayaquil</div></div>
+    <div class="top"><div class="brand">Harmony On Tour · LATAM 2026</div><div class="city">Lima</div></div>
     <div class="body">
       <h1>${esc(titulo)}</h1>
       ${texto}
@@ -96,7 +96,7 @@ module.exports = async function handler(req, res) {
     if (item.estado === ESTADOS.confirmado) {
       page(res, 200, {
         titulo: "Asistencia confirmada",
-        texto: `<p>¡Gracias${nombre ? ", " + nombre : ""}! Tu asistencia ya estaba confirmada. Te esperamos el <b>sábado 28 de noviembre</b>, de 10:00 a 14:00 hrs, en el <b>Hotel Wyndham Guayaquil Puerto Santa Ana</b>.</p><div class="code">${esc(item.codigo)}</div>`,
+        texto: `<p>¡Gracias${nombre ? ", " + nombre : ""}! Tu asistencia ya estaba confirmada. Te esperamos el <b>sábado 28 de noviembre</b>, de 10:00 a 14:00 hrs, en <b>Lima, Perú</b>.</p><div class="code">${esc(item.codigo)}</div>`,
       });
       return;
     }
@@ -111,7 +111,7 @@ module.exports = async function handler(req, res) {
     if (req.method === "GET") {
       page(res, 200, {
         titulo: "Confirma tu asistencia",
-        texto: `<p>Hola${nombre ? ", " + nombre : ""}. Tu cupo para el <b>sábado 28 de noviembre</b> (10:00 a 14:00 hrs, Hotel Wyndham Guayaquil Puerto Santa Ana) está aprobado. Confírmalo para mantenerlo.</p><div class="code">${esc(item.codigo)}</div>`,
+        texto: `<p>Hola${nombre ? ", " + nombre : ""}. Tu cupo para el <b>sábado 28 de noviembre</b> (10:00 a 14:00 hrs, Lima, Perú) está aprobado. Confírmalo para mantenerlo.</p><div class="code">${esc(item.codigo)}</div>`,
         form: `<form method="post" action="/api/confirmar"><input type="hidden" name="id" value="${esc(id)}"><input type="hidden" name="t" value="${esc(t)}"><button type="submit">Confirmo mi asistencia</button></form>`,
       });
       return;
@@ -123,7 +123,7 @@ module.exports = async function handler(req, res) {
     }, apiKey);
     page(res, 200, {
       titulo: "¡Asistencia confirmada!",
-      texto: `<p>¡Gracias${nombre ? ", " + nombre : ""}! Te esperamos el <b>sábado 28 de noviembre</b>, de 10:00 a 14:00 hrs, en el <b>Hotel Wyndham Guayaquil Puerto Santa Ana</b>. Presenta este código en el ingreso:</p><div class="code">${esc(item.codigo)}</div>`,
+      texto: `<p>¡Gracias${nombre ? ", " + nombre : ""}! Te esperamos el <b>sábado 28 de noviembre</b>, de 10:00 a 14:00 hrs, en <b>Lima, Perú</b>. Presenta este código en el ingreso:</p><div class="code">${esc(item.codigo)}</div>`,
     });
   } catch (err) {
     console.error("confirmar error:", err);

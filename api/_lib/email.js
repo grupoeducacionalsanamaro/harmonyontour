@@ -37,14 +37,15 @@ const SEDES = {
     promo2x1: true,
     speakers: ["Dra. Loreto Campos", "Dr. Miguel Romero", "Dra. Carla Ossandón", "Dra. Sofía Montes"],
   },
-  "Guayaquil — Ecuador": {
-    ciudad: "Guayaquil",
-    slug: "guayaquil",
+  "Lima — Perú": {
+    ciudad: "Lima",
+    slug: "lima",
     edicion: "03",
-    pais: "Ecuador",
+    pais: "Perú",
     fecha: "Sábado 28 de noviembre de 2026",
-    lugar: "Hotel Wyndham Guayaquil Puerto Santa Ana",
-    mapa: "https://maps.google.com/?cid=7259335876104380102",
+    // Lugar por confirmar: el correo indica que la dirección llegará más adelante.
+    lugar: "",
+    mapa: "",
     // Entrada liberada con postulación: el equipo aprueba los cupos (sin pago).
     postulacion: { precio: "Entrada liberada", nota: "Sujeta a aprobación · 60 cupos", respuesta: "20 de noviembre" },
     speakers: ["Dra. Rafaela Melo", "Dra. Malu Lobato", "Dra. Andrea Mazzo", "Dra. Javiera Vergara"],
@@ -103,7 +104,7 @@ function buildConfirmationEmail({ nombre, sede, payUrl, tipoEntrada = "Individua
   const lugarHtml = info.lugar
     ? `${esc(info.lugar)}<br><span style="font-size:13px;font-weight:500;color:#ada39a;">${esc(info.ciudad)}, ${esc(info.pais)}</span>` +
       (info.mapa ? `<br><a href="${esc(info.mapa)}" target="_blank" style="font-size:13.5px;font-weight:600;color:#d21a1a;text-decoration:none;">Ver ubicación &rarr;</a>` : "")
-    : `${esc(info.ciudad)}, Chile<br><span style="font-size:13px;font-weight:500;color:#ada39a;">La dirección exacta te llegará junto con tu ticket de acceso.</span>`;
+    : `${esc(info.ciudad)}, ${esc(info.pais)}<br><span style="font-size:13px;font-weight:500;color:#ada39a;">Lugar por confirmar: te enviaremos la dirección exacta por correo.</span>`;
 
   const html = `<!doctype html>
 <html lang="es">
@@ -262,7 +263,7 @@ ${payUrl ? `
     `Speakers: ${info.speakers.join(" · ")}`,
     info.lugar
       ? `Lugar: ${info.lugar}, ${info.ciudad}, ${info.pais}${info.mapa ? ` (ubicación: ${info.mapa})` : ""}`
-      : "Lugar: la dirección exacta te llegará junto con tu ticket de acceso.",
+      : `Lugar: ${info.ciudad}, ${info.pais} (por confirmar: te enviaremos la dirección exacta por correo).`,
     `Valor: ${precio}${notaPrecio ? ` · ${notaPrecio}` : ""}`,
     ...(es2x1 && (acompNombre || acompEmail) ? [`Acompañante (2x1): ${acompNombre || "Por informar"}${acompEmail ? ` <${acompEmail}>` : ""}`] : []),
     `Cronograma de la jornada: ${agendaUrl}`,

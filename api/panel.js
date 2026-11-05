@@ -1,4 +1,4 @@
-// Serverless function (Vercel, Node runtime): API del panel privado de postulaciones (Guayaquil).
+// Serverless function (Vercel, Node runtime): API del panel privado de postulaciones (Lima).
 //
 //   POST /api/panel?op=login    { role, password }  → abre sesión (cookie HttpOnly)
 //   POST /api/panel?op=logout                       → cierra sesión

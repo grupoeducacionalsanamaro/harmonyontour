@@ -1,4 +1,4 @@
-// Panel privado de postulaciones Guayaquil (ver api/panel.js).
+// Panel privado de postulaciones Lima (ver api/panel.js).
 (function(){
   "use strict";
 
@@ -216,7 +216,7 @@
     var items = visibleItems();
     $("list").innerHTML = items.length
       ? items.map(card).join("")
-      : '<p class="empty">' + (state.items.length ? "No hay postulaciones con este filtro." : "Aún no hay postulaciones para Guayaquil.") + '</p>';
+      : '<p class="empty">' + (state.items.length ? "No hay postulaciones con este filtro." : "Aún no hay postulaciones para Lima.") + '</p>';
   }
 
   function render(){
@@ -281,7 +281,7 @@
     var blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
     var a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "postulaciones-guayaquil" + (state.filtro ? "-" + norm(state.filtro).replace(/\s+/g, "-") : "") + ".csv";
+    a.download = "postulaciones-lima" + (state.filtro ? "-" + norm(state.filtro).replace(/\s+/g, "-") : "") + ".csv";
     document.body.appendChild(a);
     a.click();
     setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);

@@ -16,13 +16,13 @@ const PAY_OFFERS = {
 const SCK_BY_SEDE = {
   "Concepción — 17 de octubre": "HOT_CONCEPCION",
   "Antofagasta — 24 de octubre": "HOT_ANTOFAGASTA",
-  "Guayaquil — Ecuador": "HOT_GUAYAQUIL",
+  "Lima — Perú": "HOT_LIMA",
 };
 
 // Sedes gratuitas con postulación (sin pago): el equipo aprueba los cupos.
-// Guayaquil: postulaciones hasta el 19 nov 2026 (cierre 20 nov 00:00 hora de Ecuador).
+// Lima: postulaciones hasta el 19 nov 2026 (cierre 20 nov 00:00 hora de Perú).
 const SEDES_POSTULACION = {
-  "Guayaquil — Ecuador": { cierre: Date.parse("2026-11-20T00:00:00-05:00") },
+  "Lima — Perú": { cierre: Date.parse("2026-11-20T00:00:00-05:00") },
 };
 
 function buildPayUrl({ sede, submissionId, email, nombre, tipoEntrada }) {
@@ -42,7 +42,7 @@ const ALLOWED_ORIGINS = new Set([
 ]);
 
 // Valores permitidos: deben coincidir con las opciones del formulario de la landing.
-const SEDES = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre", "Guayaquil — Ecuador"]);
+const SEDES = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre", "Lima — Perú"]);
 // Sedes ya realizadas / agotadas: no aceptan nuevas inscripciones.
 const SEDES_CERRADAS = new Set(["Concepción — 17 de octubre", "Antofagasta — 24 de octubre"]);
 // Sedes con promoción 2x1 (2 entradas por $47.000; individual $29.990): permiten registrar acompañante.
@@ -147,7 +147,9 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  const sede = clean(body.sede, 60);
+  // La sede internacional pasó de Guayaquil a Lima (5 nov 2026): páginas antiguas en caché se registran como Lima.
+  const sedeRaw = clean(body.sede, 60);
+  const sede = sedeRaw === "Guayaquil — Ecuador" ? "Lima — Perú" : sedeRaw;
   const nombre = noFormula(clean(body.nombre, 100));
   const email = clean(body.email, 254).toLowerCase();
   const whatsapp = clean(body.whatsapp, 25);
@@ -173,7 +175,7 @@ module.exports = async function handler(req, res) {
   }
   const postulacion = SEDES_POSTULACION[sede] || null;
   if (postulacion && Date.now() >= postulacion.cierre) {
-    fail(res, 400, "Las postulaciones para Guayaquil cerraron el 19 de noviembre.");
+    fail(res, 400, "Las postulaciones para Lima cerraron el 19 de noviembre.");
     return;
   }
   if (!SEDES.has(sede) || !PROFESIONES.has(profesion) || !NIVELES.has(nivel)) {
