@@ -324,6 +324,10 @@
     background:
       linear-gradient(90deg, rgba(10,9,8,.5) 0%, rgba(10,9,8,.44) 45%, rgba(10,9,8,.8) 80%, #14100e 100%),
       url("/img/peru-flag.webp") left center / cover no-repeat;
+    /* Tamaño acotado: aunque el ticket crezca (formulario abierto) la imagen no se amplía ni se pixela */
+    height:min(100%, 470px); bottom:auto;
+    -webkit-mask-image:linear-gradient(180deg, #000 72%, transparent 100%);
+            mask-image:linear-gradient(180deg, #000 72%, transparent 100%);
   }
   .intl-main, .intl-side{ position:relative; z-index:1; }
   /* La perforación va sobre ambos lados: sus muescas cortan el borde dorado */
@@ -399,7 +403,8 @@
     .intl-side{ border-radius:0 0 21px 21px; }
     /* Celular: imagen vertical (bandera arriba, fade a negro hacia la inscripción) */
     .intl-flag{
-      width:100%; height:auto; bottom:0;
+      /* Ancho del ticket con la proporción de la imagen (9:16): nunca se amplía de más */
+      width:100%; height:auto; bottom:auto; aspect-ratio:9 / 16; max-height:100%;
       background:
         linear-gradient(180deg, rgba(10,9,8,.52) 0%, rgba(10,9,8,.56) 60%, rgba(10,9,8,.3) 100%),
         url("/img/peru-flag-mobile.webp") center top / cover no-repeat;
