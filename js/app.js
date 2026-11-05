@@ -47,10 +47,19 @@
       ]
     },
     {
-      // Sede internacional. Sin "agenda" el cronograma muestra "en elaboración".
+      // Sede internacional.
       id: "edicion-lima", num: "03", city: "Lima", date: "Perú · Sáb 28 nov 2026", tabDate: "Sáb 28 nov 2026",
       venue: "Auditorio Laboratorio Abbott · Av. César Vallejo 565, Lince, Lima",
-      speakers: ["rafaela-melo", "malu-lobato", "andrea-mazzo", "javiera-vergara"]
+      speakers: ["rafaela-melo", "malu-lobato", "andrea-mazzo", "javiera-vergara"],
+      agenda: [
+        { time: "10:00 – 10:05", kind: "info", title: "Bienvenida a participantes", detail: "Harmony Instituto Internacional" },
+        { time: "10:05 – 10:50", speaker: "andrea-mazzo", topic: "El error comienza antes de la técnica: análisis, anatomía y criterio en el relleno labial", subtitle: "Tema: Rellenos con ácido hialurónico" },
+        { time: "10:50 – 11:30", speaker: "malu-lobato", topic: "AFORMI SKIN: Manejo avanzado de la piel", subtitle: "Tema: Cuidados de la piel" },
+        { time: "11:30 – 12:00", kind: "break", title: "Coffee break", detail: "Espacio de descanso y networking" },
+        { time: "12:00 – 12:45", speaker: "javiera-vergara", topic: "La ciencia detrás del resultado: del análisis clínico a la precisión terapéutica con toxina botulínica", subtitle: "Tema: Aplicación de toxina botulínica" },
+        { time: "12:45 – 13:30", speaker: "rafaela-melo", topic: "La nueva era del Full Face: el Método AFORMI para resultados naturales y estratégicos", subtitle: "Tema: Rellenos con ácido hialurónico" },
+        { time: "13:30 – 14:00", kind: "networking", title: "Networking y panel de expertos" }
+      ]
     }
   ];
 
